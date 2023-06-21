@@ -1,8 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -13,16 +12,22 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
-import Chart from './Chart';
-import Deposits from './Deposits';
-import Orders from './Orders';
 import Copyright from '../components/Copyright';
+import {
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
+} from '@mui/material';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import PeopleIcon from '@mui/icons-material/People';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import LayersIcon from '@mui/icons-material/Layers';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 const drawerWidth: number = 240;
 
@@ -74,28 +79,22 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
-
-export default function Dashboard() {
+export default function Dashboard({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = React.useState(true);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
 
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar position='absolute' open={open}>
         <Toolbar
           sx={{
-            pr: '24px', // keep right padding when drawer closed
+            pr: '24px',
           }}
         >
           <IconButton
             edge='start'
             color='inherit'
             aria-label='open drawer'
-            onClick={toggleDrawer}
+            onClick={() => setOpen(!open)}
             sx={{
               marginRight: '36px',
               ...(open && { display: 'none' }),
@@ -128,16 +127,82 @@ export default function Dashboard() {
             px: [1],
           }}
         >
-          SimplyGrades
-          <IconButton onClick={toggleDrawer}>
-            <ChevronLeftIcon />
-          </IconButton>
+          {open && (
+            <>
+              <Box
+                component='img'
+                sx={{
+                  height: 125,
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                }}
+                src='/images/icon.jpg'
+                alt='Logo'
+              />
+              <IconButton onClick={() => setOpen(!open)}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </>
+          )}
         </Toolbar>
         <Divider />
         <List component='nav'>
-          {mainListItems}
+          <React.Fragment>
+            <ListItemButton>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary='Classes' />
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemIcon>
+                <ShoppingCartIcon />
+              </ListItemIcon>
+              <ListItemText primary='Orders' />
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemIcon>
+                <PeopleIcon />
+              </ListItemIcon>
+              <ListItemText primary='Customers' />
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemIcon>
+                <BarChartIcon />
+              </ListItemIcon>
+              <ListItemText primary='Reports' />
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemIcon>
+                <LayersIcon />
+              </ListItemIcon>
+              <ListItemText primary='Integrations' />
+            </ListItemButton>
+          </React.Fragment>
           <Divider sx={{ my: 1 }} />
-          {secondaryListItems}
+          <React.Fragment>
+            <ListSubheader component='div' inset>
+              Saved reports
+            </ListSubheader>
+            <ListItemButton>
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary='Current month' />
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary='Last quarter' />
+            </ListItemButton>
+            <ListItemButton>
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary='Year-end sale' />
+            </ListItemButton>
+          </React.Fragment>
         </List>
       </Drawer>
       <Box
@@ -154,40 +219,7 @@ export default function Dashboard() {
       >
         <Toolbar />
         <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
-          <Grid container spacing={3}>
-            {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper
-                sx={{
-                  p: 2,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: 240,
-                }}
-              >
-                <Chart />
-              </Paper>
-            </Grid>
-            {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper
-                sx={{
-                  p: 2,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: 240,
-                }}
-              >
-                <Deposits />
-              </Paper>
-            </Grid>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                <Orders />
-              </Paper>
-            </Grid>
-          </Grid>
+          {children}
           <Copyright sx={{ pt: 4 }} />
         </Container>
       </Box>
