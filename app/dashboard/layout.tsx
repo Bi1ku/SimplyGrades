@@ -8,7 +8,6 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
@@ -17,19 +16,19 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Copyright from '../components/Copyright';
 import {
+  Avatar,
+  Card,
+  CardContent,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  ListSubheader,
 } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import PeopleIcon from '@mui/icons-material/People';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import LayersIcon from '@mui/icons-material/Layers';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import { faker } from '@faker-js/faker';
 
-const drawerWidth: number = 240;
+const drawerWidth: number = 300;
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -43,6 +42,7 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  backgroundColor: theme.palette.primary.main,
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
@@ -57,7 +57,10 @@ const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
   '& .MuiDrawer-paper': {
-    position: 'relative',
+    position: 'absolute',
+    [theme.breakpoints.up('sm')]: {
+      position: 'relative',
+    },
     whiteSpace: 'nowrap',
     width: drawerWidth,
     transition: theme.transitions.create('width', {
@@ -71,16 +74,13 @@ const Drawer = styled(MuiDrawer, {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up('sm')]: {
-        width: theme.spacing(9),
-      },
+      width: theme.spacing(9),
     }),
   },
 }));
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -132,11 +132,11 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
               <Box
                 component='img'
                 sx={{
-                  height: 125,
+                  height: 150,
                   marginLeft: 'auto',
                   marginRight: 'auto',
                 }}
-                src='/images/icon.jpg'
+                src='/images/logo.png'
                 alt='Logo'
               />
               <IconButton onClick={() => setOpen(!open)}>
@@ -145,64 +145,45 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
             </>
           )}
         </Toolbar>
-        <Divider />
-        <List component='nav'>
-          <React.Fragment>
-            <ListItemButton>
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary='Classes' />
-            </ListItemButton>
-            <ListItemButton>
-              <ListItemIcon>
-                <ShoppingCartIcon />
-              </ListItemIcon>
-              <ListItemText primary='Orders' />
-            </ListItemButton>
-            <ListItemButton>
-              <ListItemIcon>
-                <PeopleIcon />
-              </ListItemIcon>
-              <ListItemText primary='Customers' />
-            </ListItemButton>
-            <ListItemButton>
-              <ListItemIcon>
-                <BarChartIcon />
-              </ListItemIcon>
-              <ListItemText primary='Reports' />
-            </ListItemButton>
-            <ListItemButton>
-              <ListItemIcon>
-                <LayersIcon />
-              </ListItemIcon>
-              <ListItemText primary='Integrations' />
-            </ListItemButton>
-          </React.Fragment>
-          <Divider sx={{ my: 1 }} />
-          <React.Fragment>
-            <ListSubheader component='div' inset>
-              Saved reports
-            </ListSubheader>
-            <ListItemButton>
-              <ListItemIcon>
-                <AssignmentIcon />
-              </ListItemIcon>
-              <ListItemText primary='Current month' />
-            </ListItemButton>
-            <ListItemButton>
-              <ListItemIcon>
-                <AssignmentIcon />
-              </ListItemIcon>
-              <ListItemText primary='Last quarter' />
-            </ListItemButton>
-            <ListItemButton>
-              <ListItemIcon>
-                <AssignmentIcon />
-              </ListItemIcon>
-              <ListItemText primary='Year-end sale' />
-            </ListItemButton>
-          </React.Fragment>
+        <List component='nav' sx={{ px: open ? 3 : 1 }}>
+          <Card variant='outlined' sx={open ? { mb: 2 } : { border: 'none' }}>
+            <CardContent
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                p: 1,
+                '&:last-child': {
+                  paddingBottom: 1,
+                },
+              }}
+            >
+              <Avatar alt='Avatar' src={faker.image.avatar()} sx={{ mr: 2 }} />
+              <Box>
+                <Typography variant='h6'>John Doe</Typography>
+                <Typography variant='caption'>Assistant Teacher</Typography>
+              </Box>
+            </CardContent>
+          </Card>
+
+          <ListItemButton sx={{ borderRadius: 3 }}>
+            <ListItemIcon>
+              <DashboardIcon />
+            </ListItemIcon>
+            <ListItemText primary='Classes' />
+          </ListItemButton>
+          <ListItemButton sx={{ borderRadius: 3 }}>
+            <ListItemIcon>
+              <ShoppingCartIcon />
+            </ListItemIcon>
+            <ListItemText primary='Orders' />
+          </ListItemButton>
+          <ListItemButton sx={{ borderRadius: 3 }}>
+            <ListItemIcon>
+              <PeopleIcon />
+            </ListItemIcon>
+            <ListItemText primary='Customers' />
+          </ListItemButton>
         </List>
       </Drawer>
       <Box
@@ -218,7 +199,10 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
         }}
       >
         <Toolbar />
-        <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
+        <Container
+          maxWidth='xl'
+          sx={{ mt: 4, mb: 4, pl: { xs: '87.333px', sm: '16px' } }}
+        >
           {children}
           <Copyright sx={{ pt: 4 }} />
         </Container>
