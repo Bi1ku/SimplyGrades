@@ -15,20 +15,17 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Copyright from '../components/Copyright';
-import {
-  Avatar,
-  Card,
-  CardContent,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import PeopleIcon from '@mui/icons-material/People';
-import { faker } from '@faker-js/faker';
 
-const drawerWidth: number = 300;
+const drawerWidth = 300;
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -58,7 +55,7 @@ const Drawer = styled(MuiDrawer, {
 })(({ theme, open }) => ({
   '& .MuiDrawer-paper': {
     position: 'absolute',
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       position: 'relative',
     },
     whiteSpace: 'nowrap',
@@ -158,7 +155,11 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                 },
               }}
             >
-              <Avatar alt='Avatar' src={faker.image.avatar()} sx={{ mr: 2 }} />
+              <Avatar
+                alt='Avatar'
+                src='https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg'
+                sx={{ mr: 2 }}
+              />
               <Box>
                 <Typography variant='h6'>John Doe</Typography>
                 <Typography variant='caption'>Assistant Teacher</Typography>
@@ -201,7 +202,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
         <Toolbar />
         <Container
           maxWidth='xl'
-          sx={{ mt: 4, mb: 4, pl: { xs: '87.333px', sm: '16px' } }}
+          sx={{ mt: 4, mb: 4, pl: { xs: '87.333px', md: '16px' } }}
         >
           {children}
           <Copyright sx={{ pt: 4 }} />
