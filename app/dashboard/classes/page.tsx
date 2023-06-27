@@ -13,6 +13,14 @@ import { useRouter } from 'next/navigation';
 import SearchIcon from '@mui/icons-material/Search';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import InputBase from '@mui/material/InputBase';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from '@mui/material';
+import React from 'react';
 
 const classes = [
   {
@@ -128,6 +136,15 @@ const classes = [
 ];
 
 export default function SignIn() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const router = useRouter();
 
   return (
@@ -161,9 +178,14 @@ export default function SignIn() {
                 padding: 1,
                 paddingLeft: (theme) => `calc(1em + ${theme.spacing(4)})`,
                 transition: (theme) => theme.transitions.create('width'),
-                width: { xs: '100%', sm: '30ch' },
+                width: { xs: '18ch', sm: '30ch' },
                 '&:focus': {
-                  width: '34ch',
+                  sm: {
+                    width: '34ch',
+                  },
+                  xs: {
+                    width: '22ch',
+                  },
                 },
               },
             }}
@@ -205,15 +227,31 @@ export default function SignIn() {
               </CardContent>
               <Divider />
               <CardActions>
-                <Button size='small' sx={{ ml: 'auto' }}>
-                  Delete
-                </Button>
+                <Box sx={{ ml: 'auto' }}>
+                  <Button onClick={handleClickOpen}>Delete</Button>
+                </Box>
                 <Button size='small'>Edit</Button>
               </CardActions>
             </Card>
           </Grid>
         ))}
       </Grid>
+      {/* TODO: Add this dialog in a separate modal component */}
+      <Dialog open={open} onClose={handleClose} sx={{ boxShadow: 'none' }}>
+        <DialogTitle>Delete this class?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Deleting this class will completely remove it from our database. All
+            currently enrolled students, grades, etc. will be lost.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose} autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
