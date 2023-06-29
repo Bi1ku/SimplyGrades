@@ -13,14 +13,9 @@ import { useRouter } from 'next/navigation';
 import SearchIcon from '@mui/icons-material/Search';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import InputBase from '@mui/material/InputBase';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-} from '@mui/material';
+import DialogContentText from '@mui/material/DialogContentText';
 import React from 'react';
+import Modal from '@/app/components/Modal';
 
 const classes = [
   {
@@ -137,14 +132,6 @@ const classes = [
 
 export default function SignIn() {
   const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
   const router = useRouter();
 
   return (
@@ -228,7 +215,7 @@ export default function SignIn() {
               <Divider />
               <CardActions>
                 <Box sx={{ ml: 'auto' }}>
-                  <Button onClick={handleClickOpen}>Delete</Button>
+                  <Button onClick={() => setOpen(true)}>Delete</Button>
                 </Box>
                 <Button size='small'>Edit</Button>
               </CardActions>
@@ -236,22 +223,17 @@ export default function SignIn() {
           </Grid>
         ))}
       </Grid>
-      {/* TODO: Add this dialog in a separate modal component */}
-      <Dialog open={open} onClose={handleClose} sx={{ boxShadow: 'none' }}>
-        <DialogTitle>Delete this class?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Deleting this class will completely remove it from our database. All
-            currently enrolled students, grades, etc. will be lost.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose} autoFocus>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Modal
+        title='Delete this class?'
+        open={open}
+        handleClose={() => setOpen(false)}
+        handleSubmit={() => ''}
+      >
+        <DialogContentText>
+          Deleting this class will completely remove it from our database. All
+          currently enrolled students, grades, etc. will be lost.
+        </DialogContentText>
+      </Modal>
     </Box>
   );
 }
