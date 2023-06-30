@@ -227,7 +227,10 @@ export default function SignIn() {
         title='Delete this class?'
         open={open}
         handleClose={() => setOpen(false)}
-        handleSubmit={() => ''}
+        buttons={[
+          { title: 'Cancel', onClick: () => setOpen(false) },
+          { title: 'Delete', onClick: () => setOpen(false) },
+        ]}
       >
         <DialogContentText>
           Deleting this class will completely remove it from our database. All
