@@ -10,6 +10,7 @@ import TableFooter from '@mui/material/TableFooter';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TablePagination from '@mui/material/TablePagination';
+import { Box } from '@mui/material';
 
 export default function Copyright({
   title,
@@ -21,7 +22,7 @@ export default function Copyright({
   rowsPerPage,
   rowsPerPageOptions = [],
 }: {
-  title: string;
+  title: string | React.ReactNode;
   keys: string[];
   children: React.ReactNode;
   count: number;
@@ -32,9 +33,15 @@ export default function Copyright({
 }) {
   return (
     <TableContainer component={Paper}>
-      <Typography sx={{ fontWeight: 600, px: 2, pt: 2 }} variant='h6'>
-        {title}
-      </Typography>
+      <Box>
+        {typeof title === 'string' ? (
+          <Typography sx={{ fontWeight: 600, px: 2, pt: 2 }} variant='h6'>
+            {title}
+          </Typography>
+        ) : (
+          title
+        )}
+      </Box>
       <Table>
         <TableHead>
           <TableRow>

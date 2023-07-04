@@ -1,6 +1,5 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -9,6 +8,9 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Table from '@/app/components/Table';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Add from '@mui/icons-material/Add';
 
 const students = [
   {
@@ -58,6 +60,72 @@ const students = [
     email: 'johndoe@gmail.com',
     id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
     grade: 96,
+  },
+];
+
+const assignments = [
+  {
+    name: 'Assignment 1',
+    dueDate: '10/10/2021',
+    creationDate: '10/10/2021',
+    type: 'Homework',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+  },
+  {
+    name: 'Assignment 1',
+    dueDate: '10/10/2021',
+    creationDate: '10/10/2021',
+    type: 'Homework',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+  },
+  {
+    name: 'Assignment 1',
+    dueDate: '10/10/2021',
+    creationDate: '10/10/2021',
+    type: 'Homework',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+  },
+  {
+    name: 'Assignment 1',
+    dueDate: '10/10/2021',
+    creationDate: '10/10/2021',
+    type: 'Homework',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+  },
+  {
+    name: 'Assignment 1',
+    dueDate: '10/10/2021',
+    creationDate: '10/10/2021',
+    type: 'Homework',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+  },
+  {
+    name: 'Assignment 1',
+    dueDate: '10/10/2021',
+    creationDate: '10/10/2021',
+    type: 'Homework',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+  },
+  {
+    name: 'Assignment 1',
+    dueDate: '10/10/2021',
+    creationDate: '10/10/2021',
+    type: 'Homework',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+  },
+  {
+    name: 'Assignment 1',
+    dueDate: '10/10/2021',
+    creationDate: '10/10/2021',
+    type: 'Homework',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+  },
+  {
+    name: 'Assignment 1',
+    dueDate: '10/10/2021',
+    creationDate: '10/10/2021',
+    type: 'Homework',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
   },
 ];
 
@@ -113,6 +181,7 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
             onPageChange={() => ''}
             page={0}
             rowsPerPage={5}
+            rowsPerPageOptions={[5, 10, 15]}
           >
             {students.map((student) => (
               <TableRow key={student.id}>
@@ -140,32 +209,32 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
         </Grid>
         <Grid item xs={7}>
           <Table
-            title='Assignments'
-            keys={['NAME', 'EMAIL', 'GRADE']}
-            count={students.length}
+            title={
+              <Stack flexDirection='row' sx={{ px: 2, pt: 2 }}>
+                <Typography sx={{ fontWeight: 600 }} variant='h6'>
+                  Assignments
+                </Typography>
+                <Button sx={{ ml: 'auto' }}>
+                  <Add /> Create
+                </Button>
+              </Stack>
+            }
+            keys={['NAME', 'TYPE', 'CREATION DATE', 'DUE DATE']}
+            count={assignments.length}
             onPageChange={() => ''}
             page={0}
             rowsPerPage={5}
+            rowsPerPageOptions={[5, 10, 15]}
           >
-            {students.map((student) => (
-              <TableRow key={student.id}>
-                <TableCell>{student.name}</TableCell>
+            {assignments.map((assignment) => (
+              <TableRow key={assignment.id}>
+                <TableCell>{assignment.name}</TableCell>
+                <TableCell>{assignment.type}</TableCell>
                 <TableCell>
-                  <Link href={`mailto:${student.email}`}>{student.email}</Link>
+                  {new Date(assignment.creationDate).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
-                  <Box
-                    component='span'
-                    sx={{
-                      bgcolor: 'lightgreen',
-                      p: '7px',
-                      borderRadius: 4,
-                      color: 'green',
-                      fontWeight: 600,
-                    }}
-                  >
-                    {student.grade}%
-                  </Box>
+                  {new Date(assignment.dueDate).toLocaleDateString()}
                 </TableCell>
               </TableRow>
             ))}

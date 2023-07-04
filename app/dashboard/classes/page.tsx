@@ -11,11 +11,11 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/navigation';
 import SearchIcon from '@mui/icons-material/Search';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import InputBase from '@mui/material/InputBase';
 import DialogContentText from '@mui/material/DialogContentText';
 import React from 'react';
 import Modal from '@/app/components/Modal';
+import Add from '@mui/icons-material/Add';
 
 const classes = [
   {
@@ -186,7 +186,7 @@ export default function SignIn() {
             ml: 'auto',
           }}
         >
-          <AddCircleOutlineIcon sx={{ mr: '2px' }} /> CREATE
+          <Add sx={{ pr: '2px' }} /> CREATE
         </Button>
       </Stack>
       <Grid container spacing={2}>
