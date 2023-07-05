@@ -22,9 +22,11 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import PeopleIcon from '@mui/icons-material/People';
 import { useRouter } from 'next/navigation';
+import SchoolIcon from '@mui/icons-material/School';
+import GradingIcon from '@mui/icons-material/Grading';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 const drawerWidth = 300;
 
@@ -78,8 +80,12 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
+  const [anchor, setAnchor] = React.useState<null | HTMLElement>();
+  const openMenu = Boolean(anchor);
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
+
+  const closeMenu = () => setAnchor(null);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -110,10 +116,16 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
           >
             Dashboard
           </Typography>
-          <IconButton color='inherit'>
-            <Badge badgeContent={4} color='secondary'>
-              <NotificationsIcon />
-            </Badge>
+          <IconButton
+            onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+              setAnchor(event.currentTarget)
+            }
+          >
+            <Avatar
+              sx={{ width: 30, height: 30 }}
+              alt='Avatar'
+              src='https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg'
+            />
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -171,10 +183,19 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
 
           <ListItemButton
             sx={{ borderRadius: 3 }}
-            onClick={() => router.push('/dashboard/classes')}
+            onClick={() => router.push('/dashboard')}
           >
             <ListItemIcon>
               <DashboardIcon />
+            </ListItemIcon>
+            <ListItemText primary='Dashboard' />
+          </ListItemButton>
+          <ListItemButton
+            sx={{ borderRadius: 3 }}
+            onClick={() => router.push('/dashboard/classes')}
+          >
+            <ListItemIcon>
+              <SchoolIcon />
             </ListItemIcon>
             <ListItemText primary='Classes' />
           </ListItemButton>
@@ -183,15 +204,9 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
             onClick={() => router.push('/dashboard/policies')}
           >
             <ListItemIcon>
-              <ShoppingCartIcon />
+              <GradingIcon />
             </ListItemIcon>
             <ListItemText primary='Policies' />
-          </ListItemButton>
-          <ListItemButton sx={{ borderRadius: 3 }}>
-            <ListItemIcon>
-              <PeopleIcon />
-            </ListItemIcon>
-            <ListItemText primary='Customers' />
           </ListItemButton>
         </List>
       </Drawer>
@@ -216,6 +231,18 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
           <Copyright sx={{ pt: 4 }} />
         </Container>
       </Box>
+      <Menu
+        anchorEl={anchor}
+        open={openMenu}
+        onClose={closeMenu}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={closeMenu}>Profile</MenuItem>
+        <MenuItem onClick={closeMenu}>My account</MenuItem>
+        <MenuItem onClick={closeMenu}>Logout</MenuItem>
+      </Menu>
     </Box>
   );
 }
