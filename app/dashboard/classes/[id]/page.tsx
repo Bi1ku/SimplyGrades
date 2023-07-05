@@ -133,7 +133,7 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
   return (
     <Box>
       <Grid container spacing={2}>
-        <Grid item xs={3}>
+        <Grid item xs={6} md={3}>
           <Paper sx={{ p: 2 }}>
             <Typography sx={{ fontWeight: 500 }} variant='body1'>
               AVERAGE CLASS PERFORMANCE{' '}
@@ -143,7 +143,7 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
             </Typography>
           </Paper>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6} md={3}>
           <Paper sx={{ p: 2 }}>
             <Typography sx={{ fontWeight: 500 }} variant='body1'>
               AVERAGE CLASS PERFORMANCE{' '}
@@ -153,7 +153,7 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
             </Typography>
           </Paper>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6} md={3}>
           <Paper sx={{ p: 2 }}>
             <Typography sx={{ fontWeight: 500 }} variant='body1'>
               AVERAGE CLASS PERFORMANCE{' '}
@@ -163,7 +163,7 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
             </Typography>
           </Paper>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6} md={3}>
           <Paper sx={{ p: 2 }}>
             <Typography sx={{ fontWeight: 500 }} variant='body1'>
               AVERAGE CLASS PERFORMANCE{' '}
@@ -173,7 +173,7 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
             </Typography>
           </Paper>
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={12} md={5}>
           <Table
             title='Students'
             keys={['NAME', 'EMAIL', 'GRADE']}
@@ -207,7 +207,7 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
             ))}
           </Table>
         </Grid>
-        <Grid item xs={7}>
+        <Grid item xs={12} md={7}>
           <Table
             title={
               <Stack flexDirection='row' sx={{ px: 2, pt: 2 }}>

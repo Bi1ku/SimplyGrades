@@ -10,7 +10,7 @@ import TableFooter from '@mui/material/TableFooter';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TablePagination from '@mui/material/TablePagination';
-import { Box } from '@mui/material';
+import { Box, SxProps, Theme } from '@mui/material';
 
 export default function Copyright({
   title,

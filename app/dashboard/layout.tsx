@@ -24,6 +24,7 @@ import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import PeopleIcon from '@mui/icons-material/People';
+import { useRouter } from 'next/navigation';
 
 const drawerWidth = 300;
 
@@ -78,6 +79,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -167,17 +169,23 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
             </CardContent>
           </Card>
 
-          <ListItemButton sx={{ borderRadius: 3 }}>
+          <ListItemButton
+            sx={{ borderRadius: 3 }}
+            onClick={() => router.push('/dashboard/classes')}
+          >
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary='Classes' />
           </ListItemButton>
-          <ListItemButton sx={{ borderRadius: 3 }}>
+          <ListItemButton
+            sx={{ borderRadius: 3 }}
+            onClick={() => router.push('/dashboard/policies')}
+          >
             <ListItemIcon>
               <ShoppingCartIcon />
             </ListItemIcon>
-            <ListItemText primary='Orders' />
+            <ListItemText primary='Policies' />
           </ListItemButton>
           <ListItemButton sx={{ borderRadius: 3 }}>
             <ListItemIcon>
