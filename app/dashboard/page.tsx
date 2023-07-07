@@ -291,7 +291,7 @@ export default function Dashboard() {
           sx={{ p: 2, pl: 0, width: '100%', height: '100%' }}
         >
           <Typography sx={{ fontWeight: 600, px: 2, mb: 2 }} variant='h6'>
-            Student Performance to Class Average
+            Classes' Average Performance
           </Typography>
           <ResponsiveContainer height='83%'>
             <BarChart data={data}>

@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -25,6 +25,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import GradingIcon from '@mui/icons-material/Grading';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Backdrop from '@mui/material/Backdrop';
 
 const drawerWidth = 300;
 
@@ -82,6 +83,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   const openMenu = Boolean(anchor);
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
+  const theme = useTheme();
 
   const closeMenu = () => setAnchor(null);
 
@@ -241,6 +243,14 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
         <MenuItem onClick={closeMenu}>My account</MenuItem>
         <MenuItem onClick={closeMenu}>Logout</MenuItem>
       </Menu>
+      <Backdrop
+        open={open}
+        sx={{
+          backgroundColor: {
+            lg: 'transparent',
+          },
+        }}
+      />
     </Box>
   );
 }
