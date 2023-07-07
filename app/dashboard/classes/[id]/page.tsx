@@ -244,9 +244,18 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
           >
             {students.map((student) => (
               <TableRow key={student.id}>
-                <TableCell>{student.name}</TableCell>
                 <TableCell>
-                  <Link href={`mailto:${student.email}`}>{student.email}</Link>
+                  <Typography variant='body2' noWrap>
+                    {student.name}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Link href={`mailto:${student.email}`}>
+                    {' '}
+                    <Typography variant='body2' noWrap>
+                      {student.email}
+                    </Typography>
+                  </Link>
                 </TableCell>
                 <TableCell>
                   <Box
@@ -287,13 +296,26 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
           >
             {assignments.map((assignment) => (
               <TableRow key={assignment.id}>
-                <TableCell>{assignment.name}</TableCell>
-                <TableCell>{assignment.type}</TableCell>
                 <TableCell>
-                  {new Date(assignment.creationDate).toLocaleDateString()}
+                  <Typography variant='body2' noWrap>
+                    {assignment.name}
+                  </Typography>
                 </TableCell>
                 <TableCell>
-                  {new Date(assignment.dueDate).toLocaleDateString()}
+                  {' '}
+                  <Typography variant='body2' noWrap>
+                    {assignment.type}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant='body2' noWrap>
+                    {new Date(assignment.creationDate).toLocaleDateString()}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant='body2' noWrap>
+                    {new Date(assignment.dueDate).toLocaleDateString()}
+                  </Typography>
                 </TableCell>
               </TableRow>
             ))}
