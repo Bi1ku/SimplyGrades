@@ -313,7 +313,7 @@ export default function Dashboard() {
           </ResponsiveContainer>
         </Paper>
       </Grid>
-      <Grid item xs={5}>
+      <Grid item md={5} xs={12}>
         <Table
           title='All My Students'
           keys={['NAME', 'EMAIL', 'CONTACT NUMBER']}
@@ -325,20 +325,30 @@ export default function Dashboard() {
         >
           {students.map((student) => (
             <TableRow key={student.id}>
-              <TableCell>{student.name}</TableCell>
               <TableCell>
-                <Link href={`mailto:${student.email}`}>{student.email}</Link>
+                <Typography variant='body2' noWrap>
+                  {student.name}
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Link href={`mailto:${student.email}`}>
+                  <Typography variant='body2' noWrap>
+                    {student.email}
+                  </Typography>
+                </Link>
               </TableCell>
               <TableCell>
                 <Link href={`tel:${student.contactNumber}`}>
-                  {formatContactNumber(student.contactNumber)}
+                  <Typography variant='body2' noWrap>
+                    {formatContactNumber(student.contactNumber)}
+                  </Typography>
                 </Link>
               </TableCell>
             </TableRow>
           ))}
         </Table>
       </Grid>
-      <Grid item xs={7}>
+      <Grid item xs={12} md={7}>
         <Table
           title='Upcoming Assignments'
           keys={['NAME', 'CLASS', 'CREATION DATE', 'DUE DATE']}
@@ -350,10 +360,26 @@ export default function Dashboard() {
         >
           {assignments.map((assignment) => (
             <TableRow key={assignment.id}>
-              <TableCell>{assignment.name}</TableCell>
-              <TableCell>{assignment.class}</TableCell>
-              <TableCell>{assignment.creationDate}</TableCell>
-              <TableCell>{assignment.dueDate}</TableCell>
+              <TableCell>
+                <Typography variant='body2' noWrap>
+                  {assignment.name}
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant='body2' noWrap>
+                  {assignment.class}
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant='body2' noWrap>
+                  {assignment.creationDate}
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant='body2' noWrap>
+                  {assignment.dueDate}
+                </Typography>
+              </TableCell>
             </TableRow>
           ))}
         </Table>
