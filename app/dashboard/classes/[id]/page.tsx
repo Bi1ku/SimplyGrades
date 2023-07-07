@@ -240,7 +240,6 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
             onPageChange={() => ''}
             page={0}
             rowsPerPage={5}
-            rowsPerPageOptions={[5, 10, 15]}
           >
             {students.map((student) => (
               <TableRow key={student.id}>

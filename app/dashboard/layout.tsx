@@ -9,11 +9,9 @@ import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import Copyright from '../components/Copyright';
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
@@ -58,7 +56,7 @@ const Drawer = styled(MuiDrawer, {
 })(({ theme, open }) => ({
   '& .MuiDrawer-paper': {
     position: 'absolute',
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('lg')]: {
       position: 'relative',
     },
     whiteSpace: 'nowrap',
@@ -225,7 +223,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
         <Toolbar />
         <Container
           maxWidth='xl'
-          sx={{ mt: 4, mb: 4, pl: { xs: '87.333px', md: '16px' } }}
+          sx={{ mt: 4, mb: 4, pl: { xs: '87.333px', lg: '16px' } }}
         >
           {children}
           <Copyright sx={{ pt: 4 }} />
