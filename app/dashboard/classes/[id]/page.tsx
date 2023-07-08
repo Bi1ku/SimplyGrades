@@ -20,7 +20,12 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import dynamic from 'next/dynamic';
-import useTheme from '@mui/material/styles/useTheme';
+import InputLabel from '@mui/material/InputLabel';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import React from 'react';
+import FormControl from '@mui/material/FormControl';
+import Static from '@/app/components/Static';
 
 const AreaChart = dynamic(
   () => import('recharts').then((recharts) => recharts.AreaChart),
@@ -31,31 +36,31 @@ const students = [
   {
     name: 'John Doe',
     email: 'johndoe@gmail.com',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c675',
     grade: 96,
   },
   {
     name: 'John Doe',
     email: 'johndoe@gmail.com',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c676',
     grade: 96,
   },
   {
     name: 'John Doe',
     email: 'johndoe@gmail.com',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c677',
     grade: 96,
   },
   {
     name: 'John Doe',
     email: 'johndoe@gmail.com',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c678',
     grade: 96,
   },
   {
     name: 'John Doe',
     email: 'johndoe@gmail.com',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c679',
     grade: 96,
   },
 ];
@@ -66,35 +71,35 @@ const assignments = [
     dueDate: '10/10/2021',
     creationDate: '10/10/2021',
     type: 'Homework',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c675',
   },
   {
     name: 'Assignment 1',
     dueDate: '10/10/2021',
     creationDate: '10/10/2021',
     type: 'Homework',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c676',
   },
   {
     name: 'Assignment 1',
     dueDate: '10/10/2021',
     creationDate: '10/10/2021',
     type: 'Homework',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c677',
   },
   {
     name: 'Assignment 1',
     dueDate: '10/10/2021',
     creationDate: '10/10/2021',
     type: 'Homework',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c678',
   },
   {
     name: 'Assignment 1',
     dueDate: '10/10/2021',
     creationDate: '10/10/2021',
     type: 'Homework',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c679',
   },
 ];
 
@@ -137,100 +142,22 @@ const data = [
 ];
 
 export default function ClassDetail({ params }: { params: { id: string } }) {
+  const [age, setAge] = React.useState('');
+
   return (
     <Box>
       <Grid container spacing={2}>
         <Grid item xs={6} md={3}>
-          <Paper variant='outlined' sx={{ p: 2 }}>
-            <Typography
-              variant='body2'
-              sx={{
-                fontWeight: 500,
-                color: (theme) => theme.palette.grey[600],
-                letterSpacing: 0.4,
-              }}
-            >
-              Average Student Grade
-            </Typography>
-            <Typography
-              variant='h5'
-              sx={{
-                fontWeight: 600,
-                mt: '10px',
-              }}
-            >
-              98%
-            </Typography>
-          </Paper>
+          <Static title='Average Student Grade' description='98%' />
         </Grid>
         <Grid item xs={6} md={3}>
-          <Paper variant='outlined' sx={{ p: 2 }}>
-            <Typography
-              variant='body2'
-              sx={{
-                fontWeight: 500,
-                color: (theme) => theme.palette.grey[600],
-                letterSpacing: 0.4,
-              }}
-            >
-              Average Student Grade
-            </Typography>
-            <Typography
-              variant='h5'
-              sx={{
-                fontWeight: 600,
-                mt: '10px',
-              }}
-            >
-              98%
-            </Typography>
-          </Paper>
+          <Static title='Average Student Grade' description='98%' />
         </Grid>
         <Grid item xs={6} md={3}>
-          <Paper variant='outlined' sx={{ p: 2 }}>
-            <Typography
-              variant='body2'
-              sx={{
-                fontWeight: 500,
-                color: (theme) => theme.palette.grey[600],
-                letterSpacing: 0.4,
-              }}
-            >
-              Average Student Grade
-            </Typography>
-            <Typography
-              variant='h5'
-              sx={{
-                fontWeight: 600,
-                mt: '10px',
-              }}
-            >
-              98%
-            </Typography>
-          </Paper>
+          <Static title='Average Student Grade' description='98%' />
         </Grid>
         <Grid item xs={6} md={3}>
-          <Paper variant='outlined' sx={{ p: 2 }}>
-            <Typography
-              variant='body2'
-              sx={{
-                fontWeight: 500,
-                color: (theme) => theme.palette.grey[600],
-                letterSpacing: 0.4,
-              }}
-            >
-              Average Student Grade
-            </Typography>
-            <Typography
-              variant='h5'
-              sx={{
-                fontWeight: 600,
-                mt: '10px',
-              }}
-            >
-              98%
-            </Typography>
-          </Paper>
+          <Static title='Average Student Grade' description='98%' />
         </Grid>
         <Grid item xs={12} md={5}>
           <Table
@@ -322,15 +249,38 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
         </Grid>
         <Grid item xs={12}>
           <Paper variant='outlined' sx={{ p: 2, pl: 0 }}>
-            <Typography sx={{ fontWeight: 600, px: 2, mb: 2 }} variant='h6'>
-              Student Performance to Class Average
-            </Typography>
+            <Stack flexDirection='row' justifyContent='space-between'>
+              <Typography sx={{ fontWeight: 600, px: 2, mb: 2 }} variant='h6'>
+                Student Performance to Class Average
+              </Typography>
+              <FormControl sx={{ minWidth: 120 }} size='small'>
+                <InputLabel id='demo-select-small-label'>Age</InputLabel>
+                <Select
+                  labelId='demo-select-small-label'
+                  id='demo-select-small'
+                  value={age}
+                  label='Age'
+                  onChange={(event: SelectChangeEvent) =>
+                    setAge(event.target.value)
+                  }
+                >
+                  <MenuItem value=''>
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={10}>Ten</MenuItem>
+                  <MenuItem value={20}>Twenty</MenuItem>
+                  <MenuItem value={30}>Thirty</MenuItem>
+                </Select>
+              </FormControl>
+            </Stack>
             <ResponsiveContainer width='100%' height={300}>
               <AreaChart
                 width={730}
                 height={250}
                 data={data}
                 margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                // @ts-ignore
+                cursor='crosshair'
               >
                 <defs>
                   <linearGradient id='colorUv' x1='0' y1='0' x2='0' y2='1'>

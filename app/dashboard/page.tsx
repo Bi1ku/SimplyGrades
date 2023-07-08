@@ -18,6 +18,7 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import Link from 'next/link';
 import { formatContactNumber } from '@/utils/format';
+import Static from '../components/Static';
 
 const BarChart = dynamic(
   () => import('recharts').then((recharts) => recharts.BarChart),
@@ -66,31 +67,31 @@ const students = [
   {
     name: 'John Doe',
     email: 'johndoe@gmail.com',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c675',
     contactNumber: '6463010911',
   },
   {
     name: 'John Doe',
     email: 'johndoe@gmail.com',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c664',
     contactNumber: '6463010911',
   },
   {
     name: 'John Doe',
     email: 'johndoe@gmail.com',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c677',
     contactNumber: '6463010911',
   },
   {
     name: 'John Doe',
     email: 'johndoe@gmail.com',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c678',
     contactNumber: '6463010911',
   },
   {
     name: 'John Doe',
     email: 'johndoe@gmail.com',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c679',
     contactNumber: '6463010911',
   },
 ];
@@ -101,7 +102,7 @@ const assignments = [
     dueDate: '10/10/2021',
     creationDate: '10/10/2021',
     type: 'Homework',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c675',
     class: 'Honors Pre-Calc',
   },
   {
@@ -109,7 +110,7 @@ const assignments = [
     dueDate: '10/10/2021',
     creationDate: '10/10/2021',
     type: 'Homework',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c676',
     class: 'Honors Pre-Calc',
   },
   {
@@ -117,7 +118,7 @@ const assignments = [
     dueDate: '10/10/2021',
     creationDate: '10/10/2021',
     type: 'Homework',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c677',
     class: 'Honors Pre-Calc',
   },
   {
@@ -125,7 +126,7 @@ const assignments = [
     dueDate: '10/10/2021',
     creationDate: '10/10/2021',
     type: 'Homework',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c678',
     class: 'Honors Pre-Calc',
   },
   {
@@ -133,7 +134,7 @@ const assignments = [
     dueDate: '10/10/2021',
     creationDate: '10/10/2021',
     type: 'Homework',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c679',
     class: 'Honors Pre-Calc',
   },
 ];
@@ -146,142 +147,22 @@ export default function Dashboard() {
       <Grid item xs={12} lg={4}>
         <Grid container spacing={2}>
           <Grid item xs={6} md={4} lg={6}>
-            <Paper variant='outlined' sx={{ p: 2 }}>
-              <Typography
-                variant='body2'
-                sx={{
-                  fontWeight: 500,
-                  color: (theme) => theme.palette.grey[600],
-                  letterSpacing: 0.4,
-                }}
-              >
-                Average Student Grade
-              </Typography>
-              <Typography
-                variant='h5'
-                sx={{
-                  fontWeight: 600,
-                  mt: '10px',
-                }}
-              >
-                98%
-              </Typography>
-            </Paper>
+            <Static title='Average Student Grade' description='98%' />
           </Grid>
           <Grid item xs={6} md={4} lg={6}>
-            <Paper variant='outlined' sx={{ p: 2 }}>
-              <Typography
-                variant='body2'
-                sx={{
-                  fontWeight: 500,
-                  color: (theme) => theme.palette.grey[600],
-                  letterSpacing: 0.4,
-                }}
-              >
-                Average Student Grade
-              </Typography>
-              <Typography
-                variant='h5'
-                sx={{
-                  fontWeight: 600,
-                  mt: '10px',
-                }}
-              >
-                98%
-              </Typography>
-            </Paper>
+            <Static title='Average Student Grade' description='98%' />
           </Grid>
           <Grid item xs={6} md={4} lg={6}>
-            <Paper variant='outlined' sx={{ p: 2 }}>
-              <Typography
-                variant='body2'
-                sx={{
-                  fontWeight: 500,
-                  color: (theme) => theme.palette.grey[600],
-                  letterSpacing: 0.4,
-                }}
-              >
-                Average Student Grade
-              </Typography>
-              <Typography
-                variant='h5'
-                sx={{
-                  fontWeight: 600,
-                  mt: '10px',
-                }}
-              >
-                98%
-              </Typography>
-            </Paper>
+            <Static title='Average Student Grade' description='98%' />
           </Grid>
           <Grid item xs={6} md={4} lg={6}>
-            <Paper variant='outlined' sx={{ p: 2 }}>
-              <Typography
-                variant='body2'
-                sx={{
-                  fontWeight: 500,
-                  color: (theme) => theme.palette.grey[600],
-                  letterSpacing: 0.4,
-                }}
-              >
-                Average Student Grade
-              </Typography>
-              <Typography
-                variant='h5'
-                sx={{
-                  fontWeight: 600,
-                  mt: '10px',
-                }}
-              >
-                98%
-              </Typography>
-            </Paper>
+            <Static title='Average Student Grade' description='98%' />
           </Grid>
           <Grid item xs={6} md={4} lg={6}>
-            <Paper variant='outlined' sx={{ p: 2 }}>
-              <Typography
-                variant='body2'
-                sx={{
-                  fontWeight: 500,
-                  color: (theme) => theme.palette.grey[600],
-                  letterSpacing: 0.4,
-                }}
-              >
-                Average Student Grade
-              </Typography>
-              <Typography
-                variant='h5'
-                sx={{
-                  fontWeight: 600,
-                  mt: '10px',
-                }}
-              >
-                98%
-              </Typography>
-            </Paper>
+            <Static title='Average Student Grade' description='98%' />
           </Grid>
           <Grid item xs={6} md={4} lg={6}>
-            <Paper variant='outlined' sx={{ p: 2 }}>
-              <Typography
-                variant='body2'
-                sx={{
-                  fontWeight: 500,
-                  color: (theme) => theme.palette.grey[600],
-                  letterSpacing: 0.4,
-                }}
-              >
-                Average Student Grade
-              </Typography>
-              <Typography
-                variant='h5'
-                sx={{
-                  fontWeight: 600,
-                  mt: '10px',
-                }}
-              >
-                98%
-              </Typography>
-            </Paper>
+            <Static title='Average Student Grade' description='98%' />
           </Grid>
         </Grid>
       </Grid>

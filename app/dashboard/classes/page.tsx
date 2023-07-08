@@ -19,7 +19,7 @@ import Add from '@mui/icons-material/Add';
 
 const classes = [
   {
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c675',
     title: 'Honors Pre-Calculus',
     subject: 'Mathematics',
     teacher: 'Mr. Smith',
@@ -29,7 +29,7 @@ const classes = [
     period: '1',
   },
   {
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c676',
     title: 'Honors Pre-Calculus',
     subject: 'Mathematics',
     teacher: 'Mr. Smith',
@@ -39,7 +39,7 @@ const classes = [
     period: '1',
   },
   {
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c677',
     title: 'Honors Pre-Calculus',
     subject: 'Mathematics',
     teacher: 'Mr. Smith',
@@ -49,7 +49,7 @@ const classes = [
     period: '1',
   },
   {
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c678',
     title: 'Honors Pre-Calculus',
     subject: 'Mathematics',
     teacher: 'Mr. Smith',
@@ -59,7 +59,7 @@ const classes = [
     period: '1',
   },
   {
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c679',
     title: 'Honors Pre-Calculus',
     subject: 'Mathematics',
     teacher: 'Mr. Smith',
@@ -69,7 +69,7 @@ const classes = [
     period: '1',
   },
   {
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c6710',
     title: 'Honors Pre-Calculus',
     subject: 'Mathematics',
     teacher: 'Mr. Smith',
@@ -79,7 +79,7 @@ const classes = [
     period: '1',
   },
   {
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c6711',
     title: 'Honors Pre-Calculus',
     subject: 'Mathematics',
     teacher: 'Mr. Smith',
@@ -89,7 +89,7 @@ const classes = [
     period: '1',
   },
   {
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c6712',
     title: 'Honors Pre-Calculus',
     subject: 'Mathematics',
     teacher: 'Mr. Smith',
@@ -99,7 +99,7 @@ const classes = [
     period: '1',
   },
   {
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c6713',
     title: 'Honors Pre-Calculus',
     subject: 'Mathematics',
     teacher: 'Mr. Smith',
@@ -109,7 +109,7 @@ const classes = [
     period: '1',
   },
   {
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c6714',
     title: 'Honors Pre-Calculus',
     subject: 'Mathematics',
     teacher: 'Mr. Smith',
@@ -119,7 +119,7 @@ const classes = [
     period: '1',
   },
   {
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c6715',
     title: 'Honors Pre-Calculus',
     subject: 'Mathematics',
     teacher: 'Mr. Smith',

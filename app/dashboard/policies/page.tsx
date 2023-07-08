@@ -17,84 +17,84 @@ import Add from '@mui/icons-material/Add';
 const policies = [
   {
     title: '2023 - 2024 School Year',
-    types: [
-      { type: 'Homework', percentage: 0.2 },
-      { type: 'Classwork', percentage: 0.3 },
-      { type: 'Assessments', percentage: 0.5 },
+    sections: [
+      { title: 'Homework', percentage: 0.2 },
+      { title: 'Classwork', percentage: 0.3 },
+      { title: 'Assessments', percentage: 0.5 },
     ],
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c671',
   },
   {
     title: '2023 - 2024 School Year',
-    types: [
-      { type: 'Homework', percentage: 0.2 },
-      { type: 'Classwork', percentage: 0.3 },
-      { type: 'Assessments', percentage: 0.5 },
+    sections: [
+      { title: 'Homework', percentage: 0.2 },
+      { title: 'Classwork', percentage: 0.3 },
+      { title: 'Assessments', percentage: 0.5 },
     ],
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c672',
   },
   {
     title: '2023 - 2024 School Year',
-    types: [
-      { type: 'Homework', percentage: 0.2 },
-      { type: 'Classwork', percentage: 0.3 },
-      { type: 'Assessments', percentage: 0.5 },
+    sections: [
+      { title: 'Homework', percentage: 0.2 },
+      { title: 'Classwork', percentage: 0.3 },
+      { title: 'Assessments', percentage: 0.5 },
     ],
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c673',
   },
   {
     title: '2023 - 2024 School Year',
-    types: [
-      { type: 'Homework', percentage: 0.2 },
-      { type: 'Classwork', percentage: 0.3 },
-      { type: 'Assessments', percentage: 0.5 },
+    sections: [
+      { title: 'Homework', percentage: 0.2 },
+      { title: 'Classwork', percentage: 0.3 },
+      { title: 'Assessments', percentage: 0.5 },
     ],
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
   },
   {
     title: '2023 - 2024 School Year',
-    types: [
-      { type: 'Homework', percentage: 0.2 },
-      { type: 'Classwork', percentage: 0.3 },
-      { type: 'Assessments', percentage: 0.5 },
+    sections: [
+      { title: 'Homework', percentage: 0.2 },
+      { title: 'Classwork', percentage: 0.3 },
+      { title: 'Assessments', percentage: 0.5 },
     ],
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c675',
   },
   {
     title: '2023 - 2024 School Year',
-    types: [
-      { type: 'Homework', percentage: 0.2 },
-      { type: 'Classwork', percentage: 0.3 },
-      { type: 'Assessments', percentage: 0.5 },
+    sections: [
+      { title: 'Homework', percentage: 0.2 },
+      { title: 'Classwork', percentage: 0.3 },
+      { title: 'Assessments', percentage: 0.5 },
     ],
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c676',
   },
   {
     title: '2023 - 2024 School Year',
-    types: [
-      { type: 'Homework', percentage: 0.2 },
-      { type: 'Classwork', percentage: 0.3 },
-      { type: 'Assessments', percentage: 0.5 },
+    sections: [
+      { title: 'Homework', percentage: 0.2 },
+      { title: 'Classwork', percentage: 0.3 },
+      { title: 'Assessments', percentage: 0.5 },
     ],
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c677',
   },
   {
     title: '2023 - 2024 School Year',
-    types: [
-      { type: 'Homework', percentage: 0.2 },
-      { type: 'Classwork', percentage: 0.3 },
-      { type: 'Assessments', percentage: 0.5 },
+    sections: [
+      { title: 'Homework', percentage: 0.2 },
+      { title: 'Classwork', percentage: 0.3 },
+      { title: 'Assessments', percentage: 0.5 },
     ],
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c678',
   },
   {
     title: '2023 - 2024 School Year',
-    types: [
-      { type: 'Homework', percentage: 0.2 },
-      { type: 'Classwork', percentage: 0.3 },
-      { type: 'Assessments', percentage: 0.5 },
+    sections: [
+      { title: 'Homework', percentage: 0.2 },
+      { title: 'Classwork', percentage: 0.3 },
+      { title: 'Assessments', percentage: 0.5 },
     ],
-    id: 1,
+    id: 'c451bd0d-0327-46c6-adfc-42f57514c679',
   },
 ];
 
@@ -157,14 +157,18 @@ export default function Policies() {
         </Button>
       </Stack>
       <Grid container spacing={2}>
-        {policies.map((v) => (
-          <Grid item xs={12} sm={6} md={4} key={v.id}>
+        {policies.map((policy) => (
+          <Grid item xs={12} sm={6} md={4} key={policy.id}>
             <Card>
               <CardContent>
-                <Typography variant='h5'>{v.title}</Typography>
-                {v.types.map((v) => (
-                  <Typography sx={{ mt: 1 }} variant='body2'>{`${v.type}: ${
-                    v.percentage * 100
+                <Typography variant='h5'>{policy.title}</Typography>
+                {policy.sections.map((section) => (
+                  <Typography
+                    key={section.title}
+                    sx={{ mt: 1 }}
+                    variant='body2'
+                  >{`${section.title}: ${
+                    section.percentage * 100
                   }%`}</Typography>
                 ))}
               </CardContent>

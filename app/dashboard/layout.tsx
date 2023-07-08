@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -20,12 +20,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import { useRouter } from 'next/navigation';
 import SchoolIcon from '@mui/icons-material/School';
 import GradingIcon from '@mui/icons-material/Grading';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Backdrop from '@mui/material/Backdrop';
+import Link from 'next/link';
 
 const drawerWidth = 300;
 
@@ -82,8 +82,6 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   const [anchor, setAnchor] = React.useState<null | HTMLElement>();
   const openMenu = Boolean(anchor);
   const [open, setOpen] = React.useState(false);
-  const router = useRouter();
-  const theme = useTheme();
 
   const closeMenu = () => setAnchor(null);
 
@@ -182,8 +180,9 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
           </Card>
 
           <ListItemButton
+            LinkComponent={Link}
             sx={{ borderRadius: 3 }}
-            onClick={() => router.push('/dashboard')}
+            href='/dashboard'
           >
             <ListItemIcon>
               <DashboardIcon />
@@ -191,8 +190,9 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
             <ListItemText primary='Dashboard' />
           </ListItemButton>
           <ListItemButton
+            LinkComponent={Link}
             sx={{ borderRadius: 3 }}
-            onClick={() => router.push('/dashboard/classes')}
+            href='/dashboard/classes'
           >
             <ListItemIcon>
               <SchoolIcon />
@@ -200,8 +200,9 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
             <ListItemText primary='Classes' />
           </ListItemButton>
           <ListItemButton
+            LinkComponent={Link}
             sx={{ borderRadius: 3 }}
-            onClick={() => router.push('/dashboard/policies')}
+            href='/dashboard/policies'
           >
             <ListItemIcon>
               <GradingIcon />
@@ -249,7 +250,11 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
           backgroundColor: {
             lg: 'transparent',
           },
+          pointerEvents: {
+            lg: 'none',
+          },
         }}
+        onClick={() => setOpen(false)}
       />
     </Box>
   );

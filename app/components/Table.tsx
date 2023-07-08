@@ -1,5 +1,3 @@
-'use client';
-
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -46,7 +44,9 @@ export default function Copyright({
         <TableHead>
           <TableRow>
             {keys.map((key) => (
-              <TableCell sx={{ fontSize: 12 }}>{key}</TableCell>
+              <TableCell sx={{ fontSize: 12 }} key={key}>
+                {key}
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>
