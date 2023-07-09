@@ -170,18 +170,11 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
           >
             {students.map((student) => (
               <TableRow key={student.id}>
-                <TableCell>
-                  <Typography variant='body2' noWrap>
-                    {student.name}
-                  </Typography>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  {student.name}
                 </TableCell>
-                <TableCell>
-                  <Link href={`mailto:${student.email}`}>
-                    {' '}
-                    <Typography variant='body2' noWrap>
-                      {student.email}
-                    </Typography>
-                  </Link>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  <Link href={`mailto:${student.email}`}>{student.email}</Link>
                 </TableCell>
                 <TableCell>
                   <Box
@@ -222,26 +215,17 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
           >
             {assignments.map((assignment) => (
               <TableRow key={assignment.id}>
-                <TableCell>
-                  <Typography variant='body2' noWrap>
-                    {assignment.name}
-                  </Typography>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  {assignment.name}
                 </TableCell>
-                <TableCell>
-                  {' '}
-                  <Typography variant='body2' noWrap>
-                    {assignment.type}
-                  </Typography>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  {assignment.type}
                 </TableCell>
-                <TableCell>
-                  <Typography variant='body2' noWrap>
-                    {new Date(assignment.creationDate).toLocaleDateString()}
-                  </Typography>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  {new Date(assignment.creationDate).toLocaleDateString()}
                 </TableCell>
-                <TableCell>
-                  <Typography variant='body2' noWrap>
-                    {new Date(assignment.dueDate).toLocaleDateString()}
-                  </Typography>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  {new Date(assignment.dueDate).toLocaleDateString()}
                 </TableCell>
               </TableRow>
             ))}

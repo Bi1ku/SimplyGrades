@@ -44,7 +44,7 @@ export default function Copyright({
         <TableHead>
           <TableRow>
             {keys.map((key) => (
-              <TableCell sx={{ fontSize: 12 }} key={key}>
+              <TableCell sx={{ fontSize: 12, whiteSpace: 'nowrap' }} key={key}>
                 {key}
               </TableCell>
             ))}
