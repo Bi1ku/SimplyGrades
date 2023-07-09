@@ -195,6 +195,7 @@ export default function Dashboard() {
         </Paper>
       </Grid>
       <Grid item md={5} xs={12}>
+        {/* TODO: Add Search Bar for students */}
         <Table
           title='All My Students'
           keys={['NAME', 'EMAIL', 'CONTACT NUMBER']}
