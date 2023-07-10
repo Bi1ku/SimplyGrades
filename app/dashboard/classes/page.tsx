@@ -192,7 +192,7 @@ export default function SignIn() {
       <Grid container spacing={2}>
         {classes.map((v) => (
           <Grid item xs={12} sm={6} md={4} key={v.id}>
-            <Card>
+            <Card variant='outlined'>
               <CardContent
                 onClick={() => router.push(`/dashboard/classes/${v.id}`)}
                 sx={{ '&:hover': { cursor: 'pointer' } }}

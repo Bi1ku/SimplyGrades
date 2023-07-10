@@ -226,7 +226,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
         <Toolbar />
         <Container
           maxWidth='xl'
-          sx={{ mt: 4, mb: 4, pl: { xs: '87.333px', lg: '16px' } }}
+          sx={{ my: 4, pl: { xs: '87.333px', lg: '16px' } }}
         >
           {children}
           <Copyright sx={{ pt: 4 }} />

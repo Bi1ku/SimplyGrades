@@ -19,6 +19,7 @@ import TableCell from '@mui/material/TableCell';
 import Link from 'next/link';
 import { formatContactNumber } from '@/utils/format';
 import Static from '../components/Static';
+import PanelCard from '../components/PanelCard';
 
 const BarChart = dynamic(
   () => import('recharts').then((recharts) => recharts.BarChart),
@@ -196,59 +197,61 @@ export default function Dashboard() {
       </Grid>
       <Grid item md={5} xs={12}>
         {/* TODO: Add Search Bar for students */}
-        <Table
-          title='All My Students'
-          keys={['NAME', 'EMAIL', 'CONTACT NUMBER']}
-          count={students.length}
-          onPageChange={() => ''}
-          page={0}
-          rowsPerPage={5}
-          rowsPerPageOptions={[5, 10, 15]}
-        >
-          {students.map((student) => (
-            <TableRow key={student.id}>
-              <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                {student.name}
-              </TableCell>
-              <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                <Link href={`mailto:${student.email}`}>{student.email}</Link>
-              </TableCell>
-              <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                <Link href={`tel:${student.contactNumber}`}>
-                  {formatContactNumber(student.contactNumber)}
-                </Link>
-              </TableCell>
-            </TableRow>
-          ))}
-        </Table>
+        <PanelCard title='All My Students'>
+          <Table
+            keys={['NAME', 'EMAIL', 'CONTACT NUMBER']}
+            count={students.length}
+            onPageChange={() => ''}
+            page={0}
+            rowsPerPage={5}
+            rowsPerPageOptions={[5, 10, 15]}
+          >
+            {students.map((student) => (
+              <TableRow key={student.id}>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  {student.name}
+                </TableCell>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  <Link href={`mailto:${student.email}`}>{student.email}</Link>
+                </TableCell>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  <Link href={`tel:${student.contactNumber}`}>
+                    {formatContactNumber(student.contactNumber)}
+                  </Link>
+                </TableCell>
+              </TableRow>
+            ))}
+          </Table>
+        </PanelCard>
       </Grid>
       <Grid item xs={12} md={7}>
-        <Table
-          title='Upcoming Assignments'
-          keys={['NAME', 'CLASS', 'CREATION DATE', 'DUE DATE']}
-          count={assignments.length}
-          onPageChange={() => ''}
-          page={0}
-          rowsPerPage={5}
-          rowsPerPageOptions={[5, 10, 15]}
-        >
-          {assignments.map((assignment) => (
-            <TableRow key={assignment.id}>
-              <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                {assignment.name}
-              </TableCell>
-              <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                {assignment.class}
-              </TableCell>
-              <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                {assignment.creationDate}
-              </TableCell>
-              <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                {assignment.dueDate}
-              </TableCell>
-            </TableRow>
-          ))}
-        </Table>
+        <PanelCard title='Upcoming Assignments'>
+          <Table
+            keys={['NAME', 'CLASS', 'CREATION DATE', 'DUE DATE']}
+            count={assignments.length}
+            onPageChange={() => ''}
+            page={0}
+            rowsPerPage={5}
+            rowsPerPageOptions={[5, 10, 15]}
+          >
+            {assignments.map((assignment) => (
+              <TableRow key={assignment.id}>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  {assignment.name}
+                </TableCell>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  {assignment.class}
+                </TableCell>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  {assignment.creationDate}
+                </TableCell>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  {assignment.dueDate}
+                </TableCell>
+              </TableRow>
+            ))}
+          </Table>
+        </PanelCard>
       </Grid>
     </Grid>
   );

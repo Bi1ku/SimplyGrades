@@ -159,7 +159,7 @@ export default function Policies() {
       <Grid container spacing={2}>
         {policies.map((policy) => (
           <Grid item xs={12} sm={6} md={4} key={policy.id}>
-            <Card>
+            <Card variant='outlined'>
               <CardContent>
                 <Typography variant='h5'>{policy.title}</Typography>
                 {policy.sections.map((section) => (

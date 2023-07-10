@@ -26,6 +26,8 @@ import MenuItem from '@mui/material/MenuItem';
 import React from 'react';
 import FormControl from '@mui/material/FormControl';
 import Static from '@/app/components/Static';
+import { useRouter } from 'next/navigation';
+import PanelCard from '@/app/components/PanelCard';
 
 const AreaChart = dynamic(
   () => import('recharts').then((recharts) => recharts.AreaChart),
@@ -141,8 +143,13 @@ const data = [
   },
 ];
 
-export default function ClassDetail({ params }: { params: { id: string } }) {
+export default function ClassDetail({
+  params,
+}: {
+  params: { classId: string };
+}) {
   const [age, setAge] = React.useState('');
+  const router = useRouter();
 
   return (
     <Box>
@@ -160,42 +167,45 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
           <Static title='Average Student Grade' description='98%' />
         </Grid>
         <Grid item xs={12} md={5}>
-          <Table
-            title='Students'
-            keys={['NAME', 'EMAIL', 'GRADE']}
-            count={students.length}
-            onPageChange={() => ''}
-            page={0}
-            rowsPerPage={5}
-          >
-            {students.map((student) => (
-              <TableRow key={student.id}>
-                <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                  {student.name}
-                </TableCell>
-                <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                  <Link href={`mailto:${student.email}`}>{student.email}</Link>
-                </TableCell>
-                <TableCell>
-                  <Box
-                    component='span'
-                    sx={{
-                      bgcolor: 'lightgreen',
-                      p: '7px',
-                      borderRadius: 4,
-                      color: 'green',
-                      fontWeight: 600,
-                    }}
-                  >
-                    {student.grade}%
-                  </Box>
-                </TableCell>
-              </TableRow>
-            ))}
-          </Table>
+          <PanelCard title='Students'>
+            <Table
+              keys={['NAME', 'EMAIL', 'GRADE']}
+              count={students.length}
+              onPageChange={() => ''}
+              page={0}
+              rowsPerPage={5}
+            >
+              {students.map((student) => (
+                <TableRow key={student.id}>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                    {student.name}
+                  </TableCell>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                    <Link href={`mailto:${student.email}`}>
+                      {student.email}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <Box
+                      component='span'
+                      sx={{
+                        bgcolor: 'lightgreen',
+                        p: '7px',
+                        borderRadius: 4,
+                        color: 'green',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {student.grade}%
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </Table>
+          </PanelCard>
         </Grid>
         <Grid item xs={12} md={7}>
-          <Table
+          <PanelCard
             title={
               <Stack flexDirection='row' sx={{ px: 2, pt: 2 }}>
                 <Typography sx={{ fontWeight: 600 }} variant='h6'>
@@ -206,30 +216,41 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
                 </Button>
               </Stack>
             }
-            keys={['NAME', 'TYPE', 'CREATION DATE', 'DUE DATE']}
-            count={assignments.length}
-            onPageChange={() => ''}
-            page={0}
-            rowsPerPage={5}
-            rowsPerPageOptions={[5, 10, 15]}
           >
-            {assignments.map((assignment) => (
-              <TableRow key={assignment.id}>
-                <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                  {assignment.name}
-                </TableCell>
-                <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                  {assignment.type}
-                </TableCell>
-                <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                  {new Date(assignment.creationDate).toLocaleDateString()}
-                </TableCell>
-                <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                  {new Date(assignment.dueDate).toLocaleDateString()}
-                </TableCell>
-              </TableRow>
-            ))}
-          </Table>
+            <Table
+              keys={['NAME', 'TYPE', 'CREATION DATE', 'DUE DATE']}
+              count={assignments.length}
+              onPageChange={() => ''}
+              page={0}
+              rowsPerPage={5}
+              rowsPerPageOptions={[5, 10, 15]}
+            >
+              {assignments.map((assignment) => (
+                <TableRow
+                  key={assignment.id}
+                  onClick={() =>
+                    router.push(
+                      `/dashboard/classes/${params.classId}/${assignment.id}`,
+                    )
+                  }
+                  sx={{ '&:hover': { cursor: 'pointer' } }}
+                >
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                    {assignment.name}
+                  </TableCell>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                    {assignment.type}
+                  </TableCell>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                    {new Date(assignment.creationDate).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                    {new Date(assignment.dueDate).toLocaleDateString()}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </Table>
+          </PanelCard>
         </Grid>
         <Grid item xs={12}>
           <Paper variant='outlined' sx={{ p: 2, pl: 0 }}>
@@ -239,9 +260,9 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
               </Typography>
               <FormControl sx={{ minWidth: 120 }} size='small'>
                 <InputLabel id='demo-select-small-label'>Age</InputLabel>
+                {/* TODO: Change to Autoselect */}
                 <Select
                   labelId='demo-select-small-label'
-                  id='demo-select-small'
                   value={age}
                   label='Age'
                   onChange={(event: SelectChangeEvent) =>
