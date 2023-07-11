@@ -222,7 +222,7 @@ export default function Dashboard() {
                 inputProps={{
                   style: {
                     padding: 0,
-                    width: 140,
+                    width: 150,
                   },
                 }}
                 sx={{
