@@ -1,6 +1,4 @@
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
+import MuiTable from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -9,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TablePagination from '@mui/material/TablePagination';
 
-export default function Copyright({
+export default function Table({
   keys,
   children,
   count,
@@ -28,7 +26,7 @@ export default function Copyright({
 }) {
   return (
     <TableContainer>
-      <Table>
+      <MuiTable>
         <TableHead>
           <TableRow>
             {keys.map((key) => (
@@ -50,7 +48,7 @@ export default function Copyright({
             />
           </TableRow>
         </TableFooter>
-      </Table>
+      </MuiTable>
     </TableContainer>
   );
 }

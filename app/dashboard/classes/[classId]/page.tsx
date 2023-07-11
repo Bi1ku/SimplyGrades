@@ -24,10 +24,13 @@ import InputLabel from '@mui/material/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import React from 'react';
+1;
 import FormControl from '@mui/material/FormControl';
 import Static from '@/app/components/Static';
 import { useRouter } from 'next/navigation';
 import PanelCard from '@/app/components/PanelCard';
+import Input from '@mui/material/Input';
+import { OutlinedInput } from '@mui/material';
 
 const AreaChart = dynamic(
   () => import('recharts').then((recharts) => recharts.AreaChart),
@@ -207,13 +210,39 @@ export default function ClassDetail({
         <Grid item xs={12} md={7}>
           <PanelCard
             title={
-              <Stack flexDirection='row' sx={{ px: 2, pt: 2 }}>
+              <Stack
+                flexDirection='row'
+                sx={{ px: 2, pt: 2 }}
+                justifyContent='space-between'
+              >
                 <Typography sx={{ fontWeight: 600 }} variant='h6'>
                   Assignments
                 </Typography>
-                <Button sx={{ ml: 'auto', p: 0, px: 2 }}>
-                  <Add /> Create
-                </Button>
+                <Stack flexDirection='row'>
+                  <OutlinedInput
+                    inputProps={{
+                      style: {
+                        padding: 0,
+                      },
+                    }}
+                    sx={{
+                      px: 2,
+                      borderRadius: 2,
+                    }}
+                    placeholder='Search...'
+                    size='small'
+                  />
+                  <Button
+                    size='small'
+                    variant='contained'
+                    sx={{
+                      ml: 2,
+                      borderRadius: 2,
+                    }}
+                  >
+                    <Add sx={{ pr: '2px' }} /> CREATE
+                  </Button>
+                </Stack>
               </Stack>
             }
           >
@@ -223,7 +252,6 @@ export default function ClassDetail({
               onPageChange={() => ''}
               page={0}
               rowsPerPage={5}
-              rowsPerPageOptions={[5, 10, 15]}
             >
               {assignments.map((assignment) => (
                 <TableRow

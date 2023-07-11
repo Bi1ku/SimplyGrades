@@ -7,15 +7,13 @@ export default function PanelCard({
   title,
   children,
   padding,
-  sx,
 }: {
   title: string | React.ReactNode;
   children: React.ReactNode;
   padding?: boolean;
-  sx?: SxProps<Theme>;
 }) {
   return (
-    <Paper variant='outlined' sx={{ ...sx, p: padding ? 2 : 0 }}>
+    <Paper variant='outlined' sx={{ p: padding ? 2 : 0 }}>
       {typeof title === 'string' ? (
         <Typography
           sx={{ fontWeight: 600, p: padding ? 0 : 2, pb: 0 }}
