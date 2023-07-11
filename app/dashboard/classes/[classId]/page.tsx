@@ -29,7 +29,6 @@ import FormControl from '@mui/material/FormControl';
 import Static from '@/app/components/Static';
 import { useRouter } from 'next/navigation';
 import PanelCard from '@/app/components/PanelCard';
-import Input from '@mui/material/Input';
 import { OutlinedInput } from '@mui/material';
 
 const AreaChart = dynamic(
@@ -211,11 +210,17 @@ export default function ClassDetail({
           <PanelCard
             title={
               <Stack
-                flexDirection='row'
-                sx={{ px: 2, pt: 2 }}
+                sx={{
+                  px: 2,
+                  pt: 2,
+                  flexDirection: { xs: 'column', sm: 'row' },
+                }}
                 justifyContent='space-between'
               >
-                <Typography sx={{ fontWeight: 600 }} variant='h6'>
+                <Typography
+                  sx={{ fontWeight: 600, mb: { xs: 1, sm: 0 } }}
+                  variant='h6'
+                >
                   Assignments
                 </Typography>
                 <Stack flexDirection='row'>
@@ -223,6 +228,7 @@ export default function ClassDetail({
                     inputProps={{
                       style: {
                         padding: 0,
+                        width: 140,
                       },
                     }}
                     sx={{

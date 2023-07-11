@@ -20,6 +20,14 @@ import Link from 'next/link';
 import { formatContactNumber } from '@/utils/format';
 import Static from '../components/Static';
 import PanelCard from '../components/PanelCard';
+import Stack from '@mui/material/Stack';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Button from '@mui/material/Button';
+import Add from '@mui/icons-material/Add';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 const BarChart = dynamic(
   () => import('recharts').then((recharts) => recharts.BarChart),
@@ -196,8 +204,37 @@ export default function Dashboard() {
         </Paper>
       </Grid>
       <Grid item md={5} xs={12}>
-        {/* TODO: Add Search Bar for students */}
-        <PanelCard title='All My Students'>
+        <PanelCard
+          title={
+            <Stack
+              sx={{ px: 2, pt: 2 }}
+              flexDirection='row'
+              justifyContent='space-between'
+            >
+              <Typography
+                sx={{ fontWeight: 600, mb: { xs: 1, sm: 0 } }}
+                variant='h6'
+                noWrap
+              >
+                All Students
+              </Typography>
+              <OutlinedInput
+                inputProps={{
+                  style: {
+                    padding: 0,
+                    width: 140,
+                  },
+                }}
+                sx={{
+                  px: 2,
+                  borderRadius: 2,
+                }}
+                placeholder='Search...'
+                size='small'
+              />
+            </Stack>
+          }
+        >
           <Table
             keys={['NAME', 'EMAIL', 'CONTACT NUMBER']}
             count={students.length}
@@ -225,7 +262,7 @@ export default function Dashboard() {
         </PanelCard>
       </Grid>
       <Grid item xs={12} md={7}>
-        <PanelCard title='Upcoming Assignments'>
+        <PanelCard title='All Past Assignments'>
           <Table
             keys={['NAME', 'CLASS', 'CREATION DATE', 'DUE DATE']}
             count={assignments.length}
