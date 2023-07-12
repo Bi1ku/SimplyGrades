@@ -24,12 +24,11 @@ import InputLabel from '@mui/material/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import React from 'react';
-1;
 import FormControl from '@mui/material/FormControl';
 import Static from '@/app/components/Static';
 import { useRouter } from 'next/navigation';
 import PanelCard from '@/app/components/PanelCard';
-import { OutlinedInput } from '@mui/material';
+import SearchBar from '@/app/components/SearchBar';
 
 const AreaChart = dynamic(
   () => import('recharts').then((recharts) => recharts.AreaChart),
@@ -224,20 +223,7 @@ export default function ClassDetail({
                   Assignments
                 </Typography>
                 <Stack flexDirection='row'>
-                  <OutlinedInput
-                    inputProps={{
-                      style: {
-                        padding: 0,
-                        width: 140,
-                      },
-                    }}
-                    sx={{
-                      px: 2,
-                      borderRadius: 2,
-                    }}
-                    placeholder='Search...'
-                    size='small'
-                  />
+                  <SearchBar />
                   <Button
                     size='small'
                     variant='contained'

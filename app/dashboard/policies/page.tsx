@@ -9,7 +9,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import React from 'react';
-import SearchBar from '@/app/components/SearchBar';
+import TabHeader from '@/app/components/TabHeader';
 
 const policies = [
   {
@@ -100,7 +100,7 @@ export default function Policies() {
 
   return (
     <Box>
-      <SearchBar />
+      <TabHeader />
       <Grid container spacing={2}>
         {policies.map((policy) => (
           <Grid item xs={12} sm={6} md={4} key={policy.id}>

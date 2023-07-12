@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import DialogContentText from '@mui/material/DialogContentText';
 import React from 'react';
 import Modal from '@/app/components/Modal';
-import SearchBar from '@/app/components/SearchBar';
+import TabHeader from '@/app/components/TabHeader';
 
 const classes = [
   {
@@ -133,7 +133,7 @@ export default function SignIn() {
 
   return (
     <Box>
-      <SearchBar />
+      <TabHeader />
       <Grid container spacing={2}>
         {classes.map((v) => (
           <Grid item xs={12} sm={6} md={4} key={v.id}>

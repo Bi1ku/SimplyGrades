@@ -21,13 +21,7 @@ import { formatContactNumber } from '@/utils/format';
 import Static from '../components/Static';
 import PanelCard from '../components/PanelCard';
 import Stack from '@mui/material/Stack';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Button from '@mui/material/Button';
-import Add from '@mui/icons-material/Add';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import SearchBar from '../components/SearchBar';
 
 const BarChart = dynamic(
   () => import('recharts').then((recharts) => recharts.BarChart),
@@ -218,20 +212,7 @@ export default function Dashboard() {
               >
                 All Students
               </Typography>
-              <OutlinedInput
-                inputProps={{
-                  style: {
-                    padding: 0,
-                    width: 150,
-                  },
-                }}
-                sx={{
-                  px: 2,
-                  borderRadius: 2,
-                }}
-                placeholder='Search...'
-                size='small'
-              />
+              <SearchBar />
             </Stack>
           }
         >
