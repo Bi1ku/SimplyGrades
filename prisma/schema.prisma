@@ -6,6 +6,65 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Teacher {
+  id        String   @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  classes   Class[]
+}
+
+model Student {
+  id                String              @id @default(uuid())
+  firstName         String
+  lastName          String
+  email             String
+  password          String
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  classes           Class[]
+  studentsInClasses StudentsInClasses[]
+}
+
+model Class {
+  id                String              @id @default(uuid())
+  name              String
+  teacherId         String
+  teacher           Teacher             @relation(fields: [teacherId], references: [id])
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  students          Student?            @relation(fields: [studentId], references: [id])
+  studentId         String?
+  assignments       Assignment[]
+  studentsInClasses StudentsInClasses[]
+}
+
+model StudentsInClasses {
+  student   Student  @relation(fields: [studentId], references: [id])
+  studentId String
+  class     Class    @relation(fields: [classId], references: [id])
+  classId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([studentId, classId])
+}
+
+model Assignment {
+  id        String   @id @default(uuid())
+  name      String
+  grade     Float?
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id])
+  dueDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
