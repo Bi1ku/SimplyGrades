@@ -27,7 +27,6 @@ model Student {
   password          String
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
-  classes           Class[]
   studentsInClasses StudentsInClasses[]
 }
 
@@ -38,8 +37,6 @@ model Class {
   teacher           Teacher             @relation(fields: [teacherId], references: [id])
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
-  students          Student?            @relation(fields: [studentId], references: [id])
-  studentId         String?
   assignments       Assignment[]
   studentsInClasses StudentsInClasses[]
 }
