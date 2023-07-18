@@ -12,7 +12,8 @@ model Teacher {
   id        String   @id @default(uuid())
   firstName String
   lastName  String
-  email     String
+  email     String   @unique
+  phone     String   @unique
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -23,7 +24,8 @@ model Student {
   id                String              @id @default(uuid())
   firstName         String
   lastName          String
-  email             String
+  phone             String              @unique
+  email             String              @unique
   password          String
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
