@@ -135,11 +135,11 @@ export default function SignIn() {
     <Box>
       <TabHeader />
       <Grid container spacing={2}>
-        {classes.map((v) => (
-          <Grid item xs={12} sm={6} md={4} key={v.id}>
+        {classes.map((cls) => (
+          <Grid item xs={12} sm={6} md={4} key={cls.id}>
             <Card variant='outlined'>
               <CardContent
-                onClick={() => router.push(`/dashboard/classes/${v.id}`)}
+                onClick={() => router.push(`/dashboard/classes/${cls.id}`)}
                 sx={{ '&:hover': { cursor: 'pointer' } }}
               >
                 <Box
@@ -149,12 +149,12 @@ export default function SignIn() {
                     alignItems: 'center',
                   }}
                 >
-                  <Typography variant='h5'>{v.title}</Typography>
-                  <Typography variant='caption'>{`Period ${v.period}`}</Typography>
+                  <Typography variant='h5'>{cls.title}</Typography>
+                  <Typography variant='caption'>{`Period ${cls.period}`}</Typography>
                 </Box>
-                <Typography variant='subtitle2'>{v.subject}</Typography>
+                <Typography variant='subtitle2'>{cls.subject}</Typography>
                 <Typography variant='subtitle1' sx={{ mt: 1 }}>
-                  {v.teacher}
+                  {cls.teacher}
                 </Typography>
               </CardContent>
               <Divider />
