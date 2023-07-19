@@ -1,15 +1,27 @@
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
-export async function GET(
-  req: Request,
-  { params }: { params: { teacherId: string } },
-) {}
+const prisma = new PrismaClient();
 
-export async function POST(
-  req: Request,
-  { params }: { params: { teacherId: string } },
-) {}
+export async function GET(
+  _: Request,
+  { params }: { params: { classId: string } },
+) {
+  try {
+    const { classId } = params;
+
+    const cls = await prisma.class.findUnique({
+      where: {
+        id: classId,
+      },
+    });
+    if (!cls) throw new Error('Class ID is invalid.');
+
+    return NextResponse.json(cls);
+  } catch (e: any) {
+    return NextResponse.json({ error: e.message || 'Something went wrong' });
+  }
+}
 
 export async function PUT(
   req: Request,
@@ -31,6 +43,7 @@ export async function PUT(
       },
       data: await req.json(),
     });
+
     return NextResponse.json(updatedClass);
   } catch (e: any) {
     return NextResponse.json({ error: e.message || 'Something went wrong' });
@@ -38,6 +51,46 @@ export async function PUT(
 }
 
 export async function DELETE(
-  req: Request,
-  { params }: { params: { teacherId: string } },
-) {}
+  _: Request,
+  { params }: { params: { classId: string } },
+) {
+  try {
+    const { classId } = params;
+
+    const cls = await prisma.class.findUnique({
+      where: {
+        id: classId,
+      },
+      select: {
+        studentsInClasses: true,
+      },
+    });
+    if (!cls) throw new Error('Class ID is invalid.');
+
+    const classIds = cls.studentsInClasses.map((sic) => sic.classId);
+    const studentIds = cls.studentsInClasses.map((sic) => sic.studentId);
+
+    await prisma.studentsInClasses.deleteMany({
+      where: {
+        AND: {
+          classId: {
+            in: classIds,
+          },
+          studentId: {
+            in: studentIds,
+          },
+        },
+      },
+    });
+
+    const deletedClass = await prisma.class.delete({
+      where: {
+        id: classId,
+      },
+    });
+
+    return NextResponse.json(deletedClass);
+  } catch (e: any) {
+    return NextResponse.json({ error: e.message || 'Something went wrong' });
+  }
+}
