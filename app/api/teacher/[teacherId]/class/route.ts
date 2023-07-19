@@ -28,18 +28,3 @@ export async function GET(
     return NextResponse.json({ error: e.message || 'Something went wrong' });
   }
 }
-
-export async function POST(
-  req: Request,
-  { params }: { params: { teacherId: string } },
-) {}
-
-export async function PUT(
-  req: Request,
-  { params }: { params: { teacherId: string } },
-) {}
-
-export async function DELETE(
-  req: Request,
-  { params }: { params: { teacherId: string } },
-) {}

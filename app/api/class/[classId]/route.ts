@@ -67,22 +67,6 @@ export async function DELETE(
     });
     if (!cls) throw new Error('Class ID is invalid.');
 
-    const classIds = cls.studentsInClasses.map((sic) => sic.classId);
-    const studentIds = cls.studentsInClasses.map((sic) => sic.studentId);
-
-    await prisma.studentsInClasses.deleteMany({
-      where: {
-        AND: {
-          classId: {
-            in: classIds,
-          },
-          studentId: {
-            in: studentIds,
-          },
-        },
-      },
-    });
-
     const deletedClass = await prisma.class.delete({
       where: {
         id: classId,

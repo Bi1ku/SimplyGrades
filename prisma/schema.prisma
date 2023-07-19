@@ -36,7 +36,7 @@ model Class {
   id                String              @id @default(uuid())
   name              String
   teacherId         String
-  teacher           Teacher             @relation(fields: [teacherId], references: [id])
+  teacher           Teacher             @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
   assignments       Assignment[]
@@ -44,9 +44,9 @@ model Class {
 }
 
 model StudentsInClasses {
-  student   Student  @relation(fields: [studentId], references: [id])
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   studentId String
-  class     Class    @relation(fields: [classId], references: [id])
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
   classId   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -59,7 +59,7 @@ model Assignment {
   name      String
   grade     Float?
   classId   String
-  class     Class    @relation(fields: [classId], references: [id])
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
   dueDate   DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
