@@ -7,7 +7,6 @@ async function main() {
   await prisma.student.deleteMany();
   await prisma.class.deleteMany();
   await prisma.teacher.deleteMany();
-  console.log('Deleted all students, teachers, and classes');
 
   const teacher = await prisma.teacher.create({
     data: {
@@ -18,9 +17,7 @@ async function main() {
       password: 'password',
     },
   });
-  console.log('Finished seeding teacher');
 
-  // Create 100 students
   const students = new Array(100).fill(0).map(
     async () =>
       await prisma.student.create({
@@ -33,9 +30,7 @@ async function main() {
         },
       }),
   );
-  console.log('Finished seeding students');
 
-  // Create 5 classes
   const classes = new Array(5).fill(0).map(
     async () =>
       await prisma.class.create({
@@ -46,7 +41,6 @@ async function main() {
       }),
   );
 
-  // Create student to class relationships (20 students per class)
   for (let i = 0; i < 100; i++) {
     await prisma.studentsInClasses.create({
       data: {
@@ -54,9 +48,15 @@ async function main() {
         classId: (await classes[i % 5]).id,
       },
     });
-  }
 
-  console.log('Finished seeding classes');
+    await prisma.assignment.create({
+      data: {
+        name: faker.lorem.words(3),
+        classId: (await classes[i % 5]).id,
+        dueDate: faker.date.future(),
+      },
+    });
+  }
 }
 
 main()
