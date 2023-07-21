@@ -127,7 +127,7 @@ const classes = [
   },
 ];
 
-export default function SignIn() {
+export default function Classes() {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
 

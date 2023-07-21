@@ -6,6 +6,7 @@ import {
   createTheme,
   responsiveFontSizes,
 } from '@mui/material';
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 
 export const metadata = {
   title: 'Create Next App',
@@ -38,10 +39,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <body>{children}</body>
-      </ThemeProvider>
+      <UserProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <body>{children}</body>
+        </ThemeProvider>
+      </UserProvider>
     </html>
   );
 }
