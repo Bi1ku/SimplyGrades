@@ -26,6 +26,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Backdrop from '@mui/material/Backdrop';
 import Link from 'next/link';
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 const drawerWidth = 300;
 

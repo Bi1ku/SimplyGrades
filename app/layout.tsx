@@ -6,7 +6,10 @@ import {
   createTheme,
   responsiveFontSizes,
 } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
+import useNotificationStore from './store/notification';
 
 export const metadata = {
   title: 'Create Next App',
@@ -37,12 +40,26 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const notification = useNotificationStore((state) => state);
+
   return (
     <html lang='en'>
       <UserProvider>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <body>{children}</body>
+          <Snackbar
+            open={notification.open}
+            autoHideDuration={5000}
+            onClose={() => notification.setOpen(false)}
+          >
+            <Alert
+              onClose={() => notification.setOpen(false)}
+              severity={notification.severity}
+            >
+              {notification.message}
+            </Alert>
+          </Snackbar>
         </ThemeProvider>
       </UserProvider>
     </html>
