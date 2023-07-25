@@ -1,21 +1,18 @@
 import axios from 'axios';
-import useNotificationStore from './store/notification';
-const notification = useNotificationStore((state) => state);
+import { generalizeError, notify } from './utils';
 
 const a = axios.create({
   baseURL:
     process.env.NODE_ENV === 'production'
       ? 'https://api.example.com'
-      : 'http://localhost:3000',
+      : 'http://localhost:3000/api',
   timeout: 10000,
 });
 
 a.interceptors.response.use((response) => {
   if (!response.data.error) return response.data;
-  notification.setOpen(true);
-  notification.setMessage(response.data.error);
-  notification.setSeverity('error');
-  return { data: null };
+  notify(generalizeError(response.data.error), 'error');
+  return null;
 });
 
 export default a;

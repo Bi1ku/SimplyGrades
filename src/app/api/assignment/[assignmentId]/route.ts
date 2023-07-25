@@ -19,7 +19,9 @@ export async function GET(
 
     return NextResponse.json(assignment);
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || 'Something went wrong' });
+    console.log(e);
+    console.log(e);
+    return NextResponse.json({ error: e.message });
   }
 }
 
@@ -46,7 +48,8 @@ export async function PUT(
 
     return NextResponse.json(updatedAssignment);
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || 'Something went wrong' });
+    console.log(e);
+    return NextResponse.json({ error: e.message });
   }
 }
 
@@ -72,6 +75,7 @@ export async function DELETE(
 
     return NextResponse.json(deletedAssignment);
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || 'Something went wrong' });
+    console.log(e);
+    return NextResponse.json({ error: e.message });
   }
 }

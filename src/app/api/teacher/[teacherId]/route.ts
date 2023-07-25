@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 const prisma = new PrismaClient();
 
 export async function GET(
-  req: Request,
+  _: Request,
   { params }: { params: { teacherId: string } },
 ) {
   try {
@@ -19,7 +19,8 @@ export async function GET(
 
     return NextResponse.json(teacher);
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || 'Something went wrong' });
+    console.log(e);
+    return NextResponse.json({ error: e.message });
   }
 }
 
@@ -46,7 +47,8 @@ export async function PUT(
 
     return NextResponse.json(updatedTeacher);
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || 'Something went wrong' });
+    console.log(e);
+    return NextResponse.json({ error: e.message });
   }
 }
 
@@ -72,6 +74,7 @@ export async function DELETE(
 
     return NextResponse.json(deletedTeacher);
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || 'Something went wrong' });
+    console.log(e);
+    return NextResponse.json({ error: e.message });
   }
 }

@@ -13,8 +13,6 @@ async function main() {
       firstName: 'Owen',
       lastName: 'Shi',
       email: '2008owenshi@gmail.com',
-      phone: '(646) 301-0911',
-      password: 'password',
     },
   });
 
@@ -25,8 +23,6 @@ async function main() {
           firstName: faker.person.firstName(),
           lastName: faker.person.lastName(),
           email: faker.internet.email(),
-          phone: faker.phone.number(),
-          password: faker.internet.password(),
         },
       }),
   );

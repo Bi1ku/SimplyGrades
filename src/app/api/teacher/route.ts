@@ -5,12 +5,23 @@ const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
   try {
-    const createdTeacher = await prisma.teacher.create({
-      data: await req.json(),
+    const body = await req.json();
+
+    let teacher = await prisma.teacher.findUnique({
+      where: {
+        email: body.email,
+      },
     });
 
-    return NextResponse.json(createdTeacher);
+    if (!teacher)
+      teacher = await prisma.teacher.create({
+        data: body,
+      });
+
+    console.log(teacher);
+    return NextResponse.json(teacher);
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || 'Something went wrong' });
+    console.log(e);
+    return NextResponse.json({ error: e.message });
   }
 }

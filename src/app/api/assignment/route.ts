@@ -11,6 +11,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(createdAssignment);
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || 'Something went wrong' });
+    console.log(e);
+    return NextResponse.json({ error: e.message });
   }
 }

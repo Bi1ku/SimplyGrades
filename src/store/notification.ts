@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-interface NotificationState {
+export interface NotificationState {
   open: boolean;
   message: string;
   severity: 'success' | 'error';

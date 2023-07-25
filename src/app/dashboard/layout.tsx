@@ -26,7 +26,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Backdrop from '@mui/material/Backdrop';
 import Link from 'next/link';
-import { useUser } from '@auth0/nextjs-auth0/client';
 
 const drawerWidth = 300;
 
@@ -133,8 +132,9 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
           sx={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'flex-end',
+            justifyContent: 'space-between',
             px: [1],
+            pt: 4,
           }}
         >
           {open && (
@@ -142,11 +142,11 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
               <Box
                 component='img'
                 sx={{
-                  height: 150,
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
+                  height: 50,
+                  ml: 'auto',
+                  mr: 'auto',
                 }}
-                src='/images/logo.png'
+                src='/images/logo.jpg'
                 alt='Logo'
               />
               <IconButton onClick={() => setOpen(!open)}>
@@ -156,7 +156,10 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
           )}
         </Toolbar>
         <List component='nav' sx={{ px: open ? 3 : 1 }}>
-          <Card variant='outlined' sx={open ? { mb: 2 } : { border: 'none' }}>
+          <Card
+            variant='outlined'
+            sx={open ? { mb: 2, mt: 2 } : { border: 'none' }}
+          >
             <CardContent
               sx={{
                 display: 'flex',

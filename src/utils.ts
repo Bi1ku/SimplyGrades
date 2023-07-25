@@ -1,3 +1,5 @@
+import useNotificationStore from './store/notification';
+
 export const formatContactNumber = (number: string) => {
   var cleaned = ('' + number).replace(/\D/g, '');
   var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
@@ -10,3 +12,17 @@ export const formatContactNumber = (number: string) => {
 // TODO: Change to format full name from request
 export const formatFullName = (firstName: string, lastName: string) =>
   `${firstName} ${lastName}`;
+
+export const notify = (
+  message: string,
+  severity: 'success' | 'error' = 'success',
+) => {
+  useNotificationStore.getState().setOpen(true);
+  useNotificationStore.getState().setMessage(message);
+  useNotificationStore.getState().setSeverity(severity);
+};
+
+export const generalizeError = (error: string) => {
+  if (error.length < 50) return error;
+  return 'Something went wrong.';
+};
