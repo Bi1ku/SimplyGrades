@@ -20,14 +20,15 @@ model Teacher {
 }
 
 model Student {
-  id                String              @id @default(uuid())
-  firstName         String
-  lastName          String
-  email             String              @unique
-  password          String
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  studentsInClasses StudentsInClasses[]
+  id                    String                  @id @default(uuid())
+  firstName             String
+  lastName              String
+  email                 String                  @unique
+  password              String
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  studentsToClasses     StudentsToClasses[]
+  studentsToAssignments StudentsToAssignments[]
 }
 
 model Class {
@@ -38,10 +39,10 @@ model Class {
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
   assignments       Assignment[]
-  studentsInClasses StudentsInClasses[]
+  studentsToClasses StudentsToClasses[]
 }
 
-model StudentsInClasses {
+model StudentsToClasses {
   student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   studentId String
   class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
@@ -53,14 +54,24 @@ model StudentsInClasses {
 }
 
 model Assignment {
-  id        String   @id @default(uuid())
-  name      String
-  grade     Float?
-  classId   String
-  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
-  dueDate   DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                    String                  @id @default(uuid())
+  name                  String
+  classId               String
+  class                 Class                   @relation(fields: [classId], references: [id], onDelete: Cascade)
+  dueDate               DateTime
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  studentsToAssignments StudentsToAssignments[]
 }
 
-// TODO: Add StudentsToAssignments model
+model StudentsToAssignments {
+  studentId    String
+  student      Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  assignmentId String
+  grade        Float?
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@id([studentId, assignmentId])
+}
