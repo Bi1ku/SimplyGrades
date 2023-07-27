@@ -18,7 +18,6 @@ export async function POST(req: Request) {
         data: body,
       });
 
-    console.log(teacher);
     return NextResponse.json(teacher);
   } catch (e: any) {
     console.log(e);

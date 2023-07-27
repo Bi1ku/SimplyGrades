@@ -9,7 +9,6 @@ export const formatContactNumber = (number: string) => {
   return null;
 };
 
-// TODO: Change to format full name from request
 export const formatFullName = (firstName: string, lastName: string) =>
   `${firstName} ${lastName}`;
 

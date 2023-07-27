@@ -78,7 +78,11 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-export default function Dashboard({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [anchor, setAnchor] = React.useState<null | HTMLElement>();
   const openMenu = Boolean(anchor);
   const [open, setOpen] = React.useState(false);
