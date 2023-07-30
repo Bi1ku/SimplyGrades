@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       data: body,
     });
 
-    await prisma.studentsInClasses.createMany({
+    await prisma.studentsToClasses.createMany({
       data: studentIds.map((studentId: string) => ({
         studentId,
         classId: createdClass.id,

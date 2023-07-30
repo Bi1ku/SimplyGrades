@@ -13,14 +13,35 @@ import ImageList from '@mui/material/ImageList';
 import React from 'react';
 import background from '../../../../public/images/auth_background.png';
 import { useRouter } from 'next/navigation';
+import { useMediaQuery } from '@mui/material';
+import useUserStore from '@/src/store/user';
+import { Student, Teacher } from '@prisma/client';
 
 export default function TeacherAuth() {
+  const dbUser = useUserStore((state) => state);
   const { user, error, isLoading } = useUser();
   const { push } = useRouter();
+  const md = useMediaQuery('(min-width:900px)');
 
-  const authorizeTeacher = async () => {
+  React.useEffect(() => {
+    const checkUserExistence = async () => {
+      if (user) {
+        const response: Student | Teacher | null = await a.get(
+          `/auth/existence/${user.email}`,
+        );
+        if (response) {
+          dbUser.setData(response);
+          notify('Successfully signed in!');
+          push('/dashboard');
+        }
+      }
+    };
+    checkUserExistence();
+  }, [user]);
+
+  const createTeacher = async () => {
     if (user) {
-      const response = await a.post('/teacher', {
+      const response = await a.post('/user/teacher', {
         email: user.email,
         firstName: user.given_name,
         lastName: user.family_name,
@@ -33,9 +54,9 @@ export default function TeacherAuth() {
     }
   };
 
-  const authorizeStudent = async () => {
+  const createStudent = async () => {
     if (user) {
-      const response = await a.post('/student', {
+      const response = await a.post('/user/student', {
         email: user.email,
         firstName: user.given_name,
         lastName: user.family_name,
@@ -79,22 +100,27 @@ export default function TeacherAuth() {
         display: 'grid',
         height: '100vh',
         placeItems: 'center',
-        px: 18,
+        px: {
+          lg: 18,
+          md: 6,
+          sm: 6,
+        },
         py: 2,
         backgroundImage: `url(${background.src})`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        contain: 'strict',
       }}
     >
-      <ImageList cols={2} gap={50}>
+      <ImageList cols={md ? 2 : 1} gap={50} sx={{ overflow: 'hidden' }}>
         <ImageListItem
           sx={{
             '&:hover': {
               cursor: 'pointer',
             },
           }}
-          onClick={authorizeTeacher}
+          onClick={createTeacher}
         >
           <img src='/images/teacher.jpg' style={{ borderRadius: 25 }} />
           <ImageListItemBar
@@ -113,7 +139,7 @@ export default function TeacherAuth() {
         </ImageListItem>
         <ImageListItem
           sx={{ '&:hover': { cursor: 'pointer' } }}
-          onClick={authorizeStudent}
+          onClick={createStudent}
         >
           <img src='/images/student.jpg' style={{ borderRadius: 25 }} />
           <ImageListItemBar

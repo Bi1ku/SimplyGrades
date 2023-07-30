@@ -64,7 +64,7 @@ export async function DELETE(
         id: classId,
       },
       select: {
-        studentsInClasses: true,
+        studentsToClasses: true,
       },
     });
     if (!cls) throw new Error('Class ID is invalid.');
