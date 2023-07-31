@@ -41,7 +41,7 @@ export default function TeacherAuth() {
 
   const createTeacher = async () => {
     if (user) {
-      const response = await a.post('/user/teacher', {
+      const response = await a.post('/teacher', {
         email: user.email,
         firstName: user.given_name,
         lastName: user.family_name,
@@ -56,7 +56,7 @@ export default function TeacherAuth() {
 
   const createStudent = async () => {
     if (user) {
-      const response = await a.post('/user/student', {
+      const response = await a.post('/student', {
         email: user.email,
         firstName: user.given_name,
         lastName: user.family_name,

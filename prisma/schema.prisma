@@ -13,7 +13,6 @@ model Teacher {
   firstName String
   lastName  String
   email     String   @unique
-  password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   classes   Class[]
@@ -24,7 +23,6 @@ model Student {
   firstName             String
   lastName              String
   email                 String                  @unique
-  password              String
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
   studentsToClasses     StudentsToClasses[]

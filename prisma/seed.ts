@@ -3,7 +3,7 @@ const { faker } = require('@faker-js/faker');
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.studentsInClasses.deleteMany();
+  await prisma.studentsToClasses.deleteMany();
   await prisma.student.deleteMany();
   await prisma.class.deleteMany();
   await prisma.teacher.deleteMany();
@@ -38,7 +38,7 @@ async function main() {
   );
 
   for (let i = 0; i < 100; i++) {
-    await prisma.studentsInClasses.create({
+    await prisma.studentsToClasses.create({
       data: {
         studentId: (await students[i]).id,
         classId: (await classes[i % 5]).id,
