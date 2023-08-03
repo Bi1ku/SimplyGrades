@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 async function main() {
   console.time('Seeded database');
 
+  console.log('═════════════════════════════════════════════════════');
   console.log('Clearing current database...');
   console.time('Cleared current database');
   await prisma.student.deleteMany();
@@ -12,7 +13,9 @@ async function main() {
   await prisma.teacher.deleteMany();
   await prisma.assignment.deleteMany();
   console.timeEnd('Cleared current database');
+  console.log('═════════════════════════════════════════════════════ \n');
 
+  console.log('═════════════════════════════════════════════════════');
   console.log('Seeding teacher...');
   console.time('Seeded teacher');
   const teacher = await prisma.teacher.create({
@@ -23,7 +26,9 @@ async function main() {
     },
   });
   console.timeEnd('Seeded teacher');
+  console.log('═════════════════════════════════════════════════════ \n');
 
+  console.log('═════════════════════════════════════════════════════');
   console.log('Seeding students...');
   console.time('Seeded students');
   const students = new Array(100).fill(0).map(
@@ -37,7 +42,9 @@ async function main() {
       }),
   );
   console.timeEnd('Seeded students');
+  console.log('═════════════════════════════════════════════════════ \n');
 
+  console.log('═════════════════════════════════════════════════════');
   console.log('Seeding classes...');
   console.time('Seeded classes');
   let classes = Array(5)
@@ -50,7 +57,7 @@ async function main() {
             teacherId: teacher.id,
             period: Math.floor(1 + 6 * Math.random()),
             subject: [
-              'MATH',
+              'MATHEMATICS',
               'SCIENCE',
               'ENGLISH',
               'HISTORY',
@@ -64,7 +71,9 @@ async function main() {
         }),
     );
   console.timeEnd('Seeded classes');
+  console.log('═════════════════════════════════════════════════════ \n');
 
+  console.log('═════════════════════════════════════════════════════');
   console.log('Seeding assignments...');
   console.time('Seeded assignments');
   for (let i = 0; i < 5; i++) {
@@ -79,7 +88,9 @@ async function main() {
     });
   }
   console.timeEnd('Seeded assignments');
+  console.log('═════════════════════════════════════════════════════ \n');
 
+  console.log('═════════════════════════════════════════════════════');
   console.log('Seeding students to classes relationship...');
   console.time('Seeded students to classes relationship');
   for (let i = 0; i < 100; i++) {
@@ -91,7 +102,9 @@ async function main() {
     });
   }
   console.timeEnd('Seeded students to classes relationship');
+  console.log('═════════════════════════════════════════════════════ \n');
 
+  console.log('═════════════════════════════════════════════════════');
   console.log('Seeding students to assignments relationship...');
   console.time('Seeded students to assignments relationship');
   classes = await prisma.class.findMany({
@@ -116,6 +129,7 @@ async function main() {
     }
   }
   console.timeEnd('Seeded students to assignments relationship');
+  console.log('═════════════════════════════════════════════════════ \n');
 
   console.timeEnd('Seeded database');
 }
