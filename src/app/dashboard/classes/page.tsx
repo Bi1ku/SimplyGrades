@@ -20,9 +20,6 @@ const classes = [
     title: 'Honors Pre-Calculus',
     subject: 'Mathematics',
     teacher: 'Mr. Smith',
-    room: 'A-1',
-    startTime: '8:00 AM',
-    endTime: '9:00 AM',
     period: '1',
   },
   {

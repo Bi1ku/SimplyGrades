@@ -3,17 +3,18 @@ const { faker } = require('@faker-js/faker');
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Seeding database...');
-  console.time('Seeding database');
+  console.time('Seeded database');
 
-  console.time('Clearing current database');
+  console.log('Clearing current database...');
+  console.time('Cleared current database');
   await prisma.student.deleteMany();
   await prisma.class.deleteMany();
   await prisma.teacher.deleteMany();
   await prisma.assignment.deleteMany();
-  console.timeEnd('Clearing current database');
+  console.timeEnd('Cleared current database');
 
-  console.time('Seeding teacher');
+  console.log('Seeding teacher...');
+  console.time('Seeded teacher');
   const teacher = await prisma.teacher.create({
     data: {
       firstName: 'Owen',
@@ -21,9 +22,10 @@ async function main() {
       email: '2008owenshi@gmail.com',
     },
   });
-  console.timeEnd('Seeding teacher');
+  console.timeEnd('Seeded teacher');
 
-  console.time('Seeding students');
+  console.log('Seeding students...');
+  console.time('Seeded students');
   const students = new Array(100).fill(0).map(
     async () =>
       await prisma.student.create({
@@ -34,9 +36,10 @@ async function main() {
         },
       }),
   );
-  console.timeEnd('Seeding students');
+  console.timeEnd('Seeded students');
 
-  console.time('Seeding classes');
+  console.log('Seeding classes...');
+  console.time('Seeded classes');
   let classes = Array(5)
     .fill(0)
     .map(
@@ -45,12 +48,25 @@ async function main() {
           data: {
             name: faker.lorem.words(3),
             teacherId: teacher.id,
+            period: Math.floor(1 + 6 * Math.random()),
+            subject: [
+              'MATH',
+              'SCIENCE',
+              'ENGLISH',
+              'HISTORY',
+              'ART',
+              'MUSIC',
+              'FOREIGN_LANGUAGE',
+              'PHYSICAL_EDUCATION',
+              'OTHER',
+            ][Math.floor(9 * Math.random())],
           },
         }),
     );
-  console.timeEnd('Seeding classes');
+  console.timeEnd('Seeded classes');
 
-  console.time('Seeding assignments');
+  console.log('Seeding assignments...');
+  console.time('Seeded assignments');
   for (let i = 0; i < 5; i++) {
     await prisma.assignment.create({
       data: {
@@ -62,9 +78,10 @@ async function main() {
       },
     });
   }
-  console.timeEnd('Seeding assignments');
+  console.timeEnd('Seeded assignments');
 
-  console.time('Seeding students to classes relationship');
+  console.log('Seeding students to classes relationship...');
+  console.time('Seeded students to classes relationship');
   for (let i = 0; i < 100; i++) {
     await prisma.studentsToClasses.create({
       data: {
@@ -73,9 +90,10 @@ async function main() {
       },
     });
   }
-  console.timeEnd('Seeding students to classes relationship');
+  console.timeEnd('Seeded students to classes relationship');
 
-  console.time('Seeding students to assignments relationship');
+  console.log('Seeding students to assignments relationship...');
+  console.time('Seeded students to assignments relationship');
   classes = await prisma.class.findMany({
     select: {
       assignments: true,
@@ -97,9 +115,9 @@ async function main() {
       }
     }
   }
-  console.timeEnd('Seeding students to assignments relationship');
+  console.timeEnd('Seeded students to assignments relationship');
 
-  console.timeEnd('Seeding database');
+  console.timeEnd('Seeded database');
 }
 
 main()

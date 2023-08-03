@@ -38,6 +38,8 @@ model Class {
   updatedAt         DateTime            @updatedAt
   assignments       Assignment[]
   studentsToClasses StudentsToClasses[]
+  subject           ClassSubject
+  period            Int
 }
 
 model StudentsToClasses {
@@ -72,4 +74,16 @@ model StudentsToAssignments {
   updatedAt    DateTime   @updatedAt
 
   @@id([studentId, assignmentId])
+}
+
+enum ClassSubject {
+  MATHEMATICS
+  SCIENCE
+  ENGLISH
+  HISTORY
+  ART
+  FOREIGN_LANGUAGE
+  PHYSICAL_EDUCATION
+  MUSIC
+  OTHER
 }
