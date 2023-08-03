@@ -16,6 +16,7 @@ model Teacher {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   classes   Class[]
+  avatar    String   @default("https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg")
 }
 
 model Student {
@@ -27,6 +28,7 @@ model Student {
   updatedAt             DateTime                @updatedAt
   studentsToClasses     StudentsToClasses[]
   studentsToAssignments StudentsToAssignments[]
+  avatar                String                  @default("https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg")
 }
 
 model Class {

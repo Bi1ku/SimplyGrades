@@ -39,33 +39,17 @@ export default function TeacherAuth() {
     checkUserExistence();
   }, [user]);
 
-  const createTeacher = async () => {
-    if (user) {
-      const response = await a.post('/teacher', {
-        email: user.email,
-        firstName: user.given_name,
-        lastName: user.family_name,
-      });
+  const createUser = async (type: 'student' | 'teacher') => {
+    const response = await a.post(`/${type}`, {
+      email: user?.email,
+      firstName: user?.given_name,
+      lastName: user?.family_name,
+      avatar: user?.picture,
+    });
 
-      if (response) {
-        notify('Successfully signed in!');
-        push('/dashboard');
-      }
-    }
-  };
-
-  const createStudent = async () => {
-    if (user) {
-      const response = await a.post('/student', {
-        email: user.email,
-        firstName: user.given_name,
-        lastName: user.family_name,
-      });
-
-      if (response) {
-        notify('Successfully signed in!');
-        push('/dashboard');
-      }
+    if (response) {
+      notify('Successfully signed in!');
+      push('/dashboard');
     }
   };
 
@@ -120,7 +104,7 @@ export default function TeacherAuth() {
               cursor: 'pointer',
             },
           }}
-          onClick={createTeacher}
+          onClick={() => createUser('teacher')}
         >
           <img src='/images/teacher.jpg' style={{ borderRadius: 25 }} />
           <ImageListItemBar
@@ -139,7 +123,7 @@ export default function TeacherAuth() {
         </ImageListItem>
         <ImageListItem
           sx={{ '&:hover': { cursor: 'pointer' } }}
-          onClick={createStudent}
+          onClick={() => createUser('student')}
         >
           <img src='/images/student.jpg' style={{ borderRadius: 25 }} />
           <ImageListItemBar

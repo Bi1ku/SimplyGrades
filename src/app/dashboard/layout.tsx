@@ -183,13 +183,9 @@ export default function DashboardLayout({
                 },
               }}
             >
-              <Avatar
-                alt='Avatar'
-                src='https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg'
-                sx={{ mr: 2 }}
-              />
+              <Avatar alt='Avatar' src={`${user?.firstName}`} sx={{ mr: 2 }} />
               <Box>
-                <Typography variant='h6'>John Doe</Typography>
+                <Typography variant='h6'>{`${user?.firstName} ${user?.lastName}`}</Typography>
                 <Typography variant='caption'>Assistant Teacher</Typography>
               </Box>
             </CardContent>
@@ -258,7 +254,7 @@ export default function DashboardLayout({
       >
         <MenuItem onClick={closeMenu}>Profile</MenuItem>
         <MenuItem onClick={closeMenu}>My account</MenuItem>
-        <MenuItem onClick={closeMenu}>Logout</MenuItem>
+        <MenuItem onClick={() => push('/api/auth/logout')}>Logout</MenuItem>
       </Menu>
       <Backdrop
         open={open}

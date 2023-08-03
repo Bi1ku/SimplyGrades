@@ -1,3 +1,4 @@
+import { Student, Teacher } from '@prisma/client';
 import useNotificationStore from './store/notification';
 
 export const formatContactNumber = (number: string) => {
@@ -9,8 +10,8 @@ export const formatContactNumber = (number: string) => {
   return null;
 };
 
-export const formatFullName = (firstName: string, lastName: string) =>
-  `${firstName} ${lastName}`;
+export const formatFullName = (user: Teacher | Student | null) =>
+  `${user?.firstName} ${user?.lastName}`;
 
 export const notify = (
   message: string,
