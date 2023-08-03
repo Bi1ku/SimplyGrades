@@ -150,7 +150,7 @@ export default function ClassDetail({
   params: { classId: string };
 }) {
   const [age, setAge] = React.useState('');
-  const router = useRouter();
+  const { push } = useRouter();
 
   return (
     <Box>
@@ -249,7 +249,7 @@ export default function ClassDetail({
                 <TableRow
                   key={assignment.id}
                   onClick={() =>
-                    router.push(
+                    push(
                       `/dashboard/classes/${params.classId}/${assignment.id}`,
                     )
                   }

@@ -129,7 +129,7 @@ const classes = [
 
 export default function Classes() {
   const [open, setOpen] = React.useState(false);
-  const router = useRouter();
+  const { push } = useRouter();
 
   return (
     <Box>
@@ -139,7 +139,7 @@ export default function Classes() {
           <Grid item xs={12} sm={6} md={4} key={cls.id}>
             <Card variant='outlined'>
               <CardContent
-                onClick={() => router.push(`/dashboard/classes/${cls.id}`)}
+                onClick={() => push(`/dashboard/classes/${cls.id}`)}
                 sx={{ '&:hover': { cursor: 'pointer' } }}
               >
                 <Box

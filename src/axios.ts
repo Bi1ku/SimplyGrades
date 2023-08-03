@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { generalizeError, notify } from './utils';
+import { BASE_URL } from './constants';
 
 const a = axios.create({
   baseURL: `${BASE_URL}/api`,

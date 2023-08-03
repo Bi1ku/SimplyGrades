@@ -26,6 +26,8 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Backdrop from '@mui/material/Backdrop';
 import Link from 'next/link';
+import useUserStore from '@/src/store/user';
+import { useRouter } from 'next/navigation';
 
 const drawerWidth = 300;
 
@@ -83,11 +85,17 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const user = useUserStore((state) => state.data);
   const [anchor, setAnchor] = React.useState<null | HTMLElement>();
   const openMenu = Boolean(anchor);
   const [open, setOpen] = React.useState(false);
+  const { push } = useRouter();
 
   const closeMenu = () => setAnchor(null);
+
+  React.useEffect(() => {
+    if (!user) push('/api/auth/login');
+  }, []);
 
   return (
     <Box sx={{ display: 'flex' }}>
