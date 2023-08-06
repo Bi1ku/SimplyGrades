@@ -7,10 +7,10 @@ const a = axios.create({
   timeout: 10000,
 });
 
-a.interceptors.response.use((response) => {
-  if (!response.data?.error) return response.data;
+a.interceptors.response.use((response): any => {
+  if (!response.data?.error) return response;
   notify(generalizeError(response.data.error), 'error');
-  return null;
+  return { data: null };
 });
 
 export default a;

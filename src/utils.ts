@@ -1,5 +1,5 @@
-import { Student, Teacher } from '@prisma/client';
-import useNotificationStore from './store/notification';
+import useNotificationStore from './hooks/notification';
+import { User, dummyUser } from './hooks/user';
 
 export const formatContactNumber = (number: string) => {
   var cleaned = ('' + number).replace(/\D/g, '');
@@ -10,8 +10,8 @@ export const formatContactNumber = (number: string) => {
   return null;
 };
 
-export const formatFullName = (user: Teacher | Student | null) =>
-  `${user?.firstName} ${user?.lastName}`;
+export const formatFullName = (user: User) =>
+  `${user.firstName} ${user.lastName}`;
 
 export const notify = (
   message: string,
@@ -25,4 +25,9 @@ export const notify = (
 export const generalizeError = (error: string) => {
   if (error.length < 50) return error;
   return 'Something went wrong.';
+};
+
+export const checkUser = (user: User) => {
+  if (JSON.stringify(user) === JSON.stringify(dummyUser)) return false;
+  return true;
 };

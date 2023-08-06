@@ -10,160 +10,89 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/navigation';
 import DialogContentText from '@mui/material/DialogContentText';
-import React from 'react';
+import React, { useRef } from 'react';
 import Modal from '@/src/components/Modal';
 import TabHeader from '@/src/components/TabHeader';
+import { Class, Teacher } from '@prisma/client';
+import { checkUser, formatFullName } from '@/src/utils';
+import a from '@/src/axios';
+import useUser from '@/src/hooks/user';
+import useEffectV2 from '@/src/hooks/effect';
 
-const classes = [
-  {
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c675',
-    title: 'Honors Pre-Calculus',
-    subject: 'Mathematics',
-    teacher: 'Mr. Smith',
-    period: '1',
-  },
-  {
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c676',
-    title: 'Honors Pre-Calculus',
-    subject: 'Mathematics',
-    teacher: 'Mr. Smith',
-    room: 'A-1',
-    startTime: '8:00 AM',
-    endTime: '9:00 AM',
-    period: '1',
-  },
-  {
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c677',
-    title: 'Honors Pre-Calculus',
-    subject: 'Mathematics',
-    teacher: 'Mr. Smith',
-    room: 'A-1',
-    startTime: '8:00 AM',
-    endTime: '9:00 AM',
-    period: '1',
-  },
-  {
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c678',
-    title: 'Honors Pre-Calculus',
-    subject: 'Mathematics',
-    teacher: 'Mr. Smith',
-    room: 'A-1',
-    startTime: '8:00 AM',
-    endTime: '9:00 AM',
-    period: '1',
-  },
-  {
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c679',
-    title: 'Honors Pre-Calculus',
-    subject: 'Mathematics',
-    teacher: 'Mr. Smith',
-    room: 'A-1',
-    startTime: '8:00 AM',
-    endTime: '9:00 AM',
-    period: '1',
-  },
-  {
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c6710',
-    title: 'Honors Pre-Calculus',
-    subject: 'Mathematics',
-    teacher: 'Mr. Smith',
-    room: 'A-1',
-    startTime: '8:00 AM',
-    endTime: '9:00 AM',
-    period: '1',
-  },
-  {
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c6711',
-    title: 'Honors Pre-Calculus',
-    subject: 'Mathematics',
-    teacher: 'Mr. Smith',
-    room: 'A-1',
-    startTime: '8:00 AM',
-    endTime: '9:00 AM',
-    period: '1',
-  },
-  {
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c6712',
-    title: 'Honors Pre-Calculus',
-    subject: 'Mathematics',
-    teacher: 'Mr. Smith',
-    room: 'A-1',
-    startTime: '8:00 AM',
-    endTime: '9:00 AM',
-    period: '1',
-  },
-  {
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c6713',
-    title: 'Honors Pre-Calculus',
-    subject: 'Mathematics',
-    teacher: 'Mr. Smith',
-    room: 'A-1',
-    startTime: '8:00 AM',
-    endTime: '9:00 AM',
-    period: '1',
-  },
-  {
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c6714',
-    title: 'Honors Pre-Calculus',
-    subject: 'Mathematics',
-    teacher: 'Mr. Smith',
-    room: 'A-1',
-    startTime: '8:00 AM',
-    endTime: '9:00 AM',
-    period: '1',
-  },
-  {
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c6715',
-    title: 'Honors Pre-Calculus',
-    subject: 'Mathematics',
-    teacher: 'Mr. Smith',
-    room: 'A-1',
-    startTime: '8:00 AM',
-    endTime: '9:00 AM',
-    period: '1',
-  },
-];
+interface ClassWithTeacher extends Class {
+  teacher: Teacher;
+}
 
 export default function Classes() {
+  // TODO: Fetch classes from API
+  const user = useUser();
+  const [loading, setLoading] = React.useState(true);
+  const [classes, setClasses] = React.useState<ClassWithTeacher[]>([]);
   const [open, setOpen] = React.useState(false);
   const { push } = useRouter();
+
+  React.useEffect(() => {
+    console.log('CALLED');
+    const controller = new AbortController();
+
+    checkUser(user) &&
+      (async () => {
+        const { data: response } = await a.get(`/teachers/${user.id}/classes`, {
+          signal: controller.signal,
+        });
+        console.log('RESPONSE:', response);
+        if (!response) return;
+        setClasses(response.classes);
+        setLoading(false);
+      })();
+
+    return () => {
+      controller.abort();
+    };
+  }, [user]);
 
   return (
     <Box>
       <TabHeader />
       <Grid container spacing={2}>
-        {classes.map((cls) => (
-          <Grid item xs={12} sm={6} md={4} key={cls.id}>
-            <Card variant='outlined'>
-              <CardContent
-                onClick={() => push(`/dashboard/classes/${cls.id}`)}
-                sx={{ '&:hover': { cursor: 'pointer' } }}
-              >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
+        {loading ? (
+          <></>
+        ) : classes.length ? (
+          classes.map((cls) => (
+            <Grid item xs={12} sm={6} md={4} key={cls.id}>
+              <Card variant='outlined'>
+                <CardContent
+                  onClick={() => push(`/dashboard/classes/${cls.id}`)}
+                  sx={{ '&:hover': { cursor: 'pointer' } }}
                 >
-                  <Typography variant='h5'>{cls.title}</Typography>
-                  <Typography variant='caption'>{`Period ${cls.period}`}</Typography>
-                </Box>
-                <Typography variant='subtitle2'>{cls.subject}</Typography>
-                <Typography variant='subtitle1' sx={{ mt: 1 }}>
-                  {cls.teacher}
-                </Typography>
-              </CardContent>
-              <Divider />
-              <CardActions>
-                <Box sx={{ ml: 'auto' }}>
-                  <Button onClick={() => setOpen(true)}>Delete</Button>
-                </Box>
-                <Button size='small'>Edit</Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Typography variant='h5'>{cls.name}</Typography>
+                    <Typography variant='caption'>{`Period ${cls.period}`}</Typography>
+                  </Box>
+                  <Typography variant='subtitle2'>{cls.subject}</Typography>
+                  <Typography variant='subtitle1' sx={{ mt: 1 }}>
+                    {formatFullName(user)}
+                  </Typography>
+                </CardContent>
+                <Divider />
+                <CardActions>
+                  <Box sx={{ ml: 'auto' }}>
+                    <Button onClick={() => setOpen(true)}>Delete</Button>
+                  </Box>
+                  <Button size='small'>Edit</Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))
+        ) : (
+          <></>
+        )}
       </Grid>
       <Modal
         title='Delete this class?'

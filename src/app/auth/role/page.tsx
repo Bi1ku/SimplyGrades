@@ -14,11 +14,8 @@ import React from 'react';
 import background from '../../../../public/images/auth_background.png';
 import { useRouter } from 'next/navigation';
 import { useMediaQuery } from '@mui/material';
-import useUserStore from '@/src/store/user';
-import { Student, Teacher } from '@prisma/client';
 
 export default function TeacherAuth() {
-  const dbUser = useUserStore((state) => state);
   const { user, error, isLoading } = useUser();
   const { push } = useRouter();
   const md = useMediaQuery('(min-width:900px)');
@@ -26,11 +23,9 @@ export default function TeacherAuth() {
   React.useEffect(() => {
     const checkUserExistence = async () => {
       if (user) {
-        const response: Student | Teacher | null = await a.get(
-          `/auth/existence/${user.email}`,
-        );
+        const { data: response } = await a.get(`/auth/existence/${user.email}`);
         if (response) {
-          dbUser.setData(response);
+          localStorage.setItem('user', JSON.stringify(response));
           notify('Successfully signed in!');
           push('/dashboard');
         }
@@ -39,12 +34,12 @@ export default function TeacherAuth() {
     checkUserExistence();
   }, [user]);
 
-  const createUser = async (type: 'student' | 'teacher') => {
-    const response = await a.post(`/${type}`, {
-      email: user?.email,
-      firstName: user?.given_name,
-      lastName: user?.family_name,
-      avatar: user?.picture,
+  const createUser = async (type: 'students' | 'teachers') => {
+    const { data: response } = await a.post(`/${type}`, {
+      email: user!.email,
+      firstName: user!.given_name,
+      lastName: user!.family_name,
+      avatar: user!.picture,
     });
 
     if (response) {
@@ -104,7 +99,7 @@ export default function TeacherAuth() {
               cursor: 'pointer',
             },
           }}
-          onClick={() => createUser('teacher')}
+          onClick={() => createUser('teachers')}
         >
           <img src='/images/teacher.jpg' style={{ borderRadius: 25 }} />
           <ImageListItemBar
@@ -123,7 +118,7 @@ export default function TeacherAuth() {
         </ImageListItem>
         <ImageListItem
           sx={{ '&:hover': { cursor: 'pointer' } }}
-          onClick={() => createUser('student')}
+          onClick={() => createUser('students')}
         >
           <img src='/images/student.jpg' style={{ borderRadius: 25 }} />
           <ImageListItemBar

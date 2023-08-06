@@ -26,8 +26,11 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Backdrop from '@mui/material/Backdrop';
 import Link from 'next/link';
-import useUserStore from '@/src/store/user';
 import { useRouter } from 'next/navigation';
+import useUser, { dummyUser } from '@/src/hooks/user';
+import useEffectV2 from '@/src/hooks/effect';
+import { checkUser, formatFullName } from '@/src/utils';
+import { Student, Teacher } from '@prisma/client';
 
 const drawerWidth = 300;
 
@@ -85,7 +88,7 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = useUserStore((state) => state.data);
+  const user = useUser();
   const [anchor, setAnchor] = React.useState<null | HTMLElement>();
   const openMenu = Boolean(anchor);
   const [open, setOpen] = React.useState(false);
@@ -93,8 +96,8 @@ export default function DashboardLayout({
 
   const closeMenu = () => setAnchor(null);
 
-  React.useEffect(() => {
-    if (!user) push('/api/auth/login');
+  useEffectV2(() => {
+    if (!checkUser(user)) push('/api/auth/login');
   }, []);
 
   return (
@@ -134,7 +137,7 @@ export default function DashboardLayout({
             <Avatar
               sx={{ width: 30, height: 30 }}
               alt='Avatar'
-              src='https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg'
+              src={user.avatar}
             />
           </IconButton>
         </Toolbar>
@@ -183,9 +186,9 @@ export default function DashboardLayout({
                 },
               }}
             >
-              <Avatar alt='Avatar' src={`${user?.firstName}`} sx={{ mr: 2 }} />
+              <Avatar alt='Avatar' src={user.avatar} sx={{ mr: 2 }} />
               <Box>
-                <Typography variant='h6'>{`${user?.firstName} ${user?.lastName}`}</Typography>
+                <Typography variant='h6'>{formatFullName(user)}</Typography>
                 <Typography variant='caption'>Assistant Teacher</Typography>
               </Box>
             </CardContent>
