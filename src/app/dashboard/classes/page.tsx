@@ -10,21 +10,20 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/navigation';
 import DialogContentText from '@mui/material/DialogContentText';
-import React, { useRef } from 'react';
+import React from 'react';
 import Modal from '@/src/components/Modal';
 import TabHeader from '@/src/components/TabHeader';
 import { Class, Teacher } from '@prisma/client';
 import { checkUser, formatFullName } from '@/src/utils';
 import a from '@/src/axios';
 import useUser from '@/src/hooks/user';
-import useEffectV2 from '@/src/hooks/effect';
+import Skeleton from '@mui/material/Skeleton';
 
 interface ClassWithTeacher extends Class {
   teacher: Teacher;
 }
 
 export default function Classes() {
-  // TODO: Fetch classes from API
   const user = useUser();
   const [loading, setLoading] = React.useState(true);
   const [classes, setClasses] = React.useState<ClassWithTeacher[]>([]);
@@ -32,19 +31,18 @@ export default function Classes() {
   const { push } = useRouter();
 
   React.useEffect(() => {
-    console.log('CALLED');
     const controller = new AbortController();
 
-    checkUser(user) &&
-      (async () => {
-        const { data: response } = await a.get(`/teachers/${user.id}/classes`, {
-          signal: controller.signal,
-        });
-        console.log('RESPONSE:', response);
-        if (!response) return;
-        setClasses(response.classes);
-        setLoading(false);
-      })();
+    const handleGetClasses = async (signal: AbortSignal) => {
+      const { data: response } = await a.get(`/teachers/${user.id}/classes`, {
+        signal: signal,
+      });
+      if (!response) return;
+      setClasses(response.classes);
+      setLoading(false);
+    };
+
+    checkUser(user) && handleGetClasses(controller.signal);
 
     return () => {
       controller.abort();
@@ -56,7 +54,11 @@ export default function Classes() {
       <TabHeader />
       <Grid container spacing={2}>
         {loading ? (
-          <></>
+          new Array(9).fill(0).map((_, i) => (
+            <Grid item xs={12} sm={6} md={4} key={i}>
+              <Skeleton variant='rectangular' height={172.5} />
+            </Grid>
+          ))
         ) : classes.length ? (
           classes.map((cls) => (
             <Grid item xs={12} sm={6} md={4} key={cls.id}>
@@ -70,9 +72,12 @@ export default function Classes() {
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
+                      flexWrap: 'wrap',
                     }}
                   >
-                    <Typography variant='h5'>{cls.name}</Typography>
+                    <Typography variant='h5' sx={{ maxWidth: 4 / 5 }} noWrap>
+                      {cls.name}
+                    </Typography>
                     <Typography variant='caption'>{`Period ${cls.period}`}</Typography>
                   </Box>
                   <Typography variant='subtitle2'>{cls.subject}</Typography>

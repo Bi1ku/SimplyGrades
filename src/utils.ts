@@ -2,8 +2,8 @@ import useNotificationStore from './hooks/notification';
 import { User, dummyUser } from './hooks/user';
 
 export const formatContactNumber = (number: string) => {
-  var cleaned = ('' + number).replace(/\D/g, '');
-  var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+  const cleaned = ('' + number).replace(/\D/g, '');
+  const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
   if (match) {
     return '(' + match[1] + ') ' + match[2] + '-' + match[3];
   }
@@ -22,12 +22,8 @@ export const notify = (
   useNotificationStore.getState().setSeverity(severity);
 };
 
-export const generalizeError = (error: string) => {
-  if (error.length < 50) return error;
-  return 'Something went wrong.';
-};
+export const generalizeError = (error: string) =>
+  error.length < 50 ? error : 'Something went wrong.';
 
-export const checkUser = (user: User) => {
-  if (JSON.stringify(user) === JSON.stringify(dummyUser)) return false;
-  return true;
-};
+export const checkUser = (user: User) =>
+  JSON.stringify(user) === JSON.stringify(dummyUser) ? false : true;

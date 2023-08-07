@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-const useEffectV2 = (fn: Function, inputs: []) => {
+const useEffectV2 = (fn: Function, inputs: unknown[]) => {
   const mount = useRef(false);
 
   useEffect(() => {

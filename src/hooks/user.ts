@@ -9,9 +9,11 @@ export const dummyUser = {
   email: '',
   id: '',
   avatar: '',
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };
 
-const useUser = (): User => {
+const useUser = () => {
   const [user, setUser] = useState(dummyUser);
 
   useEffect(() => {
@@ -20,7 +22,7 @@ const useUser = (): User => {
     if (user) setUser(JSON.parse(user));
   }, []);
 
-  return user as User;
+  return user;
 };
 
 export default useUser;
