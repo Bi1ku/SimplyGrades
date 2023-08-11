@@ -32,7 +32,7 @@ model Student {
 }
 
 model Class {
-  id                String              @id @default(uuid())
+  id                String              @id
   name              String
   teacherId         String
   teacher           Teacher             @relation(fields: [teacherId], references: [id], onDelete: Cascade)
@@ -83,9 +83,15 @@ enum ClassSubject {
   SCIENCE
   ENGLISH
   HISTORY
-  ART
   FOREIGN_LANGUAGE
-  PHYSICAL_EDUCATION
+  ART
   MUSIC
+  HEALTH
+  PHYSICAL_EDUCATION
+  TECHNOLOGY
+  ENGINEERING
+  COMPUTER_SCIENCE
+  GEOGRAPHY
+  SOCIAL_STUDIES
   OTHER
 }

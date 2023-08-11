@@ -27,10 +27,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Backdrop from '@mui/material/Backdrop';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import useUser, { dummyUser } from '@/src/hooks/user';
+import useUser from '@/src/hooks/user';
 import useEffectV2 from '@/src/hooks/effect';
 import { checkUser, formatFullName } from '@/src/utils';
-import { Student, Teacher } from '@prisma/client';
 
 const drawerWidth = 300;
 
@@ -97,6 +96,7 @@ export default function DashboardLayout({
   const closeMenu = () => setAnchor(null);
 
   useEffectV2(() => {
+    console.log(checkUser(user));
     if (!checkUser(user)) push('/api/auth/login');
   }, []);
 

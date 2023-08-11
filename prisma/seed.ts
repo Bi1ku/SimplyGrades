@@ -2,6 +2,16 @@ const { PrismaClient } = require('@prisma/client');
 const { faker } = require('@faker-js/faker');
 const prisma = new PrismaClient();
 
+const generateClassCode = () => {
+  const chars =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < 6; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+};
+
 async function main() {
   console.time('Seeded database');
 
@@ -53,6 +63,7 @@ async function main() {
       async () =>
         await prisma.class.create({
           data: {
+            id: generateClassCode(),
             name: faker.lorem.words(3),
             teacherId: teacher.id,
             period: Math.floor(1 + 6 * Math.random()),

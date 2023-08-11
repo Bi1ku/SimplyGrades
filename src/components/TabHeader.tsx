@@ -5,7 +5,11 @@ import Button from '@mui/material/Button';
 import Add from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 
-export default function TabHeader() {
+export default function TabHeader({
+  setCreateModalOpen,
+}: {
+  setCreateModalOpen: () => void;
+}) {
   return (
     <Stack flexDirection='row' sx={{ mb: 2 }}>
       <Box
@@ -55,6 +59,7 @@ export default function TabHeader() {
           ml: 'auto',
           borderRadius: 2,
         }}
+        onClick={setCreateModalOpen}
       >
         <Add sx={{ pr: '2px' }} /> CREATE
       </Button>
