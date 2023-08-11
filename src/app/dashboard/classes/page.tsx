@@ -48,7 +48,11 @@ const subjects = [
 
 export default function Classes() {
   const user = useUser();
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState({
+    classes: true,
+    createClass: false,
+    deleteClass: false,
+  });
   const [classes, setClasses] = React.useState<ClassWithTeacher[]>([]);
   const [classId, setClassId] = React.useState('');
   const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
@@ -58,15 +62,17 @@ export default function Classes() {
     subject: '',
     period: 0,
   });
+  const [searchQuery, setSearchQuery] = React.useState('');
   const { push } = useRouter();
 
   const handleGetClasses = async (signal?: AbortSignal) => {
+    setLoading({ ...loading, classes: true });
     const { data: response } = await a.get(`/teachers/${user.id}/classes`, {
       signal: signal,
     });
     if (!response) return;
     setClasses(response.classes);
-    setLoading(false);
+    setLoading({ ...loading, classes: false });
   };
 
   React.useEffect(() => {
@@ -80,13 +86,16 @@ export default function Classes() {
   }, [user]);
 
   const handleDeleteClass = async () => {
+    setLoading({ ...loading, deleteClass: true });
     const { data: response } = await a.delete(`/classes/${classId}`);
     if (!response) return;
     notify('Successfully deleted class!', 'success');
     handleGetClasses();
+    setLoading({ ...loading, deleteClass: false });
   };
 
   const handleCreateClass = async () => {
+    setLoading({ ...loading, createClass: true });
     const { data: response } = await a.post('/classes', {
       ...form,
       teacherId: user.id,
@@ -94,14 +103,19 @@ export default function Classes() {
     if (!response) return;
     notify('Successfully created class!', 'success');
     handleGetClasses();
+    setLoading({ ...loading, createClass: false });
   };
 
+  // TODO: MAKE UI AND UX BETTER (BETTER LOADING STATES) + EDITING CLASS NAME, PERIOD, AND SUBJECT.
   return (
     <Box>
-      <TabHeader setCreateModalOpen={() => setCreateModalOpen(true)} />
+      <TabHeader
+        setCreateModalOpen={() => setCreateModalOpen(true)}
+        setSearchQuery={(query: string) => setSearchQuery(query)}
+      />
       <Grid container spacing={2}>
         <Exist
-          data={loading}
+          data={loading.classes}
           placeholder={new Array(9).fill(0).map((_, i) => (
             <Grid item xs={12} sm={6} md={4} key={i}>
               <Skeleton variant='rectangular' height={172.5} />
@@ -109,48 +123,54 @@ export default function Classes() {
           ))}
         >
           {classes.length &&
-            classes.map((cls) => (
-              <Grid item xs={12} sm={6} md={4} key={cls.id}>
-                <Card variant='outlined'>
-                  <CardContent
-                    onClick={() => push(`/dashboard/classes/${cls.id}`)}
-                    sx={{ '&:hover': { cursor: 'pointer' } }}
-                  >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        flexWrap: 'wrap',
-                      }}
+            classes
+              .filter((v) => v.name.includes(searchQuery))
+              .map((cls) => (
+                <Grid item xs={12} sm={6} md={4} key={cls.id}>
+                  <Card variant='outlined'>
+                    <CardContent
+                      onClick={() => push(`/dashboard/classes/${cls.id}`)}
+                      sx={{ '&:hover': { cursor: 'pointer' } }}
                     >
-                      <Typography variant='h5' sx={{ maxWidth: 4 / 5 }} noWrap>
-                        {cls.name}
-                      </Typography>
-                      <Typography variant='caption'>{`Period ${cls.period}`}</Typography>
-                    </Box>
-                    <Typography variant='subtitle2'>{cls.subject}</Typography>
-                    <Typography variant='subtitle1' sx={{ mt: 1 }}>
-                      {formatFullName(user)}
-                    </Typography>
-                  </CardContent>
-                  <Divider />
-                  <CardActions>
-                    <Box sx={{ ml: 'auto' }}>
-                      <Button
-                        onClick={() => {
-                          setDeleteModalOpen(true);
-                          setClassId(cls.id);
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          flexWrap: 'wrap',
                         }}
                       >
-                        Delete
-                      </Button>
-                    </Box>
-                    <Button size='small'>Edit</Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
+                        <Typography
+                          variant='h5'
+                          sx={{ maxWidth: 4 / 5 }}
+                          noWrap
+                        >
+                          {cls.name}
+                        </Typography>
+                        <Typography variant='caption'>{`Period ${cls.period}`}</Typography>
+                      </Box>
+                      <Typography variant='subtitle2'>{cls.subject}</Typography>
+                      <Typography variant='subtitle1' sx={{ mt: 1 }}>
+                        {formatFullName(user)}
+                      </Typography>
+                    </CardContent>
+                    <Divider />
+                    <CardActions>
+                      <Box sx={{ ml: 'auto' }}>
+                        <Button
+                          onClick={() => {
+                            setDeleteModalOpen(true);
+                            setClassId(cls.id);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </Box>
+                      <Button size='small'>Edit</Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
         </Exist>
       </Grid>
       <Modal
@@ -159,8 +179,15 @@ export default function Classes() {
         handleClose={() => setDeleteModalOpen(false)}
         buttons={[
           { title: 'Cancel', onClick: () => setDeleteModalOpen(false) },
-          { title: 'Delete', onClick: handleDeleteClass },
+          {
+            title: 'Delete',
+            onClick: () => {
+              handleDeleteClass();
+              loading.deleteClass && setDeleteModalOpen(false);
+            },
+          },
         ]}
+        loading={loading.deleteClass}
       >
         <DialogContentText>
           Deleting this class will completely remove it from our database. All
@@ -174,8 +201,17 @@ export default function Classes() {
         handleClose={() => setCreateModalOpen(false)}
         buttons={[
           { title: 'Cancel', onClick: () => setCreateModalOpen(false) },
-          { title: 'Create', onClick: handleCreateClass },
+          {
+            title: 'Create',
+            onClick: () => {
+              () => {
+                handleCreateClass();
+                loading.createClass && setCreateModalOpen(false);
+              };
+            },
+          },
         ]}
+        loading={loading.createClass}
       >
         <Grid
           container

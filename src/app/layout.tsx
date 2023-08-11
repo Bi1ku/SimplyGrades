@@ -49,6 +49,7 @@ export default function RootLayout({
           <CssBaseline />
           <body>{children}</body>
           <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             open={notification.open}
             autoHideDuration={5000}
             onClose={() => notification.setOpen(false)}

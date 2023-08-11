@@ -7,8 +7,10 @@ import SearchIcon from '@mui/icons-material/Search';
 
 export default function TabHeader({
   setCreateModalOpen,
+  setSearchQuery,
 }: {
   setCreateModalOpen: () => void;
+  setSearchQuery: (query: string) => void;
 }) {
   return (
     <Stack flexDirection='row' sx={{ mb: 2 }}>
@@ -33,6 +35,7 @@ export default function TabHeader({
           <SearchIcon />
         </Box>
         <InputBase
+          onChange={(e) => setSearchQuery(e.target.value)}
           placeholder='Search…'
           sx={{
             color: 'inherit',

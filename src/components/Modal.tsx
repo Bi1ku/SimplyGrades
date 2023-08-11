@@ -5,6 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Exist from './Exist';
 import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Modal({
   open,
@@ -13,6 +14,7 @@ export default function Modal({
   children,
   buttons,
   subtitle,
+  loading,
 }: {
   open: boolean;
   handleClose: () => void;
@@ -20,6 +22,7 @@ export default function Modal({
   children: React.ReactNode;
   buttons: { title: string; onClick: () => void }[];
   subtitle?: string;
+  loading: boolean;
 }) {
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -31,8 +34,13 @@ export default function Modal({
       </Exist>
       <DialogContent>{children}</DialogContent>
       <DialogActions>
-        {buttons.map((button) => (
-          <Button onClick={button.onClick}>{button.title}</Button>
+        {buttons.map((button, i) => (
+          <Button onClick={button.onClick}>
+            {button.title}{' '}
+            {i === buttons.length - 1 && loading && (
+              <CircularProgress size={20} sx={{ ml: 1 }} />
+            )}
+          </Button>
         ))}
       </DialogActions>
     </Dialog>
