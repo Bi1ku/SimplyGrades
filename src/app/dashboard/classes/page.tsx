@@ -10,7 +10,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/navigation';
 import DialogContentText from '@mui/material/DialogContentText';
-import React from 'react';
+import React, { useMemo } from 'react';
 import Modal from '@/src/components/Modal';
 import TabHeader from '@/src/components/TabHeader';
 import { Class, Teacher } from '@prisma/client';
@@ -46,22 +46,27 @@ const subjects = [
   { label: 'Other', id: 'OTHER' },
 ];
 
+const defaultForm = {
+  name: '',
+  subject: '',
+  period: 0,
+};
+
 export default function Classes() {
   const user = useUser();
   const [loading, setLoading] = React.useState({
     classes: true,
     createClass: false,
     deleteClass: false,
+    editClass: false,
   });
   const [classes, setClasses] = React.useState<ClassWithTeacher[]>([]);
   const [classId, setClassId] = React.useState('');
   const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
   const [createModalOpen, setCreateModalOpen] = React.useState(false);
-  const [form, setForm] = React.useState({
-    name: '',
-    subject: '',
-    period: 0,
-  });
+  const [editModalOpen, setEditModalOpen] = React.useState(false);
+  const [createForm, setCreateForm] = React.useState(defaultForm);
+  const [editForm, setEditForm] = React.useState(defaultForm);
   const [searchQuery, setSearchQuery] = React.useState('');
   const { push } = useRouter();
 
@@ -75,6 +80,36 @@ export default function Classes() {
     setLoading({ ...loading, classes: false });
   };
 
+  const handleDeleteClass = async () => {
+    setLoading({ ...loading, deleteClass: true });
+    const { data: response } = await a.delete(`/classes/${classId}`);
+    if (!response) return;
+    notify('Successfully deleted class!', 'success');
+    await handleGetClasses();
+    setLoading({ ...loading, deleteClass: false });
+  };
+
+  const handleCreateClass = async () => {
+    setLoading({ ...loading, createClass: true });
+    const { data: response } = await a.post('/classes', {
+      ...createForm,
+      teacherId: user.id,
+    });
+    if (!response) return;
+    notify('Successfully created class!', 'success');
+    await handleGetClasses();
+    setLoading({ ...loading, createClass: false });
+  };
+
+  const handleEditClass = async () => {
+    setLoading({ ...loading, editClass: true });
+    const { data: response } = await a.put(`/classes/${classId}`, editForm);
+    if (!response) return;
+    notify('Successfully edited class!', 'success');
+    await handleGetClasses();
+    setLoading({ ...loading, editClass: false });
+  };
+
   React.useEffect(() => {
     const controller = new AbortController();
 
@@ -85,28 +120,21 @@ export default function Classes() {
     };
   }, [user]);
 
-  const handleDeleteClass = async () => {
-    setLoading({ ...loading, deleteClass: true });
-    const { data: response } = await a.delete(`/classes/${classId}`);
-    if (!response) return;
-    notify('Successfully deleted class!', 'success');
-    handleGetClasses();
-    setLoading({ ...loading, deleteClass: false });
-  };
+  useMemo(() => {
+    const selectedClass = classes.find((v) => v.id === classId);
+    selectedClass &&
+      setEditForm({
+        name: selectedClass.name,
+        subject: selectedClass.subject,
+        period: selectedClass.period,
+      });
+  }, [classId]);
 
-  const handleCreateClass = async () => {
-    setLoading({ ...loading, createClass: true });
-    const { data: response } = await a.post('/classes', {
-      ...form,
-      teacherId: user.id,
-    });
-    if (!response) return;
-    notify('Successfully created class!', 'success');
-    handleGetClasses();
-    setLoading({ ...loading, createClass: false });
-  };
+  const selectedSubject = useMemo(
+    () => subjects.find((v) => v.id === editForm.subject),
+    [editForm.subject],
+  );
 
-  // TODO: MAKE UI AND UX BETTER (BETTER LOADING STATES) + EDITING CLASS NAME, PERIOD, AND SUBJECT.
   return (
     <Box>
       <TabHeader
@@ -166,7 +194,14 @@ export default function Classes() {
                           Delete
                         </Button>
                       </Box>
-                      <Button size='small'>Edit</Button>
+                      <Button
+                        onClick={() => {
+                          setEditModalOpen(true);
+                          setClassId(cls.id);
+                        }}
+                      >
+                        Edit
+                      </Button>
                     </CardActions>
                   </Card>
                 </Grid>
@@ -176,14 +211,17 @@ export default function Classes() {
       <Modal
         title='Delete this class?'
         open={deleteModalOpen}
-        handleClose={() => setDeleteModalOpen(false)}
+        handleClose={() => !loading.deleteClass && setDeleteModalOpen(false)}
         buttons={[
-          { title: 'Cancel', onClick: () => setDeleteModalOpen(false) },
+          {
+            title: 'Cancel',
+            onClick: () => setDeleteModalOpen(false),
+          },
           {
             title: 'Delete',
-            onClick: () => {
-              handleDeleteClass();
-              loading.deleteClass && setDeleteModalOpen(false);
+            onClick: async () => {
+              await handleDeleteClass(); // Wait for class to be deleted before closing modal
+              setDeleteModalOpen(false);
             },
           },
         ]}
@@ -198,16 +236,18 @@ export default function Classes() {
         title='Create class'
         subtitle='Start a new class for your students to join!'
         open={createModalOpen}
-        handleClose={() => setCreateModalOpen(false)}
+        handleClose={() => !loading.createClass && setCreateModalOpen(false)}
         buttons={[
-          { title: 'Cancel', onClick: () => setCreateModalOpen(false) },
+          {
+            title: 'Cancel',
+            onClick: () => setCreateModalOpen(false),
+          },
           {
             title: 'Create',
-            onClick: () => {
-              () => {
-                handleCreateClass();
-                loading.createClass && setCreateModalOpen(false);
-              };
+            onClick: async () => {
+              setCreateForm(defaultForm);
+              await handleCreateClass(); // Wait for class to be created before closing modal
+              setCreateModalOpen(false);
             },
           },
         ]}
@@ -224,13 +264,14 @@ export default function Classes() {
               label='Name'
               fullWidth
               size='small'
-              {...passInputProps('name', form, setForm)}
+              {...passInputProps('name', createForm, setCreateForm)}
             />
           </Grid>
           <Grid item xs={6}>
             <Autocomplete
+              defaultValue={subjects[subjects.length - 1]}
               onChange={(_, value) => {
-                value && setForm({ ...form, subject: value.id });
+                value && setCreateForm({ ...createForm, subject: value.id });
               }}
               options={subjects}
               renderInput={(params: AutocompleteRenderInputParams) => (
@@ -252,7 +293,74 @@ export default function Classes() {
               type='number'
               size='small'
               InputProps={{ inputProps: { min: 0 } }}
-              {...passInputProps('period', form, setForm)}
+              {...passInputProps('period', createForm, setCreateForm)}
+            />
+          </Grid>
+        </Grid>
+      </Modal>
+      <Modal
+        loading={loading.editClass}
+        title='Edit class'
+        subtitle='Update this class with a new name, subject, or period!'
+        open={editModalOpen}
+        handleClose={() => !loading.editClass && setEditModalOpen(false)}
+        buttons={[
+          {
+            title: 'Cancel',
+            onClick: () => {
+              setEditModalOpen(false);
+            },
+          },
+          {
+            title: 'Update',
+            onClick: async () => {
+              await handleEditClass();
+              setEditModalOpen(false);
+            },
+          },
+        ]}
+      >
+        <Grid
+          container
+          spacing={2}
+          sx={{ width: { md: 565, sm: 500, xs: 400 }, mt: '1px' }}
+        >
+          <Grid item xs={12}>
+            <TextField
+              variant='outlined'
+              label='Name'
+              fullWidth
+              size='small'
+              {...passInputProps('name', editForm, setEditForm)}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Autocomplete
+              onChange={(_, value) => {
+                value && setEditForm({ ...editForm, subject: value.id });
+              }}
+              defaultValue={selectedSubject}
+              options={subjects}
+              renderInput={(params: AutocompleteRenderInputParams) => (
+                <TextField
+                  {...params}
+                  variant='outlined'
+                  label='Subject'
+                  fullWidth
+                  size='small'
+                />
+              )}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              variant='outlined'
+              label='Period'
+              fullWidth
+              type='number'
+              size='small'
+              InputProps={{ inputProps: { min: 0 } }}
+              {...passInputProps('period', editForm, setEditForm)}
             />
           </Grid>
         </Grid>
