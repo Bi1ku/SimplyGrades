@@ -90,6 +90,9 @@ export default function Classes() {
   };
 
   const handleCreateClass = async () => {
+    if (!createForm.name || !createForm.subject || !createForm.period)
+      return notify('Please fill out all fields!', 'error');
+
     setLoading({ ...loading, createClass: true });
     const { data: response } = await a.post('/classes', {
       ...createForm,

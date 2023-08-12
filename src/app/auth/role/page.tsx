@@ -22,16 +22,13 @@ export default function TeacherAuth() {
 
   React.useEffect(() => {
     const checkUserExistence = async () => {
-      if (user) {
-        const { data: response } = await a.get(`/auth/existence/${user.email}`);
-        if (response) {
-          localStorage.setItem('user', JSON.stringify(response));
-          notify('Successfully signed in!');
-          push('/dashboard');
-        }
-      }
+      const { data: response } = await a.get(`/auth/existence/${user!.email}`);
+      if (!response) return;
+      localStorage.setItem('user', JSON.stringify(response));
+      notify('Successfully signed in!');
+      push('/dashboard');
     };
-    checkUserExistence();
+    user && checkUserExistence();
   }, [user]);
 
   const createUser = async (type: 'students' | 'teachers') => {
@@ -41,11 +38,9 @@ export default function TeacherAuth() {
       lastName: user!.family_name,
       avatar: user!.picture,
     });
-
-    if (response) {
-      notify('Successfully signed in!');
-      push('/dashboard');
-    }
+    if (!response) return;
+    notify('Successfully signed in!');
+    push('/dashboard');
   };
 
   if (isLoading)
@@ -73,6 +68,7 @@ export default function TeacherAuth() {
     );
   }
 
+  // TODO: REFACTOR ROLE SELECTION USER INTERFACE
   return (
     <Box
       sx={{
