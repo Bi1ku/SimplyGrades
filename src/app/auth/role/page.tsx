@@ -68,33 +68,30 @@ export default function TeacherAuth() {
     );
   }
 
-  // TODO: REFACTOR ROLE SELECTION USER INTERFACE
   return (
     <Box
       sx={{
         display: 'grid',
-        height: '100vh',
+        height: {
+          md: '100vh',
+          sm: 'auto',
+        },
         placeItems: 'center',
         px: {
           lg: 18,
-          md: 6,
-          sm: 6,
+          md: 8,
+          sm: 12,
+          xs: 6,
         },
-        py: 2,
+        py: 4,
         backgroundImage: `url(${background.src})`,
-        backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        contain: 'strict',
       }}
     >
-      <ImageList cols={md ? 2 : 1} gap={50} sx={{ overflow: 'hidden' }}>
+      <ImageList cols={md ? 2 : 1} gap={50}>
         <ImageListItem
-          sx={{
-            '&:hover': {
-              cursor: 'pointer',
-            },
-          }}
+          sx={{ '&:hover': { cursor: 'pointer' } }}
           onClick={() => createUser('teachers')}
         >
           <img src='/images/teacher.jpg' style={{ borderRadius: 25 }} />
@@ -106,7 +103,7 @@ export default function TeacherAuth() {
               </Typography>
             }
             subtitle={
-              <Typography variant='body2'>
+              <Typography variant='body2' noWrap>
                 Create new classes, assignments, grades, and add students.
               </Typography>
             }
@@ -125,7 +122,7 @@ export default function TeacherAuth() {
               </Typography>
             }
             subtitle={
-              <Typography variant='body2'>
+              <Typography variant='body2' noWrap>
                 Join teachers' classes and view your grades.
               </Typography>
             }
