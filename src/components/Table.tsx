@@ -25,7 +25,7 @@ export default function Table({
   rowsPerPageOptions?: number[];
 }) {
   return (
-    <TableContainer>
+    <TableContainer sx={{ display: 'flex', flexDirection: 'column' }}>
       <MuiTable>
         <TableHead>
           <TableRow>
@@ -36,8 +36,18 @@ export default function Table({
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>{children}</TableBody>
-        <TableFooter>
+        <TableBody>
+          {children}
+          {count - (page + 1) * rowsPerPage < 0 &&
+            new Array(rowsPerPage - count).fill(0).map((_, i) => (
+              <TableRow key={i}>
+                {new Array(keys.length).fill(0).map((_, i) => (
+                  <TableCell key={i}>‎</TableCell>
+                ))}
+              </TableRow>
+            ))}
+        </TableBody>
+        <TableFooter sx={{ mt: 1000 }}>
           <TableRow>
             <TablePagination
               count={count}

@@ -13,7 +13,7 @@ export default function PanelCard({
   padding?: boolean;
 }) {
   return (
-    <Paper variant='outlined' sx={{ p: padding ? 2 : 0 }}>
+    <Paper variant='outlined' sx={{ p: padding ? 2 : 0, height: '100%' }}>
       {typeof title === 'string' ? (
         <Typography
           sx={{ fontWeight: 600, p: padding ? 0 : 2, pb: 0 }}

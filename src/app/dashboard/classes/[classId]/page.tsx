@@ -29,44 +29,21 @@ import Static from '@/src/components/Static';
 import { useRouter } from 'next/navigation';
 import PanelCard from '@/src/components/PanelCard';
 import SearchBar from '@/src/components/SearchBar';
+import a from '@/src/axios';
+import {
+  StudentsToClasses as DefaultStudentsToClasses,
+  Student,
+} from '@prisma/client';
+import { formatFullName } from '@/src/utils';
+
+interface StudentsToClassesWithStudent extends DefaultStudentsToClasses {
+  student: Student;
+}
 
 const AreaChart = dynamic(
   () => import('recharts').then((recharts) => recharts.AreaChart),
   { ssr: false },
 );
-
-const students = [
-  {
-    name: 'John Doe',
-    email: 'johndoe@gmail.com',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c675',
-    grade: 96,
-  },
-  {
-    name: 'John Doe',
-    email: 'johndoe@gmail.com',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c676',
-    grade: 96,
-  },
-  {
-    name: 'John Doe',
-    email: 'johndoe@gmail.com',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c677',
-    grade: 96,
-  },
-  {
-    name: 'John Doe',
-    email: 'johndoe@gmail.com',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c678',
-    grade: 96,
-  },
-  {
-    name: 'John Doe',
-    email: 'johndoe@gmail.com',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c679',
-    grade: 96,
-  },
-];
 
 const assignments = [
   {
@@ -149,10 +126,33 @@ export default function ClassDetail({
 }: {
   params: { classId: string };
 }) {
+  const { classId } = params;
   const [age, setAge] = React.useState('');
+  const [students, setStudents] =
+    React.useState<StudentsToClassesWithStudent[]>();
+  const [loading, setLoading] = React.useState({
+    students: false,
+  });
   const { push } = useRouter();
 
+  const handleGetStudents = async (signal?: AbortSignal) => {
+    setLoading({ ...loading, students: true });
+    const { data: response } = await a.get(`/classes/${classId}`, { signal });
+    if (!response) return;
+    setStudents(response.studentsToClasses);
+    setLoading({ ...loading, students: false });
+  };
+
+  React.useEffect(() => {
+    const controller = new AbortController();
+
+    handleGetStudents(controller.signal);
+
+    return () => controller.abort();
+  }, []);
+
   return (
+    // TODO: PAGINATION FOR TABLE DATA
     <Box>
       <Grid container spacing={2}>
         <Grid item xs={6} md={3}>
@@ -171,37 +171,38 @@ export default function ClassDetail({
           <PanelCard title='Students'>
             <Table
               keys={['NAME', 'EMAIL', 'GRADE']}
-              count={students.length}
+              count={students?.length || 0}
               onPageChange={() => ''}
               page={0}
               rowsPerPage={5}
             >
-              {students.map((student) => (
-                <TableRow key={student.id}>
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    {student.name}
-                  </TableCell>
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    <Link href={`mailto:${student.email}`}>
-                      {student.email}
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    <Box
-                      component='span'
-                      sx={{
-                        bgcolor: 'lightgreen',
-                        p: '7px',
-                        borderRadius: 4,
-                        color: 'green',
-                        fontWeight: 600,
-                      }}
-                    >
-                      {student.grade}%
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {students &&
+                students.map(({ student }) => (
+                  <TableRow key={student.id}>
+                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                      {formatFullName(student)}
+                    </TableCell>
+                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                      <Link href={`mailto:${student.email}`}>
+                        {student.email}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <Box
+                        component='span'
+                        sx={{
+                          bgcolor: 'lightgreen',
+                          p: '7px',
+                          borderRadius: 4,
+                          color: 'green',
+                          fontWeight: 600,
+                        }}
+                      >
+                        90%
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </Table>
           </PanelCard>
         </Grid>

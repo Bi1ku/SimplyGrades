@@ -14,6 +14,13 @@ export async function GET(
       where: {
         id: classId,
       },
+      include: {
+        studentsToClasses: {
+          include: {
+            student: true,
+          },
+        },
+      },
     });
     if (!cls) throw new Error('Class ID is invalid.');
 

@@ -118,9 +118,7 @@ export default function Classes() {
 
     checkUser(user) && handleGetClasses(controller.signal);
 
-    return () => {
-      controller.abort();
-    };
+    return () => controller.abort();
   }, [user]);
 
   useMemo(() => {
