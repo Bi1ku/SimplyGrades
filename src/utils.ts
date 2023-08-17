@@ -28,18 +28,25 @@ export const generalizeError = (error: string) =>
 export const checkUser = (user: User) =>
   JSON.stringify(user) === JSON.stringify(dummyUser) ? false : true;
 
-export const passInputProps = (
+export const passFormInputProps = (
   field: string,
   form: Record<string, any>,
   setForm: React.Dispatch<React.SetStateAction<any>>,
-) => {
-  return {
-    value: form[field],
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-      setForm({
-        ...form,
-        [field]:
-          typeof form[field] === 'number' ? +e.target.value : e.target.value,
-      }),
-  };
-};
+) => ({
+  value: form[field],
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+    setForm({
+      ...form,
+      [field]:
+        typeof form[field] === 'number' ? +e.target.value : e.target.value,
+    }),
+});
+
+export const passStateInputProps = (
+  state: any,
+  setState: React.Dispatch<React.SetStateAction<any>>,
+) => ({
+  value: state,
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+    setState(typeof state === 'number' ? +e.target.value : e.target.value),
+});

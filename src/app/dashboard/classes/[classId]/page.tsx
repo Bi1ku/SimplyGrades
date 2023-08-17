@@ -7,7 +7,6 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
-import Table from '@/src/components/Table';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Add from '@mui/icons-material/Add';
@@ -30,58 +29,14 @@ import { useRouter } from 'next/navigation';
 import PanelCard from '@/src/components/PanelCard';
 import SearchBar from '@/src/components/SearchBar';
 import a from '@/src/axios';
-import {
-  StudentsToClasses as DefaultStudentsToClasses,
-  Student,
-} from '@prisma/client';
 import { formatFullName } from '@/src/utils';
-
-interface StudentsToClassesWithStudent extends DefaultStudentsToClasses {
-  student: Student;
-}
+import { useDebounce } from 'use-debounce';
+import Table from '@/src/components/Table';
 
 const AreaChart = dynamic(
   () => import('recharts').then((recharts) => recharts.AreaChart),
   { ssr: false },
 );
-
-const assignments = [
-  {
-    name: 'Assignment 1',
-    dueDate: '10/10/2021',
-    creationDate: '10/10/2021',
-    type: 'Homework',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c675',
-  },
-  {
-    name: 'Assignment 1',
-    dueDate: '10/10/2021',
-    creationDate: '10/10/2021',
-    type: 'Homework',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c676',
-  },
-  {
-    name: 'Assignment 1',
-    dueDate: '10/10/2021',
-    creationDate: '10/10/2021',
-    type: 'Homework',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c677',
-  },
-  {
-    name: 'Assignment 1',
-    dueDate: '10/10/2021',
-    creationDate: '10/10/2021',
-    type: 'Homework',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c678',
-  },
-  {
-    name: 'Assignment 1',
-    dueDate: '10/10/2021',
-    creationDate: '10/10/2021',
-    type: 'Homework',
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c679',
-  },
-];
 
 const data = [
   {
@@ -121,6 +76,12 @@ const data = [
   },
 ];
 
+const emptyTable = {
+  data: [] as any[],
+  count: 0,
+  page: 0,
+};
+
 export default function ClassDetail({
   params,
 }: {
@@ -128,31 +89,51 @@ export default function ClassDetail({
 }) {
   const { classId } = params;
   const [age, setAge] = React.useState('');
-  const [students, setStudents] =
-    React.useState<StudentsToClassesWithStudent[]>();
   const [loading, setLoading] = React.useState({
     students: false,
+    assignments: false,
+    studentsPageChange: false,
+    assignmentsPageChange: false,
   });
+  const [studentsTable, setStudentsTable] = React.useState(emptyTable);
+  const [assignmentsTable, setAssignmentsTable] = React.useState(emptyTable);
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [debouncedSearchQuery] = useDebounce(searchQuery, 300);
   const { push } = useRouter();
 
-  const handleGetStudents = async (signal?: AbortSignal) => {
+  const handleGetStudents = React.useCallback(async (page: number = 0) => {
     setLoading({ ...loading, students: true });
-    const { data: response } = await a.get(`/classes/${classId}`, { signal });
+    const { data: response } = await a.get(`/classes/${classId}/students`, {
+      params: { page },
+    });
     if (!response) return;
-    setStudents(response.studentsToClasses);
+    setStudentsTable(response);
     setLoading({ ...loading, students: false });
-  };
-
-  React.useEffect(() => {
-    const controller = new AbortController();
-
-    handleGetStudents(controller.signal);
-
-    return () => controller.abort();
   }, []);
 
+  const handleGetAssignments = React.useCallback(
+    async (page: number = 0) => {
+      setLoading({ ...loading, assignments: true });
+      const { data: response } = await a.get(
+        `/classes/${classId}/assignments`,
+        { params: { page, searchQuery: debouncedSearchQuery } },
+      );
+      if (!response) return;
+      setAssignmentsTable(response);
+      setLoading({ ...loading, assignments: false });
+    },
+    [debouncedSearchQuery],
+  );
+
+  React.useEffect(() => {
+    handleGetStudents();
+  }, []);
+
+  React.useEffect(() => {
+    handleGetAssignments();
+  }, [debouncedSearchQuery]);
+
   return (
-    // TODO: PAGINATION FOR TABLE DATA
     <Box>
       <Grid container spacing={2}>
         <Grid item xs={6} md={3}>
@@ -171,38 +152,40 @@ export default function ClassDetail({
           <PanelCard title='Students'>
             <Table
               keys={['NAME', 'EMAIL', 'GRADE']}
-              count={students?.length || 0}
-              onPageChange={() => ''}
-              page={0}
+              count={studentsTable.count}
+              onPageChange={(_: unknown, page: number) =>
+                handleGetStudents(page)
+              }
+              page={studentsTable.page}
               rowsPerPage={5}
+              loading={loading.students}
             >
-              {students &&
-                students.map(({ student }) => (
-                  <TableRow key={student.id}>
-                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                      {formatFullName(student)}
-                    </TableCell>
-                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                      <Link href={`mailto:${student.email}`}>
-                        {student.email}
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      <Box
-                        component='span'
-                        sx={{
-                          bgcolor: 'lightgreen',
-                          p: '7px',
-                          borderRadius: 4,
-                          color: 'green',
-                          fontWeight: 600,
-                        }}
-                      >
-                        90%
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ))}
+              {studentsTable.data.map(({ student }) => (
+                <TableRow key={student.id}>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                    {formatFullName(student)}
+                  </TableCell>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                    <Link href={`mailto:${student.email}`}>
+                      {student.email}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <Box
+                      component='span'
+                      sx={{
+                        bgcolor: 'lightgreen',
+                        p: '7px',
+                        borderRadius: 4,
+                        color: 'green',
+                        fontWeight: 600,
+                      }}
+                    >
+                      90%
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))}
             </Table>
           </PanelCard>
         </Grid>
@@ -224,7 +207,10 @@ export default function ClassDetail({
                   Assignments
                 </Typography>
                 <Stack flexDirection='row'>
-                  <SearchBar />
+                  <SearchBar
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                  />
                   <Button
                     size='small'
                     variant='contained'
@@ -241,12 +227,15 @@ export default function ClassDetail({
           >
             <Table
               keys={['NAME', 'TYPE', 'CREATION DATE', 'DUE DATE']}
-              count={assignments.length}
-              onPageChange={() => ''}
-              page={0}
+              count={assignmentsTable.count}
+              onPageChange={(_: unknown, page: number) =>
+                handleGetAssignments(page)
+              }
+              page={assignmentsTable.page}
               rowsPerPage={5}
+              loading={loading.assignments}
             >
-              {assignments.map((assignment) => (
+              {assignmentsTable.data.map((assignment) => (
                 <TableRow
                   key={assignment.id}
                   onClick={() =>
@@ -259,11 +248,9 @@ export default function ClassDetail({
                   <TableCell sx={{ whiteSpace: 'nowrap' }}>
                     {assignment.name}
                   </TableCell>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>HOMEWORK</TableCell>
                   <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    {assignment.type}
-                  </TableCell>
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    {new Date(assignment.creationDate).toLocaleDateString()}
+                    {new Date(assignment.createdAt).toLocaleDateString()}
                   </TableCell>
                   <TableCell sx={{ whiteSpace: 'nowrap' }}>
                     {new Date(assignment.dueDate).toLocaleDateString()}

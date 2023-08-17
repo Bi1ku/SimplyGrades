@@ -1,11 +1,18 @@
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
+import { passStateInputProps } from '../utils';
 
-export default function SearchBar() {
+export default function SearchBar({
+  searchQuery,
+  setSearchQuery,
+}: {
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+}) {
   return (
     <TextField
-      focused={false}
+      {...passStateInputProps(searchQuery, setSearchQuery)}
       InputProps={{
         startAdornment: (
           <InputAdornment position='start'>

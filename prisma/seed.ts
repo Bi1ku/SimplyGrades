@@ -87,11 +87,11 @@ async function main() {
   console.log('═════════════════════════════════════════════════════');
   console.log('Seeding assignments...');
   console.time('Seeded assignments');
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 30; i++) {
     await prisma.assignment.create({
       data: {
         name: faker.lorem.words(3),
-        classId: (await classes[i]).id,
+        classId: (await classes[i % 5]).id,
         dueDate: [faker.date.future(), faker.date.past()][
           Math.floor(2 * Math.random())
         ],

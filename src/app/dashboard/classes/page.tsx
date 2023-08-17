@@ -14,7 +14,12 @@ import React, { useMemo } from 'react';
 import Modal from '@/src/components/Modal';
 import TabHeader from '@/src/components/TabHeader';
 import { Class, Teacher } from '@prisma/client';
-import { checkUser, formatFullName, notify, passInputProps } from '@/src/utils';
+import {
+  checkUser,
+  formatFullName,
+  notify,
+  passFormInputProps,
+} from '@/src/utils';
 import a from '@/src/axios';
 import useUser from '@/src/hooks/user';
 import Skeleton from '@mui/material/Skeleton';
@@ -70,11 +75,9 @@ export default function Classes() {
   const [searchQuery, setSearchQuery] = React.useState('');
   const { push } = useRouter();
 
-  const handleGetClasses = async (signal?: AbortSignal) => {
+  const handleGetClasses = async () => {
     setLoading({ ...loading, classes: true });
-    const { data: response } = await a.get(`/teachers/${user.id}/classes`, {
-      signal: signal,
-    });
+    const { data: response } = await a.get(`/teachers/${user.id}/classes`);
     if (!response) return;
     setClasses(response.classes);
     setLoading({ ...loading, classes: false });
@@ -114,11 +117,7 @@ export default function Classes() {
   };
 
   React.useEffect(() => {
-    const controller = new AbortController();
-
-    checkUser(user) && handleGetClasses(controller.signal);
-
-    return () => controller.abort();
+    checkUser(user) && handleGetClasses();
   }, [user]);
 
   useMemo(() => {
@@ -265,7 +264,7 @@ export default function Classes() {
               label='Name'
               fullWidth
               size='small'
-              {...passInputProps('name', createForm, setCreateForm)}
+              {...passFormInputProps('name', createForm, setCreateForm)}
             />
           </Grid>
           <Grid item xs={6}>
@@ -294,7 +293,7 @@ export default function Classes() {
               type='number'
               size='small'
               InputProps={{ inputProps: { min: 0 } }}
-              {...passInputProps('period', createForm, setCreateForm)}
+              {...passFormInputProps('period', createForm, setCreateForm)}
             />
           </Grid>
         </Grid>
@@ -332,7 +331,7 @@ export default function Classes() {
               label='Name'
               fullWidth
               size='small'
-              {...passInputProps('name', editForm, setEditForm)}
+              {...passFormInputProps('name', editForm, setEditForm)}
             />
           </Grid>
           <Grid item xs={6}>
@@ -361,7 +360,7 @@ export default function Classes() {
               type='number'
               size='small'
               InputProps={{ inputProps: { min: 0 } }}
-              {...passInputProps('period', editForm, setEditForm)}
+              {...passFormInputProps('period', editForm, setEditForm)}
             />
           </Grid>
         </Grid>

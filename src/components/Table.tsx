@@ -15,17 +15,19 @@ export default function Table({
   page,
   rowsPerPage,
   rowsPerPageOptions = [],
+  loading,
 }: {
   keys: string[];
   children: React.ReactNode;
   count: number;
-  onPageChange: () => void;
+  onPageChange: (_: unknown, page: number) => void;
   page: number;
   rowsPerPage: number;
   rowsPerPageOptions?: number[];
+  loading: boolean;
 }) {
   return (
-    <TableContainer sx={{ display: 'flex', flexDirection: 'column' }}>
+    <TableContainer>
       <MuiTable>
         <TableHead>
           <TableRow>
@@ -38,18 +40,18 @@ export default function Table({
         </TableHead>
         <TableBody>
           {children}
-          {count - (page + 1) * rowsPerPage < 0 &&
-            new Array(rowsPerPage - count).fill(0).map((_, i) => (
-              <TableRow key={i}>
-                {new Array(keys.length).fill(0).map((_, i) => (
-                  <TableCell key={i}>‎</TableCell>
-                ))}
-              </TableRow>
-            ))}
+          {count < (page + 1) * rowsPerPage && (
+            <TableRow
+              style={{ height: 52.6 * ((page + 1) * rowsPerPage - count) }}
+            >
+              <TableCell colSpan={keys.length} />
+            </TableRow>
+          )}
         </TableBody>
         <TableFooter sx={{ mt: 1000 }}>
           <TableRow>
             <TablePagination
+              sx={{ pointerEvents: loading ? 'none' : 'auto' }}
               count={count}
               onPageChange={onPageChange}
               page={page}
