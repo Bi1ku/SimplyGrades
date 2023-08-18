@@ -42,6 +42,8 @@ model Class {
   studentsToClasses StudentsToClasses[]
   subject           ClassSubject
   period            Int
+  gradingPolicy     GradingPolicy       @relation(fields: [gradingPolicyId], references: [id])
+  gradingPolicyId   String
 }
 
 model StudentsToClasses {
@@ -64,6 +66,8 @@ model Assignment {
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
   studentsToAssignments StudentsToAssignments[]
+  gradingPolicyField    GradingPolicyField      @relation(fields: [gradingPolicyFieldId], references: [id])
+  gradingPolicyFieldId  String
 }
 
 model StudentsToAssignments {
@@ -76,6 +80,26 @@ model StudentsToAssignments {
   updatedAt    DateTime   @updatedAt
 
   @@id([studentId, assignmentId])
+}
+
+model GradingPolicy {
+  id                  String               @id @default(uuid())
+  name                String
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  classes             Class[]
+  gradingPolicyFields GradingPolicyField[]
+}
+
+model GradingPolicyField {
+  id              String        @id @default(uuid())
+  name            String
+  weight          Float
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  gradingPolicy   GradingPolicy @relation(fields: [gradingPolicyId], references: [id], onDelete: Cascade)
+  gradingPolicyId String
+  assignments     Assignment[]
 }
 
 enum ClassSubject {

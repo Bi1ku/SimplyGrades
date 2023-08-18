@@ -22,6 +22,7 @@ async function main() {
   await prisma.class.deleteMany();
   await prisma.teacher.deleteMany();
   await prisma.assignment.deleteMany();
+  await prisma.gradingPolicy.deleteMany();
   console.timeEnd('Cleared current database');
   console.log('═════════════════════════════════════════════════════ \n');
 
@@ -55,6 +56,40 @@ async function main() {
   console.log('═════════════════════════════════════════════════════ \n');
 
   console.log('═════════════════════════════════════════════════════');
+  console.log('Seeding grading policies...');
+  console.time('Seeded grading policies');
+  const policy = await prisma.gradingPolicy.create({
+    data: {
+      name: 'Standard',
+    },
+  });
+  const policyFields = [
+    await prisma.gradingPolicyField.create({
+      data: {
+        name: 'Participation',
+        weight: 0.2,
+        gradingPolicyId: policy.id,
+      },
+    }),
+    await prisma.gradingPolicyField.create({
+      data: {
+        name: 'Homework, Classwork, & Quizzes',
+        weight: 0.3,
+        gradingPolicyId: policy.id,
+      },
+    }),
+    await prisma.gradingPolicyField.create({
+      data: {
+        name: 'Assessments',
+        weight: 0.5,
+        gradingPolicyId: policy.id,
+      },
+    }),
+  ];
+  console.timeEnd('Seeded grading policies');
+  console.log('═════════════════════════════════════════════════════ \n');
+
+  console.log('═════════════════════════════════════════════════════');
   console.log('Seeding classes...');
   console.time('Seeded classes');
   let classes = Array(5)
@@ -78,6 +113,7 @@ async function main() {
               'PHYSICAL_EDUCATION',
               'OTHER',
             ][Math.floor(9 * Math.random())],
+            gradingPolicyId: policy.id,
           },
         }),
     );
@@ -95,6 +131,7 @@ async function main() {
         dueDate: [faker.date.future(), faker.date.past()][
           Math.floor(2 * Math.random())
         ],
+        gradingPolicyFieldId: policyFields[Math.floor(3 * Math.random())].id,
       },
     });
   }

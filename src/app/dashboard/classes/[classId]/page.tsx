@@ -33,6 +33,7 @@ import { formatFullName } from '@/src/utils';
 import { useDebounce } from 'use-debounce';
 import CircularProgress from '@mui/material/CircularProgress';
 import Exist from '@/src/components/Exist';
+import Modal from '@/src/components/Modal';
 
 const AreaChart = dynamic(
   () => import('recharts').then((recharts) => recharts.AreaChart),
@@ -101,6 +102,7 @@ export default function ClassDetail({
   const [assignmentsTable, setAssignmentsTable] = React.useState(emptyTable);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [debouncedSearchQuery] = useDebounce(searchQuery, 300);
+  const [assignmentModalOpen, setAssignmentModalOpen] = React.useState(false);
   const { push } = useRouter();
 
   const handleGetStudents = React.useCallback(async (page: number = 0) => {
@@ -127,13 +129,12 @@ export default function ClassDetail({
     [debouncedSearchQuery],
   );
 
+  const handleCreateAssignment = async () => {};
+
   React.useEffect(() => {
     handleGetStudents();
     handleGetAssignments();
-    setTimeout(
-      () => setLoading((prev) => ({ ...prev, tableData: false })),
-      750,
-    );
+    setLoading((prev) => ({ ...prev, tableData: false }));
   }, []);
 
   React.useEffect(() => {
@@ -240,6 +241,7 @@ export default function ClassDetail({
                       ml: 2,
                       borderRadius: 2,
                     }}
+                    onClick={() => setAssignmentModalOpen(true)}
                   >
                     <Add sx={{ pr: '2px' }} /> CREATE
                   </Button>
@@ -368,6 +370,25 @@ export default function ClassDetail({
           </Paper>
         </Grid>
       </Grid>
+      <Modal
+        open={assignmentModalOpen}
+        handleClose={() => setAssignmentModalOpen(false)}
+        title='Create assignment'
+        subtitle='Create a new assignment to keep track of grades!'
+        buttons={[
+          { title: 'Cancel', onClick: () => setAssignmentModalOpen(false) },
+          { title: 'Create', onClick: handleCreateAssignment },
+        ]}
+        loading={false}
+      >
+        <Grid
+          container
+          spacing={2}
+          sx={{ width: { md: 565, sm: 500, xs: 400 }, mt: '1px' }}
+        >
+          {/* TODO: Add form */}
+        </Grid>
+      </Modal>
     </Box>
   );
 }

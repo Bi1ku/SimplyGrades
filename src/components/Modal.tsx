@@ -36,7 +36,7 @@ export default function Modal({
       <DialogActions>
         {buttons.map((button, i) => (
           <Button onClick={button.onClick}>
-            {button.title}{' '}
+            {button.title}
             {i === buttons.length - 1 && loading && (
               <CircularProgress size={20} sx={{ ml: 1 }} />
             )}

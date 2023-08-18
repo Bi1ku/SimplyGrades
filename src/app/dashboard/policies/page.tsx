@@ -10,6 +10,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import React from 'react';
 import TabHeader from '@/src/components/TabHeader';
+import Modal from '@/src/components/Modal';
 
 const policies = [
   {
@@ -95,12 +96,20 @@ const policies = [
   },
 ];
 
+// TODO: Add functionality to policies page
 export default function Policies() {
   const [open, setOpen] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [createModalOpen, setCreateModalOpen] = React.useState(false);
+
+  const handleCreatePolicy = async () => {};
 
   return (
     <Box>
-      <TabHeader />
+      <TabHeader
+        setSearchQuery={setSearchQuery}
+        setCreateModalOpen={() => setCreateModalOpen(true)}
+      />
       <Grid container spacing={2}>
         {policies.map((policy) => (
           <Grid item xs={12} sm={6} md={4} key={policy.id}>
@@ -128,6 +137,19 @@ export default function Policies() {
           </Grid>
         ))}
       </Grid>
+      <Modal
+        title='Create grading policy'
+        subtitle='Create a new grading policy for your classes!'
+        open={createModalOpen}
+        handleClose={() => setCreateModalOpen(false)}
+        buttons={[
+          { title: 'Cancel', onClick: () => setCreateModalOpen(false) },
+          { title: 'Create', onClick: handleCreatePolicy },
+        ]}
+        loading={false}
+      >
+        <></>
+      </Modal>
     </Box>
   );
 }

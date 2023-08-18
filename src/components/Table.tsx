@@ -31,9 +31,10 @@ export default function Table({
   rowsPerPageOptions?: number[];
   loading: boolean;
 }) {
+  console.log(count);
   return (
     <Exist
-      data={!count}
+      data={count === 0}
       placeholder={
         <Stack
           flexDirection='column'
