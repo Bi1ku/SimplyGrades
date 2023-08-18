@@ -112,7 +112,7 @@ export default function DashboardLayout({
             edge='start'
             color='inherit'
             aria-label='open drawer'
-            onClick={() => setOpen(!open)}
+            onClick={() => setOpen((prev) => !prev)}
             sx={{
               marginRight: '36px',
               ...(open && { display: 'none' }),
@@ -164,7 +164,7 @@ export default function DashboardLayout({
                 src='/images/logo.jpg'
                 alt='Logo'
               />
-              <IconButton onClick={() => setOpen(!open)}>
+              <IconButton onClick={() => setOpen((prev) => !prev)}>
                 <ChevronLeftIcon />
               </IconButton>
             </>

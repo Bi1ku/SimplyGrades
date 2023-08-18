@@ -35,11 +35,11 @@ export const passFormInputProps = (
 ) => ({
   value: form[field],
   onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm({
-      ...form,
+    setForm((prev: { [x: string]: any }) => ({
+      ...prev,
       [field]:
-        typeof form[field] === 'number' ? +e.target.value : e.target.value,
-    }),
+        typeof prev[field] === 'number' ? +e.target.value : e.target.value,
+    })),
 });
 
 export const passStateInputProps = (

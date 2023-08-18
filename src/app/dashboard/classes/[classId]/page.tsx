@@ -102,25 +102,25 @@ export default function ClassDetail({
   const { push } = useRouter();
 
   const handleGetStudents = React.useCallback(async (page: number = 0) => {
-    setLoading({ ...loading, students: true });
+    setLoading((prev) => ({ ...prev, students: true }));
     const { data: response } = await a.get(`/classes/${classId}/students`, {
       params: { page },
     });
     if (!response) return;
     setStudentsTable(response);
-    setLoading({ ...loading, students: false });
+    setLoading((prev) => ({ ...prev, students: false }));
   }, []);
 
   const handleGetAssignments = React.useCallback(
     async (page: number = 0) => {
-      setLoading({ ...loading, assignments: true });
+      setLoading((prev) => ({ ...prev, assignments: true }));
       const { data: response } = await a.get(
         `/classes/${classId}/assignments`,
         { params: { page, searchQuery: debouncedSearchQuery } },
       );
       if (!response) return;
       setAssignmentsTable(response);
-      setLoading({ ...loading, assignments: false });
+      setLoading((prev) => ({ ...prev, assignments: false }));
     },
     [debouncedSearchQuery],
   );

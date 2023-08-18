@@ -76,27 +76,27 @@ export default function Classes() {
   const { push } = useRouter();
 
   const handleGetClasses = async () => {
-    setLoading({ ...loading, classes: true });
+    setLoading((prev) => ({ ...prev, classes: true }));
     const { data: response } = await a.get(`/teachers/${user.id}/classes`);
     if (!response) return;
     setClasses(response.classes);
-    setLoading({ ...loading, classes: false });
+    setLoading((prev) => ({ ...prev, classes: false }));
   };
 
   const handleDeleteClass = async () => {
-    setLoading({ ...loading, deleteClass: true });
+    setLoading((prev) => ({ ...prev, deleteClass: true }));
     const { data: response } = await a.delete(`/classes/${classId}`);
     if (!response) return;
     notify('Successfully deleted class!', 'success');
     await handleGetClasses();
-    setLoading({ ...loading, deleteClass: false });
+    setLoading((prev) => ({ ...prev, deleteClass: false }));
   };
 
   const handleCreateClass = async () => {
     if (!createForm.name || !createForm.subject || !createForm.period)
       return notify('Please fill out all fields!', 'error');
 
-    setLoading({ ...loading, createClass: true });
+    setLoading((prev) => ({ ...prev, createClass: true }));
     const { data: response } = await a.post('/classes', {
       ...createForm,
       teacherId: user.id,
@@ -104,16 +104,16 @@ export default function Classes() {
     if (!response) return;
     notify('Successfully created class!', 'success');
     await handleGetClasses();
-    setLoading({ ...loading, createClass: false });
+    setLoading((prev) => ({ ...prev, createClass: false }));
   };
 
   const handleEditClass = async () => {
-    setLoading({ ...loading, editClass: true });
+    setLoading((prev) => ({ ...prev, editClass: true }));
     const { data: response } = await a.put(`/classes/${classId}`, editForm);
     if (!response) return;
     notify('Successfully edited class!', 'success');
     await handleGetClasses();
-    setLoading({ ...loading, editClass: false });
+    setLoading((prev) => ({ ...prev, editClass: false }));
   };
 
   React.useEffect(() => {
@@ -271,7 +271,8 @@ export default function Classes() {
             <Autocomplete
               defaultValue={subjects[subjects.length - 1]}
               onChange={(_, value) => {
-                value && setCreateForm({ ...createForm, subject: value.id });
+                value &&
+                  setCreateForm((prev) => ({ ...prev, subject: value.id }));
               }}
               options={subjects}
               renderInput={(params: AutocompleteRenderInputParams) => (
@@ -337,7 +338,8 @@ export default function Classes() {
           <Grid item xs={6}>
             <Autocomplete
               onChange={(_, value) => {
-                value && setEditForm({ ...editForm, subject: value.id });
+                value &&
+                  setEditForm((prev) => ({ ...prev, subject: value.id }));
               }}
               defaultValue={selectedSubject}
               options={subjects}
