@@ -13,7 +13,7 @@ import ImageList from '@mui/material/ImageList';
 import React from 'react';
 import background from '../../../../public/images/auth_background.png';
 import { useRouter } from 'next/navigation';
-import { useMediaQuery } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function TeacherAuth() {
   const { user, error, isLoading } = useUser();

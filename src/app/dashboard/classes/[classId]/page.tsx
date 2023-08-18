@@ -31,12 +31,15 @@ import SearchBar from '@/src/components/SearchBar';
 import a from '@/src/axios';
 import { formatFullName } from '@/src/utils';
 import { useDebounce } from 'use-debounce';
-import Table from '@/src/components/Table';
+import CircularProgress from '@mui/material/CircularProgress';
+import Exist from '@/src/components/Exist';
 
 const AreaChart = dynamic(
   () => import('recharts').then((recharts) => recharts.AreaChart),
   { ssr: false },
 );
+
+const Table = dynamic(() => import('@/src/components/Table'), { ssr: false });
 
 const data = [
   {
@@ -90,10 +93,9 @@ export default function ClassDetail({
   const { classId } = params;
   const [age, setAge] = React.useState('');
   const [loading, setLoading] = React.useState({
+    tableData: true,
     students: false,
     assignments: false,
-    studentsPageChange: false,
-    assignmentsPageChange: false,
   });
   const [studentsTable, setStudentsTable] = React.useState(emptyTable);
   const [assignmentsTable, setAssignmentsTable] = React.useState(emptyTable);
@@ -127,6 +129,11 @@ export default function ClassDetail({
 
   React.useEffect(() => {
     handleGetStudents();
+    handleGetAssignments();
+    setTimeout(
+      () => setLoading((prev) => ({ ...prev, tableData: false })),
+      750,
+    );
   }, []);
 
   React.useEffect(() => {
@@ -149,44 +156,59 @@ export default function ClassDetail({
           <Static title='Average Student Grade' description='98%' />
         </Grid>
         <Grid item xs={12} md={5}>
-          <PanelCard title='Students'>
-            <Table
-              keys={['NAME', 'EMAIL', 'GRADE']}
-              count={studentsTable.count}
-              onPageChange={(_: unknown, page: number) =>
-                handleGetStudents(page)
+          <PanelCard title='Students' sx={{ height: 420.719 }}>
+            <Exist
+              data={loading.tableData}
+              placeholder={
+                <Box
+                  sx={{
+                    height: '100%',
+                    display: 'grid',
+                    placeItems: 'center',
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
               }
-              page={studentsTable.page}
-              rowsPerPage={5}
-              loading={loading.students}
             >
-              {studentsTable.data.map(({ student }) => (
-                <TableRow key={student.id}>
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    {formatFullName(student)}
-                  </TableCell>
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    <Link href={`mailto:${student.email}`}>
-                      {student.email}
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    <Box
-                      component='span'
-                      sx={{
-                        bgcolor: 'lightgreen',
-                        p: '7px',
-                        borderRadius: 4,
-                        color: 'green',
-                        fontWeight: 600,
-                      }}
-                    >
-                      90%
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </Table>
+              <Table
+                keys={['NAME', 'EMAIL', 'GRADE']}
+                count={studentsTable.count}
+                onPageChange={(_: unknown, page: number) =>
+                  handleGetStudents(page)
+                }
+                page={studentsTable.page}
+                rowsPerPage={5}
+                loading={loading.students}
+              >
+                {studentsTable.data.map(({ student }) => (
+                  <TableRow key={student.id}>
+                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                      {formatFullName(student)}
+                    </TableCell>
+                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                      <Link href={`mailto:${student.email}`}>
+                        {student.email}
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <Box
+                        component='span'
+                        sx={{
+                          bgcolor: 'lightgreen',
+                          p: '7px',
+                          borderRadius: 4,
+                          color: 'green',
+                          fontWeight: 600,
+                        }}
+                      >
+                        90%
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </Table>
+            </Exist>
           </PanelCard>
         </Grid>
         <Grid item xs={12} md={7}>
@@ -224,40 +246,58 @@ export default function ClassDetail({
                 </Stack>
               </Stack>
             }
+            sx={{ height: 420.719 }}
           >
-            <Table
-              keys={['NAME', 'TYPE', 'CREATION DATE', 'DUE DATE']}
-              count={assignmentsTable.count}
-              onPageChange={(_: unknown, page: number) =>
-                handleGetAssignments(page)
-              }
-              page={assignmentsTable.page}
-              rowsPerPage={5}
-              loading={loading.assignments}
-            >
-              {assignmentsTable.data.map((assignment) => (
-                <TableRow
-                  key={assignment.id}
-                  onClick={() =>
-                    push(
-                      `/dashboard/classes/${params.classId}/${assignment.id}`,
-                    )
-                  }
-                  sx={{ '&:hover': { cursor: 'pointer' } }}
+            <Exist
+              data={loading.tableData}
+              placeholder={
+                <Box
+                  sx={{
+                    height: '100%',
+                    display: 'grid',
+                    placeItems: 'center',
+                  }}
                 >
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    {assignment.name}
-                  </TableCell>
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>HOMEWORK</TableCell>
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    {new Date(assignment.createdAt).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    {new Date(assignment.dueDate).toLocaleDateString()}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </Table>
+                  <CircularProgress />
+                </Box>
+              }
+            >
+              <Table
+                keys={['NAME', 'TYPE', 'CREATION DATE', 'DUE DATE']}
+                count={assignmentsTable.count}
+                onPageChange={(_: unknown, page: number) =>
+                  handleGetAssignments(page)
+                }
+                page={assignmentsTable.page}
+                rowsPerPage={5}
+                loading={loading.assignments}
+              >
+                {assignmentsTable.data.map((assignment) => (
+                  <TableRow
+                    key={assignment.id}
+                    onClick={() =>
+                      push(
+                        `/dashboard/classes/${params.classId}/${assignment.id}`,
+                      )
+                    }
+                    sx={{ '&:hover': { cursor: 'pointer' } }}
+                  >
+                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                      {assignment.name}
+                    </TableCell>
+                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                      HOMEWORK
+                    </TableCell>
+                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                      {new Date(assignment.createdAt).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                      {new Date(assignment.dueDate).toLocaleDateString()}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </Table>
+            </Exist>
           </PanelCard>
         </Grid>
         <Grid item xs={12}>

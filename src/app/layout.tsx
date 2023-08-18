@@ -1,11 +1,7 @@
 'use client';
 
-import {
-  CssBaseline,
-  ThemeProvider,
-  createTheme,
-  responsiveFontSizes,
-} from '@mui/material';
+import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { UserProvider } from '@auth0/nextjs-auth0/client';

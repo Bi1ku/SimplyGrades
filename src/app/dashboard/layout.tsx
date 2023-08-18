@@ -96,7 +96,6 @@ export default function DashboardLayout({
   const closeMenu = () => setAnchor(null);
 
   useEffectV2(() => {
-    console.log(checkUser(user));
     if (!checkUser(user)) push('/api/auth/login');
   }, []);
 
