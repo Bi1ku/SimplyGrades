@@ -22,7 +22,7 @@ async function main() {
   await prisma.class.deleteMany();
   await prisma.teacher.deleteMany();
   await prisma.assignment.deleteMany();
-  await prisma.gradingPolicy.deleteMany();
+  await prisma.policy.deleteMany();
   console.timeEnd('Cleared current database');
   console.log('═════════════════════════════════════════════════════ \n');
 
@@ -58,31 +58,32 @@ async function main() {
   console.log('═════════════════════════════════════════════════════');
   console.log('Seeding grading policies...');
   console.time('Seeded grading policies');
-  const policy = await prisma.gradingPolicy.create({
+  const policy = await prisma.policy.create({
     data: {
       name: 'Standard',
+      teacherId: teacher.id,
     },
   });
   const policyFields = [
-    await prisma.gradingPolicyField.create({
+    await prisma.policyField.create({
       data: {
         name: 'Participation',
         weight: 0.2,
-        gradingPolicyId: policy.id,
+        policyId: policy.id,
       },
     }),
-    await prisma.gradingPolicyField.create({
+    await prisma.policyField.create({
       data: {
         name: 'Homework, Classwork, & Quizzes',
         weight: 0.3,
-        gradingPolicyId: policy.id,
+        policyId: policy.id,
       },
     }),
-    await prisma.gradingPolicyField.create({
+    await prisma.policyField.create({
       data: {
         name: 'Assessments',
         weight: 0.5,
-        gradingPolicyId: policy.id,
+        policyId: policy.id,
       },
     }),
   ];
@@ -113,7 +114,7 @@ async function main() {
               'PHYSICAL_EDUCATION',
               'OTHER',
             ][Math.floor(9 * Math.random())],
-            gradingPolicyId: policy.id,
+            policyId: policy.id,
           },
         }),
     );
@@ -131,7 +132,7 @@ async function main() {
         dueDate: [faker.date.future(), faker.date.past()][
           Math.floor(2 * Math.random())
         ],
-        gradingPolicyFieldId: policyFields[Math.floor(3 * Math.random())].id,
+        policyFieldId: policyFields[Math.floor(3 * Math.random())].id,
       },
     });
   }

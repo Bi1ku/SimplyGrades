@@ -16,6 +16,7 @@ model Teacher {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   classes   Class[]
+  policies  Policy[]
   avatar    String   @default("https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg")
 }
 
@@ -42,8 +43,8 @@ model Class {
   studentsToClasses StudentsToClasses[]
   subject           ClassSubject
   period            Int
-  gradingPolicy     GradingPolicy       @relation(fields: [gradingPolicyId], references: [id])
-  gradingPolicyId   String
+  policy            Policy              @relation(fields: [policyId], references: [id])
+  policyId          String
 }
 
 model StudentsToClasses {
@@ -66,8 +67,8 @@ model Assignment {
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
   studentsToAssignments StudentsToAssignments[]
-  gradingPolicyField    GradingPolicyField      @relation(fields: [gradingPolicyFieldId], references: [id])
-  gradingPolicyFieldId  String
+  policyField           PolicyField             @relation(fields: [policyFieldId], references: [id])
+  policyFieldId         String
 }
 
 model StudentsToAssignments {
@@ -82,24 +83,26 @@ model StudentsToAssignments {
   @@id([studentId, assignmentId])
 }
 
-model GradingPolicy {
-  id                  String               @id @default(uuid())
-  name                String
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  classes             Class[]
-  gradingPolicyFields GradingPolicyField[]
+model Policy {
+  id           String        @id @default(uuid())
+  name         String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  classes      Class[]
+  policyFields PolicyField[]
+  teacher      Teacher       @relation(fields: [teacherId], references: [id])
+  teacherId    String
 }
 
-model GradingPolicyField {
-  id              String        @id @default(uuid())
-  name            String
-  weight          Float
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  gradingPolicy   GradingPolicy @relation(fields: [gradingPolicyId], references: [id], onDelete: Cascade)
-  gradingPolicyId String
-  assignments     Assignment[]
+model PolicyField {
+  id          String       @id @default(uuid())
+  name        String
+  weight      Float
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  policy      Policy       @relation(fields: [policyId], references: [id], onDelete: Cascade)
+  policyId    String
+  assignments Assignment[]
 }
 
 enum ClassSubject {
