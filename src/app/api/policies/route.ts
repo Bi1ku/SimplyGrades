@@ -5,8 +5,15 @@ const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
   try {
+    const { policyFields, ...body } = await req.json();
+
     const policy = await prisma.policy.create({
-      data: await req.json(),
+      data: {
+        ...body,
+        policyFields: {
+          createMany: policyFields,
+        },
+      },
     });
 
     return NextResponse.json(policy);

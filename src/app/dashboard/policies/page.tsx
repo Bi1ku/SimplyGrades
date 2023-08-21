@@ -18,90 +18,9 @@ import { Policy, PolicyField } from '@prisma/client';
 import Skeleton from '@mui/material/Skeleton';
 import Exist from '@/src/components/Exist';
 import TextField from '@mui/material/TextField';
-
-const policies = [
-  {
-    title: '2023 - 2024 School Year',
-    sections: [
-      { title: 'Homework', percentage: 0.2 },
-      { title: 'Classwork', percentage: 0.3 },
-      { title: 'Assessments', percentage: 0.5 },
-    ],
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c671',
-  },
-  {
-    title: '2023 - 2024 School Year',
-    sections: [
-      { title: 'Homework', percentage: 0.2 },
-      { title: 'Classwork', percentage: 0.3 },
-      { title: 'Assessments', percentage: 0.5 },
-    ],
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c672',
-  },
-  {
-    title: '2023 - 2024 School Year',
-    sections: [
-      { title: 'Homework', percentage: 0.2 },
-      { title: 'Classwork', percentage: 0.3 },
-      { title: 'Assessments', percentage: 0.5 },
-    ],
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c673',
-  },
-  {
-    title: '2023 - 2024 School Year',
-    sections: [
-      { title: 'Homework', percentage: 0.2 },
-      { title: 'Classwork', percentage: 0.3 },
-      { title: 'Assessments', percentage: 0.5 },
-    ],
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c674',
-  },
-  {
-    title: '2023 - 2024 School Year',
-    sections: [
-      { title: 'Homework', percentage: 0.2 },
-      { title: 'Classwork', percentage: 0.3 },
-      { title: 'Assessments', percentage: 0.5 },
-    ],
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c675',
-  },
-  {
-    title: '2023 - 2024 School Year',
-    sections: [
-      { title: 'Homework', percentage: 0.2 },
-      { title: 'Classwork', percentage: 0.3 },
-      { title: 'Assessments', percentage: 0.5 },
-    ],
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c676',
-  },
-  {
-    title: '2023 - 2024 School Year',
-    sections: [
-      { title: 'Homework', percentage: 0.2 },
-      { title: 'Classwork', percentage: 0.3 },
-      { title: 'Assessments', percentage: 0.5 },
-    ],
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c677',
-  },
-  {
-    title: '2023 - 2024 School Year',
-    sections: [
-      { title: 'Homework', percentage: 0.2 },
-      { title: 'Classwork', percentage: 0.3 },
-      { title: 'Assessments', percentage: 0.5 },
-    ],
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c678',
-  },
-  {
-    title: '2023 - 2024 School Year',
-    sections: [
-      { title: 'Homework', percentage: 0.2 },
-      { title: 'Classwork', percentage: 0.3 },
-      { title: 'Assessments', percentage: 0.5 },
-    ],
-    id: 'c451bd0d-0327-46c6-adfc-42f57514c679',
-  },
-];
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton } from '@mui/material';
 
 interface PolicyWithFields extends Policy {
   policyFields: PolicyField[];
@@ -123,7 +42,7 @@ export default function Policies() {
   });
   const [createForm, setCreateForm] = React.useState({
     name: '',
-    policyFields: [] as PolicyField[],
+    policyFields: [{ name: '', weight: 0 }] as PolicyField[],
   });
   const [searchQuery, setSearchQuery] = React.useState('');
   const [policies, setPolicies] = React.useState<PolicyWithFields[]>([]);
@@ -227,27 +146,57 @@ export default function Policies() {
               {...passFormInputProps('name', createForm, setCreateForm)}
             />
           </Grid>
-          <Grid item xs={6}>
-            <TextField
+          {createForm.policyFields.map((field, i) => (
+            <>
+              <Grid item xs={5.5}>
+                <TextField
+                  variant='outlined'
+                  label='Field Name'
+                  fullWidth
+                  size='small'
+                  value={field.name}
+                />
+              </Grid>
+              <Grid item xs={5.5}>
+                <TextField
+                  variant='outlined'
+                  label='Weight'
+                  fullWidth
+                  type='number'
+                  size='small'
+                  InputProps={{ inputProps: { min: 0 } }}
+                  value={field.weight}
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <IconButton
+                  onClick={() => {
+                    createForm.policyFields.splice(i, 1);
+                    setCreateForm((prev) => ({ ...prev }));
+                  }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Grid>
+            </>
+          ))}
+          <Grid item xs={12}>
+            <Button
               variant='outlined'
-              label='Field Name'
-              fullWidth
-              type='number'
-              size='small'
-              InputProps={{ inputProps: { min: 0 } }}
-              {...passFormInputProps('period', createForm, setCreateForm)}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              variant='outlined'
-              label='Weight'
-              fullWidth
-              type='number'
-              size='small'
-              InputProps={{ inputProps: { min: 0 } }}
-              {...passFormInputProps('period', createForm, setCreateForm)}
-            />
+              startIcon={<AddIcon />}
+              sx={{ borderRadius: 7 }}
+              onClick={() => {
+                setCreateForm((prev) => ({
+                  ...prev,
+                  policyFields: [
+                    ...prev.policyFields,
+                    { name: '', weight: 0 } as PolicyField,
+                  ],
+                }));
+              }}
+            >
+              New Field
+            </Button>
           </Grid>
         </Grid>
       </Modal>
