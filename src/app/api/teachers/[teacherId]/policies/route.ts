@@ -18,6 +18,7 @@ export async function GET(
         policies: {
           include: {
             policyFields: true,
+            classes: true,
           },
         },
       },

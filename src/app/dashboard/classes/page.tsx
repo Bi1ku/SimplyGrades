@@ -13,7 +13,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import React, { useMemo } from 'react';
 import Modal from '@/src/components/Modal';
 import TabHeader from '@/src/components/TabHeader';
-import { Class, Teacher } from '@prisma/client';
+import { Class, Policy, Teacher } from '@prisma/client';
 import {
   checkUser,
   formatFullName,
@@ -55,6 +55,7 @@ const defaultForm = {
   name: '',
   subject: '',
   period: 0,
+  policyId: '',
 };
 
 export default function Classes() {
@@ -65,35 +66,57 @@ export default function Classes() {
     deleteClass: false,
     editClass: false,
   });
+  const [modalOpen, setModalOpen] = React.useState({
+    delete: false,
+    create: false,
+    edit: false,
+  });
   const [classes, setClasses] = React.useState<ClassWithTeacher[]>([]);
-  const [classId, setClassId] = React.useState('');
-  const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
-  const [createModalOpen, setCreateModalOpen] = React.useState(false);
-  const [editModalOpen, setEditModalOpen] = React.useState(false);
+  const [selectedClass, setSelectedClass] = React.useState(classes[0]);
   const [createForm, setCreateForm] = React.useState(defaultForm);
   const [editForm, setEditForm] = React.useState(defaultForm);
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [policies, setPolicies] = React.useState([] as Policy[]);
   const { push } = useRouter();
 
   const handleGetClasses = async () => {
     setLoading((prev) => ({ ...prev, classes: true }));
     const { data: response } = await a.get(`/teachers/${user.id}/classes`);
-    if (!response) return;
+    if (!response) return setLoading((prev) => ({ ...prev, classes: false }));
     setClasses(response.classes);
     setLoading((prev) => ({ ...prev, classes: false }));
   };
 
+  const handleGetPolicies = async () => {
+    const { data: response } = await a.get(`/teachers/${user.id}/policies`);
+    if (!response) return;
+    setPolicies(
+      response.policies.map((policy: Policy) => ({
+        label: policy.name,
+        id: policy.id,
+      })),
+    );
+  };
+
   const handleDeleteClass = async () => {
     setLoading((prev) => ({ ...prev, deleteClass: true }));
-    const { data: response } = await a.delete(`/classes/${classId}`);
-    if (!response) return;
-    notify('Successfully deleted class!', 'success');
+    const { data: response } = await a.delete(`/classes/${selectedClass.id}`);
+    if (!response)
+      return setLoading((prev) => ({ ...prev, deleteClass: false }));
+    notify('Successfully deleted class!');
     await handleGetClasses();
     setLoading((prev) => ({ ...prev, deleteClass: false }));
   };
 
   const handleCreateClass = async () => {
-    if (!createForm.name || !createForm.subject || !createForm.period)
+    console.log(createForm);
+
+    if (
+      !createForm.name ||
+      !createForm.subject ||
+      !createForm.period ||
+      !createForm.policyId
+    )
       return notify('Please fill out all fields!', 'error');
 
     setLoading((prev) => ({ ...prev, createClass: true }));
@@ -101,34 +124,41 @@ export default function Classes() {
       ...createForm,
       teacherId: user.id,
     });
-    if (!response) return;
-    notify('Successfully created class!', 'success');
+    if (!response)
+      return setLoading((prev) => ({ ...prev, createClass: false }));
+    notify('Successfully created class!');
     await handleGetClasses();
     setLoading((prev) => ({ ...prev, createClass: false }));
   };
 
   const handleEditClass = async () => {
     setLoading((prev) => ({ ...prev, editClass: true }));
-    const { data: response } = await a.put(`/classes/${classId}`, editForm);
-    if (!response) return;
-    notify('Successfully edited class!', 'success');
+    const { data: response } = await a.put(
+      `/classes/${selectedClass.id}`,
+      editForm,
+    );
+    if (!response) return setLoading((prev) => ({ ...prev, editClass: false }));
+    notify('Successfully edited class!');
     await handleGetClasses();
     setLoading((prev) => ({ ...prev, editClass: false }));
   };
 
   React.useEffect(() => {
-    checkUser(user) && handleGetClasses();
+    if (checkUser(user)) {
+      handleGetPolicies();
+      handleGetClasses();
+    }
   }, [user]);
 
-  useMemo(() => {
-    const selectedClass = classes.find((v) => v.id === classId);
+  React.useEffect(() => {
     selectedClass &&
       setEditForm({
         name: selectedClass.name,
         subject: selectedClass.subject,
         period: selectedClass.period,
+        policyId: selectedClass.policyId,
       });
-  }, [classId]);
+  }, [selectedClass]);
 
   const selectedSubject = useMemo(
     () => subjects.find((v) => v.id === editForm.subject),
@@ -138,7 +168,10 @@ export default function Classes() {
   return (
     <Box>
       <TabHeader
-        setCreateModalOpen={() => setCreateModalOpen(true)}
+        setCreateModalOpen={() => {
+          setCreateForm(defaultForm);
+          setModalOpen((prev) => ({ ...prev, create: true }));
+        }}
         setSearchQuery={(query: string) => setSearchQuery(query)}
       />
       <Grid container spacing={2}>
@@ -187,8 +220,8 @@ export default function Classes() {
                       <Box sx={{ ml: 'auto' }}>
                         <Button
                           onClick={() => {
-                            setDeleteModalOpen(true);
-                            setClassId(cls.id);
+                            setModalOpen((prev) => ({ ...prev, delete: true }));
+                            setSelectedClass(cls);
                           }}
                         >
                           Delete
@@ -196,8 +229,8 @@ export default function Classes() {
                       </Box>
                       <Button
                         onClick={() => {
-                          setEditModalOpen(true);
-                          setClassId(cls.id);
+                          setModalOpen((prev) => ({ ...prev, edit: true }));
+                          setSelectedClass(cls);
                         }}
                       >
                         Edit
@@ -210,18 +243,26 @@ export default function Classes() {
       </Grid>
       <Modal
         title='Delete this class?'
-        open={deleteModalOpen}
-        handleClose={() => !loading.deleteClass && setDeleteModalOpen(false)}
+        open={modalOpen.delete}
+        handleClose={() =>
+          !loading.deleteClass &&
+          setModalOpen((prev) => ({ ...prev, delete: false }))
+        }
         buttons={[
           {
             title: 'Cancel',
-            onClick: () => setDeleteModalOpen(false),
+            onClick: () =>
+              !loading.deleteClass &&
+              setModalOpen((prev) => ({
+                ...prev,
+                delete: false,
+              })),
           },
           {
             title: 'Delete',
             onClick: async () => {
               await handleDeleteClass(); // Wait for class to be deleted before closing modal
-              setDeleteModalOpen(false);
+              setModalOpen((prev) => ({ ...prev, delete: false }));
             },
           },
         ]}
@@ -235,19 +276,26 @@ export default function Classes() {
       <Modal
         title='Create class'
         subtitle='Start a new class for your students to join!'
-        open={createModalOpen}
-        handleClose={() => !loading.createClass && setCreateModalOpen(false)}
+        open={modalOpen.create}
+        handleClose={() =>
+          !loading.createClass &&
+          setModalOpen((prev) => ({ ...prev, create: false }))
+        }
         buttons={[
           {
             title: 'Cancel',
-            onClick: () => setCreateModalOpen(false),
+            onClick: () =>
+              !loading.createClass &&
+              setModalOpen((prev) => ({
+                ...prev,
+                create: false,
+              })),
           },
           {
             title: 'Create',
             onClick: async () => {
-              setCreateForm(defaultForm);
               await handleCreateClass(); // Wait for class to be created before closing modal
-              setCreateModalOpen(false);
+              setModalOpen((prev) => ({ ...prev, create: false }));
             },
           },
         ]}
@@ -267,9 +315,26 @@ export default function Classes() {
               {...passFormInputProps('name', createForm, setCreateForm)}
             />
           </Grid>
+          <Grid item xs={12}>
+            <Autocomplete
+              onChange={(_, value) => {
+                value &&
+                  setCreateForm((prev) => ({ ...prev, policyId: value.id }));
+              }}
+              options={policies}
+              renderInput={(params: AutocompleteRenderInputParams) => (
+                <TextField
+                  {...params}
+                  variant='outlined'
+                  label='Grading Policy'
+                  fullWidth
+                  size='small'
+                />
+              )}
+            />
+          </Grid>
           <Grid item xs={6}>
             <Autocomplete
-              defaultValue={subjects[subjects.length - 1]}
               onChange={(_, value) => {
                 value &&
                   setCreateForm((prev) => ({ ...prev, subject: value.id }));
@@ -303,20 +368,26 @@ export default function Classes() {
         loading={loading.editClass}
         title='Edit class'
         subtitle='Update this class with a new name, subject, or period!'
-        open={editModalOpen}
-        handleClose={() => !loading.editClass && setEditModalOpen(false)}
+        open={modalOpen.edit}
+        handleClose={() =>
+          !loading.editClass &&
+          setModalOpen((prev) => ({ ...prev, edit: false }))
+        }
         buttons={[
           {
             title: 'Cancel',
-            onClick: () => {
-              setEditModalOpen(false);
-            },
+            onClick: () =>
+              !loading.editClass &&
+              setModalOpen((prev) => ({
+                ...prev,
+                edit: false,
+              })),
           },
           {
             title: 'Update',
             onClick: async () => {
               await handleEditClass();
-              setEditModalOpen(false);
+              setModalOpen((prev) => ({ ...prev, edit: false }));
             },
           },
         ]}

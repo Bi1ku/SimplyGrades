@@ -3,8 +3,8 @@ import { NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
-export async function PUT(
-  req: Request,
+export async function GET(
+  _: Request,
   { params }: { params: { policyId: string } },
 ) {
   try {
@@ -15,13 +15,59 @@ export async function PUT(
         id: policyId,
       },
     });
-    if (!policy) throw new Error('Student ID is invalid.');
+    if (!policy) throw new Error('Policy ID is invalid.');
 
-    const updatedPolicy = await prisma.student.update({
+    return NextResponse.json(policy);
+  } catch (e: any) {
+    console.log(e);
+    return NextResponse.json({ error: e.message });
+  }
+}
+
+export async function PUT(
+  req: Request,
+  { params }: { params: { policyId: string } },
+) {
+  try {
+    const { policyId } = params;
+    const { name, policyFields } = await req.json();
+
+    const policy = await prisma.policy.findUnique({
       where: {
         id: policyId,
       },
-      data: await req.json(),
+    });
+    if (!policy) throw new Error('Policy ID is invalid.');
+
+    await prisma.policy.update({
+      where: {
+        id: policyId,
+      },
+      data: {
+        name,
+      },
+    });
+
+    for (const field of policyFields) {
+      await prisma.policyField.upsert({
+        where: {
+          id: field.id || '',
+        },
+        update: {
+          weight: field.weight,
+          name: field.name,
+        },
+        create: {
+          ...field,
+          policyId,
+        },
+      });
+    }
+
+    const updatedPolicy = await prisma.policy.findUnique({
+      where: {
+        id: policyId,
+      },
     });
 
     return NextResponse.json(updatedPolicy);
@@ -43,7 +89,7 @@ export async function DELETE(
         id: policyId,
       },
     });
-    if (!policyId) throw new Error('Student ID is invalid.');
+    if (!policy) throw new Error('Policy ID is invalid.');
 
     const deletedPolicy = await prisma.policy.delete({
       where: {
