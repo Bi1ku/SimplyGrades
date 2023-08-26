@@ -109,8 +109,6 @@ export default function Classes() {
   };
 
   const handleCreateClass = async () => {
-    console.log(createForm);
-
     if (
       !createForm.name ||
       !createForm.subject ||

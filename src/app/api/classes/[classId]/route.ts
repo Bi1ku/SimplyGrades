@@ -15,9 +15,9 @@ export async function GET(
         id: classId,
       },
       include: {
-        studentsToClasses: {
+        policy: {
           include: {
-            student: true,
+            policyFields: true,
           },
         },
       },

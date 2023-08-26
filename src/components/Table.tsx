@@ -10,7 +10,6 @@ import Box from '@mui/material/Box';
 import Exist from './Exist';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 export default function Table({
   keys,
@@ -31,7 +30,6 @@ export default function Table({
   rowsPerPageOptions?: number[];
   loading: boolean;
 }) {
-  console.log(count);
   return (
     <Exist
       data={count === 0}

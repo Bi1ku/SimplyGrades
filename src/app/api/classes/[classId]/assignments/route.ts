@@ -29,6 +29,9 @@ export async function GET(
           contains: searchQuery,
         },
       },
+      include: {
+        policyField: true,
+      },
       skip: page * pageSize,
       take: pageSize,
       orderBy: {

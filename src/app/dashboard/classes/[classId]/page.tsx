@@ -29,11 +29,24 @@ import { useRouter } from 'next/navigation';
 import PanelCard from '@/src/components/PanelCard';
 import SearchBar from '@/src/components/SearchBar';
 import a from '@/src/axios';
-import { formatFullName } from '@/src/utils';
+import { formatFullName, notify, passFormInputProps } from '@/src/utils';
 import { useDebounce } from 'use-debounce';
 import CircularProgress from '@mui/material/CircularProgress';
 import Exist from '@/src/components/Exist';
 import Modal from '@/src/components/Modal';
+import TextField from '@mui/material/TextField';
+import Autocomplete, {
+  AutocompleteRenderInputParams,
+} from '@mui/material/Autocomplete';
+import { Class, Policy, PolicyField } from '@prisma/client';
+
+interface PolicyWithIncludes extends Policy {
+  policyFields: PolicyField[];
+}
+
+interface ClassWithIncludes extends Class {
+  policy: PolicyWithIncludes;
+}
 
 const AreaChart = dynamic(
   () => import('recharts').then((recharts) => recharts.AreaChart),
@@ -97,41 +110,78 @@ export default function ClassDetail({
     tableData: true,
     students: false,
     assignments: false,
+    createAssignment: false,
   });
   const [studentsTable, setStudentsTable] = React.useState(emptyTable);
   const [assignmentsTable, setAssignmentsTable] = React.useState(emptyTable);
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [createAssignmentForm, setCreateAssignmentForm] = React.useState({
+    name: '',
+    policyFieldId: '',
+    dueDate: '',
+    classId,
+  });
   const [debouncedSearchQuery] = useDebounce(searchQuery, 300);
   const [assignmentModalOpen, setAssignmentModalOpen] = React.useState(false);
-  const { push } = useRouter();
+  const [gradingModalOpen, setGradingModalOpen] = React.useState(false);
+  const [cls, setClass] = React.useState<ClassWithIncludes>();
+  const gradingFields = React.useMemo(() => {
+    if (cls)
+      return cls.policy.policyFields.map((field) => ({
+        id: field.id,
+        label: field.name,
+      }));
+  }, [cls]);
 
-  const handleGetStudents = React.useCallback(async (page: number = 0) => {
+  const handleGetClass = async () => {
+    const { data: response } = await a.get(`/classes/${classId}`);
+    if (!response) return;
+    setClass(response);
+  };
+
+  const handleGetStudents = async (page: number = 0) => {
     setLoading((prev) => ({ ...prev, students: true }));
     const { data: response } = await a.get(`/classes/${classId}/students`, {
       params: { page },
     });
-    if (!response) return;
+    if (!response) return setLoading((prev) => ({ ...prev, students: false }));
     setStudentsTable(response);
     setLoading((prev) => ({ ...prev, students: false }));
-  }, []);
+  };
 
-  const handleGetAssignments = React.useCallback(
-    async (page: number = 0) => {
-      setLoading((prev) => ({ ...prev, assignments: true }));
-      const { data: response } = await a.get(
-        `/classes/${classId}/assignments`,
-        { params: { page, searchQuery: debouncedSearchQuery } },
-      );
-      if (!response) return;
-      setAssignmentsTable(response);
-      setLoading((prev) => ({ ...prev, assignments: false }));
-    },
-    [debouncedSearchQuery],
-  );
+  const handleGetAssignments = async (page: number = 0) => {
+    setLoading((prev) => ({ ...prev, assignments: true }));
+    const { data: response } = await a.get(`/classes/${classId}/assignments`, {
+      params: { page, searchQuery: debouncedSearchQuery },
+    });
+    if (!response)
+      return setLoading((prev) => ({ ...prev, assignments: false }));
+    setAssignmentsTable(response);
+    setLoading((prev) => ({ ...prev, assignments: false }));
+  };
 
-  const handleCreateAssignment = async () => {};
+  const handleCreateAssignment = async () => {
+    setLoading((prev) => ({ ...prev, createAssignment: true }));
+    const { data: response } = await a.post(`/assignments`, {
+      ...createAssignmentForm,
+      dueDate: new Date(createAssignmentForm.dueDate),
+    });
+    if (!response)
+      return setLoading((prev) => ({ ...prev, createAssignment: false }));
+    handleGetAssignments();
+    notify('Successfully created assignment!');
+    setLoading((prev) => ({ ...prev, createAssignment: false }));
+  };
+
+  const handleDeleteAssignment = (assignmentId: string) => async () => {
+    const { data: response } = await a.delete(`/assignments/${assignmentId}`);
+    if (!response) return;
+    notify('Successfully deleted assignment!');
+    handleGetAssignments();
+  };
 
   React.useEffect(() => {
+    handleGetClass();
     handleGetStudents();
     handleGetAssignments();
     setLoading((prev) => ({ ...prev, tableData: false }));
@@ -265,7 +315,13 @@ export default function ClassDetail({
               }
             >
               <Table
-                keys={['NAME', 'TYPE', 'CREATION DATE', 'DUE DATE']}
+                keys={[
+                  'NAME',
+                  'GRADING FIELD',
+                  'CREATION DATE',
+                  'DUE DATE',
+                  '',
+                ]}
                 count={assignmentsTable.count}
                 onPageChange={(_: unknown, page: number) =>
                   handleGetAssignments(page)
@@ -277,24 +333,24 @@ export default function ClassDetail({
                 {assignmentsTable.data.map((assignment) => (
                   <TableRow
                     key={assignment.id}
-                    onClick={() =>
-                      push(
-                        `/dashboard/classes/${params.classId}/${assignment.id}`,
-                      )
-                    }
                     sx={{ '&:hover': { cursor: 'pointer' } }}
                   >
                     <TableCell sx={{ whiteSpace: 'nowrap' }}>
                       {assignment.name}
                     </TableCell>
                     <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                      HOMEWORK
+                      {assignment.policyField.name}
                     </TableCell>
                     <TableCell sx={{ whiteSpace: 'nowrap' }}>
                       {new Date(assignment.createdAt).toLocaleDateString()}
                     </TableCell>
                     <TableCell sx={{ whiteSpace: 'nowrap' }}>
                       {new Date(assignment.dueDate).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                      <Link onClick={handleDeleteAssignment(assignment.id)}>
+                        Delete
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -372,21 +428,81 @@ export default function ClassDetail({
       </Grid>
       <Modal
         open={assignmentModalOpen}
-        handleClose={() => setAssignmentModalOpen(false)}
+        handleClose={() =>
+          !loading.createAssignment && setAssignmentModalOpen(false)
+        }
         title='Create assignment'
         subtitle='Create a new assignment to keep track of grades!'
         buttons={[
-          { title: 'Cancel', onClick: () => setAssignmentModalOpen(false) },
-          { title: 'Create', onClick: handleCreateAssignment },
+          {
+            title: 'Cancel',
+            onClick: () =>
+              !loading.createAssignment && setAssignmentModalOpen(false),
+          },
+          {
+            title: 'Create',
+            onClick: async () => {
+              await handleCreateAssignment();
+              setAssignmentModalOpen(false);
+            },
+          },
         ]}
-        loading={false}
+        loading={loading.createAssignment}
       >
         <Grid
           container
           spacing={2}
           sx={{ width: { md: 565, sm: 500, xs: 400 }, mt: '1px' }}
         >
-          {/* TODO: Add form */}
+          <Grid item xs={12}>
+            <TextField
+              variant='outlined'
+              label='Name'
+              fullWidth
+              size='small'
+              {...passFormInputProps(
+                'name',
+                createAssignmentForm,
+                setCreateAssignmentForm,
+              )}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Autocomplete
+              onChange={(_, value) => {
+                value &&
+                  setCreateAssignmentForm((prev) => ({
+                    ...prev,
+                    policyFieldId: value.id,
+                  }));
+              }}
+              options={gradingFields || []}
+              renderInput={(params: AutocompleteRenderInputParams) => (
+                <TextField
+                  {...params}
+                  variant='outlined'
+                  label='Grading Field'
+                  fullWidth
+                  size='small'
+                />
+              )}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              variant='outlined'
+              label='Due Date'
+              fullWidth
+              size='small'
+              InputLabelProps={{ shrink: true }}
+              type='date'
+              {...passFormInputProps(
+                'dueDate',
+                createAssignmentForm,
+                setCreateAssignmentForm,
+              )}
+            />
+          </Grid>
         </Grid>
       </Modal>
     </Box>
