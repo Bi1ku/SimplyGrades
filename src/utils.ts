@@ -11,7 +11,7 @@ export const formatContactNumber = (number: string) => {
 };
 
 export const formatFullName = (user: User) =>
-  `${user.firstName} ${user.lastName}`;
+  `${user?.firstName} ${user?.lastName}`;
 
 export const notify = (
   message: string,

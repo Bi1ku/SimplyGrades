@@ -4,7 +4,6 @@ import { BASE_URL } from './constants';
 
 const a = axios.create({
   baseURL: `${BASE_URL}/api`,
-  timeout: 10000,
 });
 
 a.interceptors.response.use((response): any => {

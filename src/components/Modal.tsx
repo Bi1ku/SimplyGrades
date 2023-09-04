@@ -35,7 +35,7 @@ export default function Modal({
       <DialogContent>{children}</DialogContent>
       <DialogActions>
         {buttons.map((button, i) => (
-          <Button onClick={button.onClick}>
+          <Button onClick={button.onClick} key={i}>
             {button.title}
             {i === buttons.length - 1 && loading && (
               <CircularProgress size={20} sx={{ ml: 1 }} />

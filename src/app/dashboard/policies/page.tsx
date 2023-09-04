@@ -45,6 +45,7 @@ const ClassesPills = React.memo(
   ({ policy }: { policy: PolicyWithIncludes }) => {
     return policy.classes.map((cls) => (
       <Box
+        key={cls.id}
         sx={{
           bgcolor: colors[Math.floor(Math.random() * colors.length)],
           borderRadius: 500,
@@ -270,7 +271,7 @@ export default function Policies() {
             />
           </Grid>
           {createForm.policyFields.map((field, i) => (
-            <>
+            <React.Fragment key={field.id}>
               <Grid item xs={5.5}>
                 <TextField
                   variant='outlined'
@@ -309,7 +310,7 @@ export default function Policies() {
                   <DeleteIcon />
                 </IconButton>
               </Grid>
-            </>
+            </React.Fragment>
           ))}
           <Grid item xs={12}>
             <Button
@@ -400,8 +401,8 @@ export default function Policies() {
               {...passFormInputProps('name', editForm, setEditForm)}
             />
           </Grid>
-          {editForm.policyFields.map((field, i) => (
-            <>
+          {editForm.policyFields.map((field) => (
+            <React.Fragment key={field.id}>
               <Grid item xs={6}>
                 <TextField
                   variant='outlined'
@@ -430,7 +431,7 @@ export default function Policies() {
                   }}
                 />
               </Grid>
-            </>
+            </React.Fragment>
           ))}
           <Grid item xs={12}>
             <Button
