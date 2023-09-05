@@ -9,7 +9,7 @@ export default function TabHeader({
   setCreateModalOpen,
   setSearchQuery,
 }: {
-  setCreateModalOpen: () => void;
+  setCreateModalOpen: (value: boolean) => void;
   setSearchQuery: (query: string) => void;
 }) {
   return (
@@ -62,7 +62,7 @@ export default function TabHeader({
           ml: 'auto',
           borderRadius: 2,
         }}
-        onClick={setCreateModalOpen}
+        onClick={() => setCreateModalOpen(true)}
       >
         <Add sx={{ pr: '2px' }} /> CREATE
       </Button>
