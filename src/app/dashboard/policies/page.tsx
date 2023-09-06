@@ -85,8 +85,11 @@ export default function Policies() {
     checkUser(user) && handleGetPolicies();
   }, [user]);
 
-  const handleSetModal = (modal: keyof typeof modalOpen) => (value: boolean) =>
-    setModalOpen((prev) => ({ ...prev, [modal]: value }));
+  const handleSetModal = React.useCallback(
+    (modal: keyof typeof modalOpen) => (value: boolean) =>
+      setModalOpen((prev) => ({ ...prev, [modal]: value })),
+    [],
+  );
 
   return (
     <Box>
