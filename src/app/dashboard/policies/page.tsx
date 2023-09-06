@@ -103,7 +103,7 @@ export default function Policies() {
             </Grid>
           ))}
         >
-          {!loading && policies.length
+          {policies.length
             ? policies
                 .filter((policy) => policy.name.includes(searchQuery))
                 .map((policy) => (
