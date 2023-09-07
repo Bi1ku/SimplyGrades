@@ -58,18 +58,18 @@ export default function Classes() {
     );
   };
 
+  const handleSetModal = React.useCallback(
+    (modal: keyof typeof modalOpen) => (value: boolean) =>
+      setModalOpen((prev) => ({ ...prev, [modal]: value })),
+    [],
+  );
+
   React.useEffect(() => {
     if (checkUser(user)) {
       handleGetPolicies();
       handleGetClasses();
     }
   }, [user]);
-
-  const handleSetModal = React.useCallback(
-    (modal: keyof typeof modalOpen) => (value: boolean) =>
-      setModalOpen((prev) => ({ ...prev, [modal]: value })),
-    [],
-  );
 
   return (
     <Box>

@@ -81,15 +81,15 @@ export default function Policies() {
     setLoading(false);
   }, [user.id]);
 
-  React.useEffect(() => {
-    checkUser(user) && handleGetPolicies();
-  }, [user]);
-
   const handleSetModal = React.useCallback(
     (modal: keyof typeof modalOpen) => (value: boolean) =>
       setModalOpen((prev) => ({ ...prev, [modal]: value })),
     [],
   );
+
+  React.useEffect(() => {
+    checkUser(user) && handleGetPolicies();
+  }, [user]);
 
   return (
     <Box>

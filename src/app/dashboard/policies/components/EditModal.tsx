@@ -50,10 +50,7 @@ export default function EditModal({
       open={open}
       handleClose={handleClose}
       buttons={[
-        {
-          title: 'Cancel',
-          onClick: () => handleClose,
-        },
+        { title: 'Cancel', onClick: () => handleClose },
         {
           title: 'Update',
           onClick: async () => {

@@ -33,10 +33,7 @@ export default function DeleteModal({
       open={open}
       handleClose={handleClose}
       buttons={[
-        {
-          title: 'Cancel',
-          onClick: handleClose,
-        },
+        { title: 'Cancel', onClick: handleClose },
         {
           title: 'Delete',
           onClick: async () => {

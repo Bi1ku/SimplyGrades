@@ -7,7 +7,7 @@ import Autocomplete, {
 } from '@mui/material/Autocomplete';
 import React from 'react';
 import a from '@/src/axios';
-import { defaultForm as defaultForm2, subjects } from './CreateModal';
+import { defaultForm as emptyDefaultForm, subjects } from './CreateModal';
 import { ClassWithTeacher } from '../page';
 
 export default function EditModal({
@@ -21,17 +21,17 @@ export default function EditModal({
   refetch: () => void;
   cls: ClassWithTeacher;
 }) {
-  const defaultForm = cls
-    ? {
-        name: cls.name,
-        subject: cls.subject,
-        period: cls.period,
-        policyId: cls.policyId,
-      }
-    : defaultForm2;
-
   const [loading, setLoading] = React.useState(false);
-  const [form, setForm] = React.useState(defaultForm);
+  const [form, setForm] = React.useState(
+    cls
+      ? {
+          name: cls.name,
+          subject: cls.subject,
+          period: cls.period,
+          policyId: cls.policyId,
+        }
+      : emptyDefaultForm,
+  );
 
   const handleEditClass = async () => {
     setLoading(true);
@@ -56,10 +56,7 @@ export default function EditModal({
       open={open}
       handleClose={handleClose}
       buttons={[
-        {
-          title: 'Cancel',
-          onClick: handleClose,
-        },
+        { title: 'Cancel', onClick: handleClose },
         {
           title: 'Update',
           onClick: async () => {

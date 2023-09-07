@@ -55,10 +55,7 @@ export default function CreateModal({
       open={open}
       handleClose={handleClose}
       buttons={[
-        {
-          title: 'Cancel',
-          onClick: handleClose,
-        },
+        { title: 'Cancel', onClick: handleClose },
         {
           title: 'Create',
           onClick: async () => {
