@@ -45,7 +45,7 @@ export default function Classes() {
     if (!response) return setLoading(false);
     setClasses(response.classes);
     setLoading(false);
-  }, []);
+  }, [user.id]);
 
   const handleGetPolicies = async () => {
     const { data: response } = await a.get(`/teachers/${user.id}/policies`);
