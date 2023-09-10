@@ -1,6 +1,6 @@
 import a from '@/src/axios';
 import Modal from '@/src/components/Modal';
-import { formatFullName } from '@/src/utils';
+import { formatFullName, notify } from '@/src/utils';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
@@ -51,9 +51,11 @@ export default function GradingModal({
       `/assignments/${assignmentId}/grades`,
       gradeForm,
     );
-    if (!response) return;
+    if (!response) return setGradeLoading(false);
     handleGetGrades();
+    notify('Successfully graded assignment!');
     setGradeLoading(false);
+    setOpen(false);
   };
 
   const handleGradeChange =
@@ -78,8 +80,8 @@ export default function GradingModal({
   };
 
   React.useEffect(() => {
-    assignmentId && handleGetGrades();
-  }, [assignmentId]);
+    open && assignmentId && handleGetGrades();
+  }, [open]);
 
   return (
     <Modal
@@ -91,10 +93,7 @@ export default function GradingModal({
         { title: 'Cancel', onClick: handleClose },
         {
           title: 'Grade',
-          onClick: async () => {
-            await handleGradeAssignment();
-            handleClose();
-          },
+          onClick: handleGradeAssignment,
         },
       ]}
       loading={gradeLoading}

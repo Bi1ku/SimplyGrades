@@ -22,16 +22,7 @@ export default function EditModal({
   cls: ClassWithTeacher;
 }) {
   const [loading, setLoading] = React.useState(false);
-  const [form, setForm] = React.useState(
-    cls
-      ? {
-          name: cls.name,
-          subject: cls.subject,
-          period: cls.period,
-          policyId: cls.policyId,
-        }
-      : emptyDefaultForm,
-  );
+  const [form, setForm] = React.useState(emptyDefaultForm);
 
   const handleEditClass = async () => {
     setLoading(true);
@@ -48,6 +39,16 @@ export default function EditModal({
     () => subjects.find((v) => v.id === form.subject),
     [form.subject],
   );
+
+  React.useEffect(() => {
+    cls &&
+      setForm({
+        name: cls.name,
+        subject: cls.subject,
+        period: cls.period,
+        policyId: cls.policyId,
+      });
+  }, [cls]);
   return (
     <Modal
       loading={loading}

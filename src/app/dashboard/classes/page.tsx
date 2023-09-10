@@ -86,62 +86,65 @@ export default function Classes() {
             </Grid>
           ))}
         >
-          {classes.length &&
-            classes
-              .filter((v) => v.name.includes(searchQuery))
-              .map((cls) => (
-                <Grid item xs={12} sm={6} md={4} key={cls.id}>
-                  <Card variant='outlined'>
-                    <CardContent
-                      onClick={() => push(`/dashboard/classes/${cls.id}`)}
-                      sx={{ '&:hover': { cursor: 'pointer' } }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          flexWrap: 'wrap',
-                        }}
+          {classes.length
+            ? classes
+                .filter((v) => v.name.includes(searchQuery))
+                .map((cls) => (
+                  <Grid item xs={12} sm={6} md={4} key={cls.id}>
+                    <Card variant='outlined'>
+                      <CardContent
+                        onClick={() => push(`/dashboard/classes/${cls.id}`)}
+                        sx={{ '&:hover': { cursor: 'pointer' } }}
                       >
-                        <Typography
-                          variant='h5'
-                          sx={{ maxWidth: 4 / 5 }}
-                          noWrap
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            flexWrap: 'wrap',
+                          }}
                         >
-                          {cls.name}
+                          <Typography
+                            variant='h5'
+                            sx={{ maxWidth: 4 / 5 }}
+                            noWrap
+                          >
+                            {cls.name}
+                          </Typography>
+                          <Typography variant='caption'>{`Period ${cls.period}`}</Typography>
+                        </Box>
+                        <Typography variant='subtitle2'>
+                          {cls.subject}
                         </Typography>
-                        <Typography variant='caption'>{`Period ${cls.period}`}</Typography>
-                      </Box>
-                      <Typography variant='subtitle2'>{cls.subject}</Typography>
-                      <Typography variant='subtitle1' sx={{ mt: 1 }}>
-                        {formatFullName(user)}
-                      </Typography>
-                    </CardContent>
-                    <Divider />
-                    <CardActions>
-                      <Box sx={{ ml: 'auto' }}>
+                        <Typography variant='subtitle1' sx={{ mt: 1 }}>
+                          {formatFullName(user)}
+                        </Typography>
+                      </CardContent>
+                      <Divider />
+                      <CardActions>
+                        <Box sx={{ ml: 'auto' }}>
+                          <Button
+                            onClick={() => {
+                              handleSetModal('delete')(true);
+                              setClass(cls);
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        </Box>
                         <Button
                           onClick={() => {
-                            handleSetModal('delete')(true);
+                            handleSetModal('edit')(true);
                             setClass(cls);
                           }}
                         >
-                          Delete
+                          Edit
                         </Button>
-                      </Box>
-                      <Button
-                        onClick={() => {
-                          handleSetModal('edit')(true);
-                          setClass(cls);
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))}
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                ))
+            : null}
         </Exist>
       </Grid>
       <DeleteModal

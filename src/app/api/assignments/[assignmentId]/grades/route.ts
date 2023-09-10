@@ -65,6 +65,11 @@ export async function GET(
       include: {
         student: true,
       },
+      orderBy: {
+        student: {
+          firstName: 'asc',
+        },
+      },
     });
 
     return NextResponse.json(grades);
