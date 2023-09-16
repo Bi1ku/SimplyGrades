@@ -2,10 +2,6 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import React from 'react';
 import {
   ResponsiveContainer,
@@ -25,44 +21,6 @@ import a from '@/src/axios';
 import { Context } from '../page';
 import { formatFullName } from '@/src/utils';
 
-const data = [
-  {
-    name: 'Assignment 1',
-    avgGrade: 78,
-    studentGrade: 90,
-  },
-  {
-    name: 'Assignment 2',
-    avgGrade: 45,
-    studentGrade: 87,
-  },
-  {
-    name: 'Assignment 3',
-    avgGrade: 90,
-    studentGrade: 72,
-  },
-  {
-    name: 'Assignment 4',
-    avgGrade: 80,
-    studentGrade: 50,
-  },
-  {
-    name: 'Assignment 5',
-    avgGrade: 47,
-    studentGrade: 100,
-  },
-  {
-    name: 'Assignment 6',
-    avgGrade: 93,
-    studentGrade: 78,
-  },
-  {
-    name: 'Assignment 7',
-    avgGrade: 78,
-    studentGrade: 34,
-  },
-];
-
 interface GraphData {
   name: string;
   avgGrade: number;
@@ -75,26 +33,21 @@ export default function StudentToAverageGraph({
   students: { student: Student }[];
 }) {
   const classId = React.useContext(Context);
-  const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState([] as GraphData[]);
 
   const handleGetGraphData = async (studentId: string) => {
-    setLoading(true);
-    console.log('called');
     const { data: response } = await a.get(
       `/classes/${classId}/stats/${studentId}/graph`,
     );
-    console.log(response);
-    if (!response) return setLoading(false);
+    if (!response) return;
     setData(response);
-    setLoading(false);
   };
 
   React.useEffect(() => {
     handleGetGraphData(students[0]?.student.id);
   }, [students]);
 
-  const studentsAutocomplete = React.useMemo(
+  const autocompleteData = React.useMemo(
     () =>
       students.map(({ student }) => ({
         label: formatFullName(student),
@@ -113,7 +66,8 @@ export default function StudentToAverageGraph({
           <Autocomplete
             sx={{ width: 200, ml: 'auto' }}
             onChange={(_, value) => handleGetGraphData(value?.id || '')}
-            options={studentsAutocomplete}
+            defaultValue={autocompleteData[0]}
+            options={autocompleteData}
             renderInput={(params: AutocompleteRenderInputParams) => (
               <TextField
                 {...params}
