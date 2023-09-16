@@ -51,13 +51,6 @@ export async function GET(
   try {
     const { assignmentId } = params;
 
-    const assignment = await prisma.assignment.findUnique({
-      where: {
-        id: assignmentId,
-      },
-    });
-    if (!assignment) throw new Error('Assignment ID is invalid.');
-
     const grades = await prisma.studentsToAssignments.findMany({
       where: {
         assignmentId,

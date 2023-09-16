@@ -15,7 +15,6 @@ export async function GET(
         id: policyId,
       },
     });
-    if (!policy) throw new Error('Policy ID is invalid.');
 
     return NextResponse.json(policy);
   } catch (e: any) {
@@ -31,13 +30,6 @@ export async function PUT(
   try {
     const { policyId } = params;
     const { name, policyFields } = await req.json();
-
-    const policy = await prisma.policy.findUnique({
-      where: {
-        id: policyId,
-      },
-    });
-    if (!policy) throw new Error('Policy ID is invalid.');
 
     await prisma.policy.update({
       where: {
@@ -83,13 +75,6 @@ export async function DELETE(
 ) {
   try {
     const { policyId } = params;
-
-    const policy = await prisma.policy.findUnique({
-      where: {
-        id: policyId,
-      },
-    });
-    if (!policy) throw new Error('Policy ID is invalid.');
 
     const deletedPolicy = await prisma.policy.delete({
       where: {

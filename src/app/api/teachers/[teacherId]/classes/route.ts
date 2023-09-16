@@ -18,7 +18,6 @@ export async function GET(
         classes: true,
       },
     });
-    if (!teacher) throw new Error('Teacher ID is invalid.');
 
     return NextResponse.json(teacher);
   } catch (e: any) {

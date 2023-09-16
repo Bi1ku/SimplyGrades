@@ -15,7 +15,6 @@ export async function GET(
         id: teacherId,
       },
     });
-    if (!teacher) throw new Error('Teacher ID is invalid.');
 
     return NextResponse.json(teacher);
   } catch (e: any) {
@@ -30,13 +29,6 @@ export async function PUT(
 ) {
   try {
     const { teacherId } = params;
-
-    const teacher = await prisma.teacher.findUnique({
-      where: {
-        id: teacherId,
-      },
-    });
-    if (!teacher) throw new Error('Teacher ID is invalid.');
 
     const updatedTeacher = await prisma.teacher.update({
       where: {
@@ -58,13 +50,6 @@ export async function DELETE(
 ) {
   try {
     const { teacherId } = params;
-
-    const teacher = await prisma.teacher.findUnique({
-      where: {
-        id: teacherId,
-      },
-    });
-    if (!teacher) throw new Error('Teacher ID is invalid.');
 
     const deletedTeacher = await prisma.teacher.delete({
       where: {

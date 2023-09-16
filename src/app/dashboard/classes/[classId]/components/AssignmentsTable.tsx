@@ -52,15 +52,21 @@ export default function AssignmentsTable() {
     );
   };
 
-  const handleGetAssignments = async (page: number = 0) => {
-    setPageLoading(true);
-    const { data: response } = await a.get(`/classes/${classId}/assignments`, {
-      params: { page, searchQuery },
-    });
-    if (!response) return setPageLoading(false);
-    setData(response);
-    setPageLoading(false);
-  };
+  const handleGetAssignments = React.useCallback(
+    async (page: number = 0) => {
+      setPageLoading(true);
+      const { data: response } = await a.get(
+        `/classes/${classId}/assignments`,
+        {
+          params: { page, searchQuery },
+        },
+      );
+      if (!response) return setPageLoading(false);
+      setData(response);
+      setPageLoading(false);
+    },
+    [debouncedSearchQuery],
+  );
 
   const handleDeleteAssignment = (assignmentId: string) => async () => {
     const { data: response } = await a.delete(`/assignments/${assignmentId}`);

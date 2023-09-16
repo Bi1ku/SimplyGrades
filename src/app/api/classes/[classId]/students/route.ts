@@ -14,13 +14,6 @@ export async function GET(
 
     const { classId } = params;
 
-    const cls = await prisma.class.findUnique({
-      where: {
-        id: classId,
-      },
-    });
-    if (!cls) throw new Error('Class ID is invalid.');
-
     const count = await prisma.studentsToClasses.count({
       where: {
         classId,

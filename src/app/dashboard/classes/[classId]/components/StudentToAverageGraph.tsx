@@ -16,6 +16,14 @@ import {
   Area,
   AreaChart,
 } from 'recharts';
+import { Student } from '@prisma/client';
+import Autocomplete, {
+  AutocompleteRenderInputParams,
+} from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import a from '@/src/axios';
+import { Context } from '../page';
+import { formatFullName } from '@/src/utils';
 
 const data = [
   {
@@ -55,34 +63,67 @@ const data = [
   },
 ];
 
-export default function StudentToAverageTable() {
-  const [age, setAge] = React.useState('');
+interface GraphData {
+  name: string;
+  avgGrade: number;
+  studentGrade: number;
+}
+
+export default function StudentToAverageGraph({
+  students,
+}: {
+  students: { student: Student }[];
+}) {
+  const classId = React.useContext(Context);
+  const [loading, setLoading] = React.useState(false);
+  const [data, setData] = React.useState([] as GraphData[]);
+
+  const handleGetGraphData = async (studentId: string) => {
+    setLoading(true);
+    console.log('called');
+    const { data: response } = await a.get(
+      `/classes/${classId}/stats/${studentId}/graph`,
+    );
+    console.log(response);
+    if (!response) return setLoading(false);
+    setData(response);
+    setLoading(false);
+  };
+
+  React.useEffect(() => {
+    handleGetGraphData(students[0]?.student.id);
+  }, [students]);
+
+  const studentsAutocomplete = React.useMemo(
+    () =>
+      students.map(({ student }) => ({
+        label: formatFullName(student),
+        id: student.id,
+      })),
+    [students],
+  );
+
   return (
     <Grid item xs={12}>
       <Paper variant='outlined' sx={{ p: 2, pl: 0 }}>
-        <Stack flexDirection='row' justifyContent='space-between'>
+        <Stack flexDirection='row'>
           <Typography sx={{ fontWeight: 600, px: 2, mb: 2 }} variant='h6'>
             Student Performance to Class Average
           </Typography>
-          <FormControl sx={{ minWidth: 120 }} size='small'>
-            <InputLabel id='demo-select-small-label'>Age</InputLabel>
-            {/* TODO: Change to Autoselect */}
-            <Select
-              labelId='demo-select-small-label'
-              value={age}
-              label='Age'
-              onChange={(event: SelectChangeEvent) =>
-                setAge(event.target.value)
-              }
-            >
-              <MenuItem value=''>
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
+          <Autocomplete
+            sx={{ width: 200, ml: 'auto' }}
+            onChange={(_, value) => handleGetGraphData(value?.id || '')}
+            options={studentsAutocomplete}
+            renderInput={(params: AutocompleteRenderInputParams) => (
+              <TextField
+                {...params}
+                variant='outlined'
+                label='Student'
+                fullWidth
+                size='small'
+              />
+            )}
+          />
         </Stack>
         <ResponsiveContainer width='100%' height={300}>
           <AreaChart

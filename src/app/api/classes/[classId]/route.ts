@@ -22,7 +22,6 @@ export async function GET(
         },
       },
     });
-    if (!cls) throw new Error('Class ID is invalid.');
 
     return NextResponse.json(cls);
   } catch (e: any) {
@@ -37,13 +36,6 @@ export async function PUT(
 ) {
   try {
     const { classId } = params;
-
-    const cls = await prisma.class.findUnique({
-      where: {
-        id: classId,
-      },
-    });
-    if (!cls) throw new Error('Class ID is invalid.');
 
     const updatedClass = await prisma.class.update({
       where: {
@@ -65,16 +57,6 @@ export async function DELETE(
 ) {
   try {
     const { classId } = params;
-
-    const cls = await prisma.class.findUnique({
-      where: {
-        id: classId,
-      },
-      select: {
-        studentsToClasses: true,
-      },
-    });
-    if (!cls) throw new Error('Class ID is invalid.');
 
     const deletedClass = await prisma.class.delete({
       where: {

@@ -15,7 +15,6 @@ export async function GET(
         id: assignmentId,
       },
     });
-    if (!assignment) throw new Error('Assignment ID is invalid.');
 
     return NextResponse.json(assignment);
   } catch (e: any) {
@@ -31,13 +30,6 @@ export async function PUT(
 ) {
   try {
     const { assignmentId } = params;
-
-    const assignment = await prisma.assignment.findUnique({
-      where: {
-        id: assignmentId,
-      },
-    });
-    if (!assignment) throw new Error('Assignment ID is invalid.');
 
     const updatedAssignment = await prisma.assignment.update({
       where: {
@@ -59,13 +51,6 @@ export async function DELETE(
 ) {
   try {
     const { assignmentId } = params;
-
-    const assignment = await prisma.assignment.findUnique({
-      where: {
-        id: assignmentId,
-      },
-    });
-    if (!assignment) throw new Error('Assignment ID is invalid.');
 
     const deletedAssignment = await prisma.assignment.delete({
       where: {

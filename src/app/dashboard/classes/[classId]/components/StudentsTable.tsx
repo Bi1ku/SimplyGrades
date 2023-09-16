@@ -9,31 +9,16 @@ import Table from '@/src/components/Table';
 import TableRow from '@mui/material/TableRow';
 import Link from 'next/link';
 import { Student } from '@prisma/client';
-import a from '@/src/axios';
 import TableCell from '@mui/material/TableCell';
-import { Context } from '../page';
 
-export default function StudentsTable() {
-  const classId = React.useContext(Context);
-  const [loading, setLoading] = React.useState(true);
-  const [data, setData] = React.useState({
-    data: [] as { student: Student }[],
-    count: 0,
-    page: 0,
-  });
-
-  const handleGetStudents = async () => {
-    const { data: response } = await a.get(`/classes/${classId}/students`, {
-      params: { page: 0, pageSize: 1000 },
-    });
-    if (!response) return setLoading(false);
-    setData(response);
-    setLoading(false);
-  };
-
-  React.useEffect(() => {
-    handleGetStudents();
-  }, []);
+export default function StudentsTable({
+  students,
+  loading,
+}: {
+  students: { student: Student }[];
+  loading: boolean;
+}) {
+  const [page, setPage] = React.useState(0);
 
   return (
     <Grid item xs={12} md={5}>
@@ -54,40 +39,36 @@ export default function StudentsTable() {
         >
           <Table
             keys={['NAME', 'EMAIL', 'GRADE']}
-            count={data.count}
-            onPageChange={(_, page) => setData((prev) => ({ ...prev, page }))}
-            page={data.page}
+            count={students.length}
+            onPageChange={(_, page) => setPage(page)}
+            page={page}
             rowsPerPage={5}
             loading={false}
           >
-            {data.data
-              .slice(data.page * 5, (data.page + 1) * 5)
-              .map(({ student }) => (
-                <TableRow key={student.id}>
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    {formatFullName(student)}
-                  </TableCell>
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    <Link href={`mailto:${student.email}`}>
-                      {student.email}
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    <Box
-                      component='span'
-                      sx={{
-                        bgcolor: 'lightgreen',
-                        p: '7px',
-                        borderRadius: 4,
-                        color: 'green',
-                        fontWeight: 600,
-                      }}
-                    >
-                      90%
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ))}
+            {students.slice(page * 5, (page + 1) * 5).map(({ student }) => (
+              <TableRow key={student.id}>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  {formatFullName(student)}
+                </TableCell>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  <Link href={`mailto:${student.email}`}>{student.email}</Link>
+                </TableCell>
+                <TableCell>
+                  <Box
+                    component='span'
+                    sx={{
+                      bgcolor: 'lightgreen',
+                      p: '7px',
+                      borderRadius: 4,
+                      color: 'green',
+                      fontWeight: 600,
+                    }}
+                  >
+                    90%
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ))}
           </Table>
         </Exist>
       </PanelCard>
