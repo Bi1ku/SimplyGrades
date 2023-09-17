@@ -32,6 +32,7 @@ export default function ClassDetail({
   React.useEffect(() => {
     handleGetStudents();
   }, []);
+
   return (
     <Context.Provider value={classId}>
       <Grid container spacing={2}>

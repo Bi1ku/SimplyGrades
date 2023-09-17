@@ -9,6 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import Link from 'next/link';
 import React from 'react';
+import a from '@/src/axios';
 
 const students = [
   {
@@ -45,6 +46,15 @@ const students = [
 
 export default function AllStudentsTable() {
   const [searchQuery, setSearchQuery] = React.useState('');
+  // const [students, setStudents] = React.useState();
+  const [page, setPage] = React.useState(0);
+
+  const handleGetStudents = async () => {};
+
+  React.useEffect(() => {
+    handleGetStudents();
+  }, []);
+
   return (
     <Grid item md={5} xs={12}>
       <PanelCard

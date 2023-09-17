@@ -105,10 +105,7 @@ export default function AssignmentsTable() {
                 Assignments
               </Typography>
               <Stack flexDirection='row'>
-                <SearchBar
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                />
+                <SearchBar setSearchQuery={setSearchQuery} />
                 <Button
                   size='small'
                   variant='contained'
