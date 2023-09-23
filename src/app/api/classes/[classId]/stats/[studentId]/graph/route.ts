@@ -29,10 +29,13 @@ export async function GET(
         studentGrade: 0,
       };
       for (const { studentId: id, grade } of assignment.studentsToAssignments) {
-        data.avgGrade += grade!;
-        if (id === studentId) data.studentGrade = grade!;
+        data.avgGrade += grade;
+        if (id === studentId) data.studentGrade = grade;
       }
-      data.avgGrade /= assignment.studentsToAssignments.length;
+      data.avgGrade =
+        Math.round(
+          (data.avgGrade / assignment.studentsToAssignments.length) * 100,
+        ) / 100;
       result.push(data);
     }
 
