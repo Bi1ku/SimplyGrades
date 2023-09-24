@@ -26,7 +26,7 @@ export const generalizeError = (error: string) =>
   error.length < 50 ? error : 'Something went wrong.';
 
 export const checkUser = (user: User) =>
-  JSON.stringify(user) === JSON.stringify(dummyUser) ? false : true;
+  !(JSON.stringify(user) === JSON.stringify(dummyUser));
 
 export const passFormInputProps = (
   field: string,

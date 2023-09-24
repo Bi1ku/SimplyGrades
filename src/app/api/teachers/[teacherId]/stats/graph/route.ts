@@ -40,7 +40,7 @@ export async function GET(
         }
         data.avgGrade =
           Math.round(
-            (data.avgGrade / assignment.studentsToAssignments.length) * 100,
+            (data.avgGrade / assignment.studentsToAssignments.length) * 101,
           ) / 100;
       }
       result.push(data);
