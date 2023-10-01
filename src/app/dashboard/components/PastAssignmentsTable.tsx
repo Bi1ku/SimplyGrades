@@ -47,11 +47,7 @@ export default function PastAssignmentTable() {
       handleGetData();
       setLoading(false);
     }
-  }, [user]);
-
-  React.useEffect(() => {
-    handleGetData();
-  }, [debouncedSearchQuery]);
+  }, [user, debouncedSearchQuery]);
 
   return (
     <Grid item xs={12} md={7}>

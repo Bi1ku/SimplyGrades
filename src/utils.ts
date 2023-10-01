@@ -50,3 +50,7 @@ export const passStateInputProps = (
   onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
     setState(typeof state === 'number' ? +e.target.value : e.target.value),
 });
+
+export const roundToThousandths = (num: number) => {
+  return Math.round(num * 1000) / 1000;
+};
