@@ -1,15 +1,15 @@
-import MuiTable from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableFooter from '@mui/material/TableFooter';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TablePagination from '@mui/material/TablePagination';
-import Box from '@mui/material/Box';
-import Exist from './Exist';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import MuiTable from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableFooter from "@mui/material/TableFooter";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TablePagination from "@mui/material/TablePagination";
+import Box from "@mui/material/Box";
+import Exist from "./Exist";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 
 export default function Table({
   keys,
@@ -35,16 +35,16 @@ export default function Table({
       data={count === 0}
       placeholder={
         <Stack
-          flexDirection='column'
-          alignItems='center'
-          sx={{ width: '100%', height: '100%' }}
+          flexDirection="column"
+          alignItems="center"
+          sx={{ width: "100%", height: "100%" }}
         >
           <Box
-            component='img'
-            src='/images/no_data.jpg'
-            sx={{ width: '100%', height: '75%', objectFit: 'contain' }}
+            component="img"
+            src="/images/no_data.jpg"
+            sx={{ width: "100%", height: "75%", objectFit: "contain" }}
           />
-          <Typography variant='body2'>No data was was found.</Typography>
+          <Typography variant="body2">No data was was found.</Typography>
         </Stack>
       }
     >
@@ -54,7 +54,7 @@ export default function Table({
             <TableRow>
               {keys.map((key) => (
                 <TableCell
-                  sx={{ fontSize: 12, whiteSpace: 'nowrap' }}
+                  sx={{ fontSize: 12, whiteSpace: "nowrap" }}
                   key={key}
                 >
                   {key}
@@ -75,7 +75,7 @@ export default function Table({
           <TableFooter sx={{ mt: 1000 }}>
             <TableRow>
               <TablePagination
-                sx={{ pointerEvents: loading ? 'none' : 'auto' }}
+                sx={{ pointerEvents: loading ? "none" : "auto" }}
                 count={count}
                 onPageChange={onPageChange}
                 page={page}

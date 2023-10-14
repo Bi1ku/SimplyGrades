@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import Grid from '@mui/material/Grid';
-import React from 'react';
-import AssignmentsTable from './components/AssignmentsTable';
-import StudentToAverageGraph from './components/StudentToAverageGraph';
-import StudentsTable from './components/StudentsTable';
-import StaticData from './components/StaticData';
-import a from '@/src/axios';
-import { Student } from '@prisma/client';
+import Grid from "@mui/material/Grid";
+import React from "react";
+import AssignmentsTable from "./components/AssignmentsTable";
+import StudentToAverageGraph from "./components/StudentToAverageGraph";
+import StudentsTable from "./components/StudentsTable";
+import StaticData from "./components/StaticData";
+import a from "@/src/axios";
+import { Student } from "@prisma/client";
 
-export const Context = React.createContext('');
+export const Context = React.createContext("");
 
 export default function ClassDetail({
   params,

@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client';
-import { NextResponse } from 'next/server';
+import { PrismaClient } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
 export async function GET(
   _: Request,
-  { params }: { params: { classId: string; studentId: string } },
+  { params }: { params: { classId: string; studentId: string } }
 ) {
   try {
     const { classId, studentId } = params;
@@ -34,7 +34,7 @@ export async function GET(
       }
       data.avgGrade =
         Math.round(
-          (data.avgGrade / assignment.studentsToAssignments.length) * 100,
+          (data.avgGrade / assignment.studentsToAssignments.length) * 100
         ) / 100;
       result.push(data);
     }

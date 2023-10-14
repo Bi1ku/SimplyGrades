@@ -1,11 +1,11 @@
-import a from '@/src/axios';
-import Exist from '@/src/components/Exist';
-import Static from '@/src/components/Static';
-import useUser from '@/src/hooks/user';
-import { checkUser } from '@/src/utils';
-import Grid from '@mui/material/Grid';
-import Skeleton from '@mui/material/Skeleton';
-import React from 'react';
+import a from "@/src/axios";
+import Exist from "@/src/components/Exist";
+import Static from "@/src/components/Static";
+import useUser from "@/src/hooks/user";
+import { checkUser } from "@/src/utils";
+import Grid from "@mui/material/Grid";
+import Skeleton from "@mui/material/Skeleton";
+import React from "react";
 
 interface StaticsData {
   ungradedCount: number;
@@ -26,7 +26,7 @@ export default function Statics({ avgGrade }: { avgGrade: number }) {
 
   const handleGetStatics = async () => {
     const { data: response } = await a.get(
-      `/teachers/${user.id}/stats/statics`,
+      `/teachers/${user.id}/stats/statics`
     );
     if (!response) return setLoading(true);
     setStatics(response);
@@ -46,9 +46,9 @@ export default function Statics({ avgGrade }: { avgGrade: number }) {
             {new Array(6).fill(0).map((_, i) => (
               <Grid item xs={6} md={4} lg={6}>
                 <Skeleton
-                  variant='rectangular'
+                  variant="rectangular"
                   height={95}
-                  sx={{ borderRadius: '5px' }}
+                  sx={{ borderRadius: "5px" }}
                 />
               </Grid>
             ))}
@@ -60,36 +60,36 @@ export default function Statics({ avgGrade }: { avgGrade: number }) {
         <Grid container spacing={2}>
           <Grid item xs={6} md={4} lg={6}>
             <Static
-              title='Total Students'
+              title="Total Students"
               description={statics.studentCount.toString()}
             />
           </Grid>
           <Grid item xs={6} md={4} lg={6}>
             <Static
-              title='Average Student Grade'
+              title="Average Student Grade"
               description={`${avgGrade}%`}
             />
           </Grid>
           <Grid item xs={6} md={4} lg={6}>
             <Static
-              title='Graded Assignments'
+              title="Graded Assignments"
               description={statics.gradedCount.toString()}
             />
           </Grid>
           <Grid item xs={6} md={4} lg={6}>
             <Static
-              title='Ungraded Assignments'
+              title="Ungraded Assignments"
               description={statics.ungradedCount.toString()}
             />
           </Grid>
           <Grid item xs={6} md={4} lg={6}>
             <Static
-              title='Total Classes'
+              title="Total Classes"
               description={statics.classCount.toString()}
             />
           </Grid>
           <Grid item xs={6} md={4} lg={6}>
-            <Static title='Teacher Rating' description='TBA' />
+            <Static title="Teacher Rating" description="TBA" />
           </Grid>
         </Grid>
       </Grid>

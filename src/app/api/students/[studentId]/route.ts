@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client';
-import { NextResponse } from 'next/server';
+import { PrismaClient } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
 export async function GET(
   _: Request,
-  { params }: { params: { studentId: string } },
+  { params }: { params: { studentId: string } }
 ) {
   try {
     const { studentId } = params;
@@ -25,7 +25,7 @@ export async function GET(
 
 export async function PUT(
   req: Request,
-  { params }: { params: { studentId: string } },
+  { params }: { params: { studentId: string } }
 ) {
   try {
     const { studentId } = params;
@@ -46,7 +46,7 @@ export async function PUT(
 
 export async function DELETE(
   _: Request,
-  { params }: { params: { studentId: string } },
+  { params }: { params: { studentId: string } }
 ) {
   try {
     const { studentId } = params;

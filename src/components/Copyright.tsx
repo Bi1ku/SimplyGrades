@@ -1,20 +1,20 @@
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 
 export default function Copyright(props: any) {
   return (
     <Typography
-      variant='body2'
-      color='text.secondary'
-      align='center'
+      variant="body2"
+      color="text.secondary"
+      align="center"
       {...props}
     >
-      {'Copyright © '}
-      <Link color='inherit' href='https://simplygrades.com/'>
+      {"Copyright © "}
+      <Link color="inherit" href="https://simplygrades.com/">
         Simply Grades
-      </Link>{' '}
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }

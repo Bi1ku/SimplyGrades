@@ -1,16 +1,16 @@
-import { PrismaClient } from '@prisma/client';
-import { NextResponse } from 'next/server';
+import { PrismaClient } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
 export async function GET(
   req: Request,
-  { params }: { params: { teacherId: string } },
+  { params }: { params: { teacherId: string } }
 ) {
   try {
     const url = new URL(req.url);
-    const page = +(url.searchParams.get('page') || 0);
-    const pageSize = +(url.searchParams.get('pageSize') || 5);
+    const page = +(url.searchParams.get("page") || 0);
+    const pageSize = +(url.searchParams.get("pageSize") || 5);
 
     const { teacherId } = params;
 
@@ -37,7 +37,7 @@ export async function GET(
     }
 
     const students = classes.map((cls) =>
-      cls.studentsToClasses.map(({ student }) => student),
+      cls.studentsToClasses.map(({ student }) => student)
     );
 
     return NextResponse.json({ data: students, count });

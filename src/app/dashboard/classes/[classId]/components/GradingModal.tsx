@@ -1,14 +1,14 @@
-import a from '@/src/axios';
-import Modal from '@/src/components/Modal';
-import { formatFullName, notify } from '@/src/utils';
-import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import { Student, StudentsToAssignments } from '@prisma/client';
-import React from 'react';
+import a from "@/src/axios";
+import Modal from "@/src/components/Modal";
+import { formatFullName, notify } from "@/src/utils";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { Student, StudentsToAssignments } from "@prisma/client";
+import React from "react";
 
 interface StudentsToAssignmentsWithIncludes extends StudentsToAssignments {
   student: Student;
@@ -31,14 +31,14 @@ export default function GradingModal({
   const [loading, setLoading] = React.useState(false);
   const [gradeLoading, setGradeLoading] = React.useState(false);
   const [grades, setGrades] = React.useState(
-    [] as StudentsToAssignmentsWithIncludes[],
+    [] as StudentsToAssignmentsWithIncludes[]
   );
   const [gradeForm, setGradeForm] = React.useState([] as GradeFormField[]);
 
   const handleGetGrades = async () => {
     setLoading(true);
     const { data: response } = await a.get(
-      `/assignments/${assignmentId}/grades`,
+      `/assignments/${assignmentId}/grades`
     );
     if (!response) return;
     setGrades(response);
@@ -49,11 +49,11 @@ export default function GradingModal({
     setGradeLoading(true);
     const { data: response } = await a.post(
       `/assignments/${assignmentId}/grades`,
-      gradeForm,
+      gradeForm
     );
     if (!response) return setGradeLoading(false);
     handleGetGrades();
-    notify('Successfully graded assignment!');
+    notify("Successfully graded assignment!");
     setGradeLoading(false);
     setOpen(false);
   };
@@ -62,7 +62,7 @@ export default function GradingModal({
     (studentId: string) => async (e: React.ChangeEvent<HTMLInputElement>) => {
       const dupGradeForm = [...gradeForm];
       const index = dupGradeForm.findIndex(
-        (field) => field.studentId === studentId,
+        (field) => field.studentId === studentId
       );
 
       if (index === -1) dupGradeForm.push({ studentId, grade: 0 });
@@ -87,19 +87,19 @@ export default function GradingModal({
     <Modal
       open={open}
       handleClose={handleClose}
-      title='Grade assignment'
-      subtitle='Grade assignments to keep track of student and class performance!'
+      title="Grade assignment"
+      subtitle="Grade assignments to keep track of student and class performance!"
       buttons={[
-        { title: 'Cancel', onClick: handleClose },
+        { title: "Cancel", onClick: handleClose },
         {
-          title: 'Grade',
+          title: "Grade",
           onClick: handleGradeAssignment,
         },
       ]}
       loading={gradeLoading}
     >
       {loading ? (
-        <Box sx={{ display: 'grid', placeItems: 'center', p: 4, mt: 2 }}>
+        <Box sx={{ display: "grid", placeItems: "center", p: 4, mt: 2 }}>
           <CircularProgress />
         </Box>
       ) : (
@@ -107,28 +107,28 @@ export default function GradingModal({
           <React.Fragment key={i}>
             <Stack
               sx={{ my: 1 }}
-              direction='row'
-              alignItems='center'
-              justifyContent='space-between'
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
             >
-              <Typography variant='body2'>
+              <Typography variant="body2">
                 {formatFullName(grade.student)}
               </Typography>
               <Stack
-                direction='row'
-                alignItems='center'
-                justifyContent='flex-end'
+                direction="row"
+                alignItems="center"
+                justifyContent="flex-end"
               >
                 <TextField
-                  size='small'
-                  variant='standard'
+                  size="small"
+                  variant="standard"
                   defaultValue={grade.grade}
                   sx={{ width: 1 / 2 }}
-                  type='number'
+                  type="number"
                   InputProps={{ inputProps: { min: 0, max: 100 } }}
                   onChange={handleGradeChange(grade.studentId)}
                 />
-                <Typography variant='body2' sx={{ ml: 1 }}>
+                <Typography variant="body2" sx={{ ml: 1 }}>
                   / 100
                 </Typography>
               </Stack>

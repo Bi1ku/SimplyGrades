@@ -1,13 +1,13 @@
-import a from '@/src/axios';
-import Modal from '@/src/components/Modal';
-import { notify, passFormInputProps } from '@/src/utils';
+import a from "@/src/axios";
+import Modal from "@/src/components/Modal";
+import { notify, passFormInputProps } from "@/src/utils";
 import Autocomplete, {
   AutocompleteRenderInputParams,
-} from '@mui/material/Autocomplete';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
-import { PolicyField } from '@prisma/client';
-import React from 'react';
+} from "@mui/material/Autocomplete";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import { PolicyField } from "@prisma/client";
+import React from "react";
 
 export default function CreateAssignmentModal({
   open,
@@ -24,21 +24,21 @@ export default function CreateAssignmentModal({
 }) {
   const [loading, setLoading] = React.useState(false);
   const [form, setForm] = React.useState({
-    name: '',
-    policyFieldId: '',
-    dueDate: '',
+    name: "",
+    policyFieldId: "",
+    dueDate: "",
     classId,
   });
   1;
   const handleCreateAssignment = async () => {
     setLoading(true);
-    const { data: response } = await a.post('/assignments', {
+    const { data: response } = await a.post("/assignments", {
       ...form,
       dueDate: new Date(form.dueDate),
     });
     if (!response) return setLoading(false);
     refetch();
-    notify('Assignment created successfully!', 'success');
+    notify("Assignment created successfully!", "success");
     setLoading(false);
   };
 
@@ -48,15 +48,15 @@ export default function CreateAssignmentModal({
     <Modal
       open={open}
       handleClose={handleClose}
-      title='Create assignment'
-      subtitle='Create a new assignment to keep track of grades!'
+      title="Create assignment"
+      subtitle="Create a new assignment to keep track of grades!"
       buttons={[
         {
-          title: 'Cancel',
+          title: "Cancel",
           onClick: handleClose,
         },
         {
-          title: 'Create',
+          title: "Create",
           onClick: async () => {
             await handleCreateAssignment();
             handleClose();
@@ -68,15 +68,15 @@ export default function CreateAssignmentModal({
       <Grid
         container
         spacing={2}
-        sx={{ width: { md: 565, sm: 500, xs: 400 }, mt: '1px' }}
+        sx={{ width: { md: 565, sm: 500, xs: 400 }, mt: "1px" }}
       >
         <Grid item xs={12}>
           <TextField
-            variant='outlined'
-            label='Name'
+            variant="outlined"
+            label="Name"
             fullWidth
-            size='small'
-            {...passFormInputProps('name', form, setForm)}
+            size="small"
+            {...passFormInputProps("name", form, setForm)}
           />
         </Grid>
         <Grid item xs={6}>
@@ -92,23 +92,23 @@ export default function CreateAssignmentModal({
             renderInput={(params: AutocompleteRenderInputParams) => (
               <TextField
                 {...params}
-                variant='outlined'
-                label='Grading Field'
+                variant="outlined"
+                label="Grading Field"
                 fullWidth
-                size='small'
+                size="small"
               />
             )}
           />
         </Grid>
         <Grid item xs={6}>
           <TextField
-            variant='outlined'
-            label='Due Date'
+            variant="outlined"
+            label="Due Date"
             fullWidth
-            size='small'
+            size="small"
             InputLabelProps={{ shrink: true }}
-            type='date'
-            {...passFormInputProps('dueDate', form, setForm)}
+            type="date"
+            {...passFormInputProps("dueDate", form, setForm)}
           />
         </Grid>
       </Grid>

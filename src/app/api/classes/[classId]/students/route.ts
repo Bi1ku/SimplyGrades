@@ -1,16 +1,16 @@
-import { PrismaClient } from '@prisma/client';
-import { NextResponse } from 'next/server';
+import { PrismaClient } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
 export async function GET(
   req: Request,
-  { params }: { params: { classId: string } },
+  { params }: { params: { classId: string } }
 ) {
   try {
     const url = new URL(req.url);
-    const page = +(url.searchParams.get('page') || 0);
-    const pageSize = +(url.searchParams.get('pageSize') || 5);
+    const page = +(url.searchParams.get("page") || 0);
+    const pageSize = +(url.searchParams.get("pageSize") || 5);
 
     const { classId } = params;
 
@@ -29,7 +29,7 @@ export async function GET(
       },
       orderBy: {
         student: {
-          firstName: 'asc',
+          firstName: "asc",
         },
       },
       skip: page * pageSize,

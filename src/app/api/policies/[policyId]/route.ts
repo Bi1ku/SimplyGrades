@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client';
-import { NextResponse } from 'next/server';
+import { PrismaClient } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
 export async function GET(
   _: Request,
-  { params }: { params: { policyId: string } },
+  { params }: { params: { policyId: string } }
 ) {
   try {
     const { policyId } = params;
@@ -25,7 +25,7 @@ export async function GET(
 
 export async function PUT(
   req: Request,
-  { params }: { params: { policyId: string } },
+  { params }: { params: { policyId: string } }
 ) {
   try {
     const { policyId } = params;
@@ -43,7 +43,7 @@ export async function PUT(
     for (const field of policyFields) {
       await prisma.policyField.upsert({
         where: {
-          id: field.id || '',
+          id: field.id || "",
         },
         update: {
           weight: field.weight,
@@ -71,7 +71,7 @@ export async function PUT(
 
 export async function DELETE(
   _: Request,
-  { params }: { params: { policyId: string } },
+  { params }: { params: { policyId: string } }
 ) {
   try {
     const { policyId } = params;

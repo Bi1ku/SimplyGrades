@@ -1,11 +1,11 @@
-import { PrismaClient, StudentsToAssignments } from '@prisma/client';
-import { NextResponse } from 'next/server';
+import { PrismaClient, StudentsToAssignments } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
 export async function POST(
   req: Request,
-  { params }: { params: { assignmentId: string } },
+  { params }: { params: { assignmentId: string } }
 ) {
   try {
     const { assignmentId } = params;
@@ -16,7 +16,7 @@ export async function POST(
         id: assignmentId,
       },
     });
-    if (!assignment) throw new Error('Assignment ID is invalid.');
+    if (!assignment) throw new Error("Assignment ID is invalid.");
 
     const grades = await body.map(
       async (grade: StudentsToAssignments) =>
@@ -34,7 +34,7 @@ export async function POST(
           update: {
             grade: grade.grade,
           },
-        }),
+        })
     );
 
     return NextResponse.json(grades);
@@ -46,7 +46,7 @@ export async function POST(
 
 export async function GET(
   _: Request,
-  { params }: { params: { assignmentId: string } },
+  { params }: { params: { assignmentId: string } }
 ) {
   try {
     const { assignmentId } = params;
@@ -60,7 +60,7 @@ export async function GET(
       },
       orderBy: {
         student: {
-          firstName: 'asc',
+          firstName: "asc",
         },
       },
     });

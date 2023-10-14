@@ -1,7 +1,7 @@
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import { SxProps, Theme } from '@mui/material/styles';
-import React from 'react';
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import { SxProps, Theme } from "@mui/material/styles";
+import React from "react";
 
 export default function PanelCard({
   title,
@@ -16,13 +16,13 @@ export default function PanelCard({
 }) {
   return (
     <Paper
-      variant='outlined'
-      sx={{ p: padding ? 2 : 0, height: '100%', ...sx }}
+      variant="outlined"
+      sx={{ p: padding ? 2 : 0, height: "100%", ...sx }}
     >
-      {typeof title === 'string' ? (
+      {typeof title === "string" ? (
         <Typography
           sx={{ fontWeight: 600, p: padding ? 0 : 2, pb: 0 }}
-          variant='h6'
+          variant="h6"
         >
           {title}
         </Typography>

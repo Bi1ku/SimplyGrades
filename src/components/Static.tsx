@@ -1,5 +1,5 @@
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 
 export default function Static({
   title,
@@ -9,10 +9,10 @@ export default function Static({
   description: string;
 }) {
   return (
-    <Paper variant='outlined' sx={{ p: 2, height: '100%' }}>
+    <Paper variant="outlined" sx={{ p: 2, height: "100%" }}>
       <Typography
         noWrap
-        variant='body2'
+        variant="body2"
         sx={{
           fontWeight: 500,
           color: (theme) => theme.palette.grey[600],
@@ -22,10 +22,10 @@ export default function Static({
         {title}
       </Typography>
       <Typography
-        variant='h5'
+        variant="h5"
         sx={{
           fontWeight: 600,
-          mt: '10px',
+          mt: "10px",
         }}
       >
         {description}

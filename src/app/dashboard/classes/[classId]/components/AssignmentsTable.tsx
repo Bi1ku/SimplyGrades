@@ -1,25 +1,25 @@
-import Exist from '@/src/components/Exist';
-import PanelCard from '@/src/components/PanelCard';
-import SearchBar from '@/src/components/SearchBar';
-import { Add } from '@mui/icons-material';
-import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
-import Table from '@/src/components/Table';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import React from 'react';
-import Link from '@mui/material/Link';
-import a from '@/src/axios';
-import { useDebounce } from 'use-debounce';
-import { notify } from '@/src/utils';
-import CreateAssignmentModal from './CreateAssignmentModal';
-import { Assignment, PolicyField } from '@prisma/client';
-import GradingModal from './GradingModal';
-import { Context } from '../page';
+import Exist from "@/src/components/Exist";
+import PanelCard from "@/src/components/PanelCard";
+import SearchBar from "@/src/components/SearchBar";
+import { Add } from "@mui/icons-material";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Table from "@/src/components/Table";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import React from "react";
+import Link from "@mui/material/Link";
+import a from "@/src/axios";
+import { useDebounce } from "use-debounce";
+import { notify } from "@/src/utils";
+import CreateAssignmentModal from "./CreateAssignmentModal";
+import { Assignment, PolicyField } from "@prisma/client";
+import GradingModal from "./GradingModal";
+import { Context } from "../page";
 
 interface AssignmentWithIncludes extends Assignment {
   policyField: PolicyField;
@@ -27,11 +27,11 @@ interface AssignmentWithIncludes extends Assignment {
 
 export default function AssignmentsTable() {
   const classId = React.useContext(Context);
-  const [assignmentId, setAssignmentId] = React.useState('');
+  const [assignmentId, setAssignmentId] = React.useState("");
   const [gradingModalOpen, setGradingModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [pageLoading, setPageLoading] = React.useState(false);
-  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchQuery, setSearchQuery] = React.useState("");
   const [creationModalOpen, setCreationModalOpen] = React.useState(false);
   const [debouncedSearchQuery] = useDebounce(searchQuery, 300);
   const [data, setData] = React.useState({
@@ -48,7 +48,7 @@ export default function AssignmentsTable() {
       response.policy.policyFields.map((field: PolicyField) => ({
         id: field.id,
         label: field.name,
-      })),
+      }))
     );
   };
 
@@ -59,19 +59,19 @@ export default function AssignmentsTable() {
         `/classes/${classId}/assignments`,
         {
           params: { page, searchQuery },
-        },
+        }
       );
       if (!response) return setPageLoading(false);
       setData(response);
       setPageLoading(false);
     },
-    [debouncedSearchQuery],
+    [debouncedSearchQuery]
   );
 
   const handleDeleteAssignment = (assignmentId: string) => async () => {
     const { data: response } = await a.delete(`/assignments/${assignmentId}`);
     if (!response) return;
-    notify('Successfully deleted assignment!');
+    notify("Successfully deleted assignment!");
     handleGetAssignments();
   };
 
@@ -94,28 +94,28 @@ export default function AssignmentsTable() {
               sx={{
                 px: 2,
                 pt: 2,
-                flexDirection: { xs: 'column', sm: 'row' },
+                flexDirection: { xs: "column", sm: "row" },
               }}
-              justifyContent='space-between'
+              justifyContent="space-between"
             >
               <Typography
                 sx={{ fontWeight: 600, mb: { xs: 1, sm: 0 } }}
-                variant='h6'
+                variant="h6"
               >
                 Assignments
               </Typography>
-              <Stack flexDirection='row'>
+              <Stack flexDirection="row">
                 <SearchBar setSearchQuery={setSearchQuery} />
                 <Button
-                  size='small'
-                  variant='contained'
+                  size="small"
+                  variant="contained"
                   sx={{
                     ml: 2,
                     borderRadius: 2,
                   }}
                   onClick={() => setCreationModalOpen(true)}
                 >
-                  <Add sx={{ pr: '2px' }} /> CREATE
+                  <Add sx={{ pr: "2px" }} /> CREATE
                 </Button>
               </Stack>
             </Stack>
@@ -127,9 +127,9 @@ export default function AssignmentsTable() {
             placeholder={
               <Box
                 sx={{
-                  height: '100%',
-                  display: 'grid',
-                  placeItems: 'center',
+                  height: "100%",
+                  display: "grid",
+                  placeItems: "center",
                 }}
               >
                 <CircularProgress />
@@ -137,7 +137,7 @@ export default function AssignmentsTable() {
             }
           >
             <Table
-              keys={['NAME', 'GRADING FIELD', 'CREATION DATE', 'DUE DATE', '']}
+              keys={["NAME", "GRADING FIELD", "CREATION DATE", "DUE DATE", ""]}
               count={data.count}
               onPageChange={(_, page) => handleGetAssignments(page)}
               page={data.page}
@@ -152,22 +152,22 @@ export default function AssignmentsTable() {
                       setGradingModalOpen(true);
                     }}
                     sx={{
-                      whiteSpace: 'nowrap',
-                      '&:hover': { cursor: 'pointer' },
+                      whiteSpace: "nowrap",
+                      "&:hover": { cursor: "pointer" },
                     }}
                   >
                     {assignment.name}
                   </TableCell>
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  <TableCell sx={{ whiteSpace: "nowrap" }}>
                     {assignment.policyField.name}
                   </TableCell>
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  <TableCell sx={{ whiteSpace: "nowrap" }}>
                     {new Date(assignment.createdAt).toLocaleDateString()}
                   </TableCell>
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  <TableCell sx={{ whiteSpace: "nowrap" }}>
                     {new Date(assignment.dueDate).toLocaleDateString()}
                   </TableCell>
-                  <TableCell sx={{ whiteSpace: 'nowrap', cursor: 'pointer' }}>
+                  <TableCell sx={{ whiteSpace: "nowrap", cursor: "pointer" }}>
                     <Link onClick={handleDeleteAssignment(assignment.id)}>
                       Delete
                     </Link>

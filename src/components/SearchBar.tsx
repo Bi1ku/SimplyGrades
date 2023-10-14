@@ -1,6 +1,6 @@
-import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
-import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
+import SearchIcon from "@mui/icons-material/Search";
 
 export default function SearchBar({
   setSearchQuery,
@@ -12,7 +12,7 @@ export default function SearchBar({
       onChange={(e) => setSearchQuery(e.target.value)}
       InputProps={{
         startAdornment: (
-          <InputAdornment position='start'>
+          <InputAdornment position="start">
             <SearchIcon />
           </InputAdornment>
         ),
@@ -21,7 +21,7 @@ export default function SearchBar({
           borderRadius: 8,
         },
       }}
-      placeholder='Search...'
+      placeholder="Search..."
       inputProps={{
         style: {
           padding: 4,

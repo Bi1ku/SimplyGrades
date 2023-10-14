@@ -1,8 +1,8 @@
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import React from 'react';
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import React from "react";
 import {
   ResponsiveContainer,
   XAxis,
@@ -11,15 +11,15 @@ import {
   Tooltip,
   Area,
   AreaChart,
-} from 'recharts';
-import { Student } from '@prisma/client';
+} from "recharts";
+import { Student } from "@prisma/client";
 import Autocomplete, {
   AutocompleteRenderInputParams,
-} from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import a from '@/src/axios';
-import { Context } from '../page';
-import { formatFullName } from '@/src/utils';
+} from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import a from "@/src/axios";
+import { Context } from "../page";
+import { formatFullName } from "@/src/utils";
 
 interface GraphData {
   name: string;
@@ -37,7 +37,7 @@ export default function StudentToAverageGraph({
 
   const handleGetGraphData = async (studentId: string) => {
     const { data: response } = await a.get(
-      `/classes/${classId}/stats/${studentId}/graph`,
+      `/classes/${classId}/stats/${studentId}/graph`
     );
     if (!response) return;
     setData(response);
@@ -53,68 +53,68 @@ export default function StudentToAverageGraph({
         label: formatFullName(student),
         id: student.id,
       })),
-    [students],
+    [students]
   );
 
   return (
     <Grid item xs={12}>
-      <Paper variant='outlined' sx={{ p: 2, pl: 0 }}>
-        <Stack flexDirection='row'>
-          <Typography sx={{ fontWeight: 600, px: 2, mb: 2 }} variant='h6'>
+      <Paper variant="outlined" sx={{ p: 2, pl: 0 }}>
+        <Stack flexDirection="row">
+          <Typography sx={{ fontWeight: 600, px: 2, mb: 2 }} variant="h6">
             Student Performance to Class Average
           </Typography>
           <Autocomplete
-            sx={{ width: 200, ml: 'auto' }}
-            onChange={(_, value) => handleGetGraphData(value?.id || '')}
+            sx={{ width: 200, ml: "auto" }}
+            onChange={(_, value) => handleGetGraphData(value?.id || "")}
             defaultValue={autocompleteData[0]}
             options={autocompleteData}
             renderInput={(params: AutocompleteRenderInputParams) => (
               <TextField
                 {...params}
-                variant='outlined'
-                label='Student'
+                variant="outlined"
+                label="Student"
                 fullWidth
-                size='small'
+                size="small"
               />
             )}
           />
         </Stack>
-        <ResponsiveContainer width='100%' height={300}>
+        <ResponsiveContainer width="100%" height={300}>
           <AreaChart
             width={730}
             height={250}
             data={data}
             margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
             // @ts-ignore
-            cursor='crosshair'
+            cursor="crosshair"
           >
             <defs>
-              <linearGradient id='colorUv' x1='0' y1='0' x2='0' y2='1'>
-                <stop offset='5%' stopColor='#8884d8' stopOpacity={0.8} />
-                <stop offset='95%' stopColor='#8884d8' stopOpacity={0} />
+              <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
               </linearGradient>
-              <linearGradient id='colorPv' x1='0' y1='0' x2='0' y2='1'>
-                <stop offset='5%' stopColor='#82ca9d' stopOpacity={0.8} />
-                <stop offset='95%' stopColor='#82ca9d' stopOpacity={0} />
+              <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <XAxis dataKey='name' />
+            <XAxis dataKey="name" />
             <YAxis ticks={[20, 40, 60, 80, 100]} />
-            <CartesianGrid strokeDasharray='7 7' />
+            <CartesianGrid strokeDasharray="7 7" />
             <Tooltip />
             <Area
-              type='monotone'
-              dataKey='studentGrade'
-              stroke='#8884d8'
+              type="monotone"
+              dataKey="studentGrade"
+              stroke="#8884d8"
               fillOpacity={1}
-              fill='url(#colorUv)'
+              fill="url(#colorUv)"
             />
             <Area
-              type='monotone'
-              dataKey='avgGrade'
-              stroke='#82ca9d'
+              type="monotone"
+              dataKey="avgGrade"
+              stroke="#82ca9d"
               fillOpacity={1}
-              fill='url(#colorPv)'
+              fill="url(#colorPv)"
             />
           </AreaChart>
         </ResponsiveContainer>

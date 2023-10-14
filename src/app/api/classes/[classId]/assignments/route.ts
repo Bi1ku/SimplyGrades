@@ -1,17 +1,17 @@
-import { PrismaClient } from '@prisma/client';
-import { NextResponse } from 'next/server';
+import { PrismaClient } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
 export async function GET(
   req: Request,
-  { params }: { params: { classId: string } },
+  { params }: { params: { classId: string } }
 ) {
   try {
     const url = new URL(req.url);
-    const page = +(url.searchParams.get('page') || 0);
-    const pageSize = +(url.searchParams.get('pageSize') || 5);
-    const searchQuery = url.searchParams.get('searchQuery') || '';
+    const page = +(url.searchParams.get("page") || 0);
+    const pageSize = +(url.searchParams.get("pageSize") || 5);
+    const searchQuery = url.searchParams.get("searchQuery") || "";
 
     const { classId } = params;
 
@@ -28,7 +28,7 @@ export async function GET(
       skip: page * pageSize,
       take: pageSize,
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
     });
 
