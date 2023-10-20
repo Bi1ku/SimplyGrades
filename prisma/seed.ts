@@ -1,47 +1,48 @@
-const { PrismaClient } = require('@prisma/client');
-const { faker } = require('@faker-js/faker');
+const { PrismaClient } = require("@prisma/client");
+const { faker } = require("@faker-js/faker");
 const prisma = new PrismaClient();
 
-const generateClassCode = () => {
+function generateClassCode() {
   const chars =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
   for (let i = 0; i < 6; i++) {
     result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return result;
-};
+}
 
 async function main() {
-  console.time('Seeded database');
+  console.time("Seeded database");
 
-  console.log('═════════════════════════════════════════════════════');
-  console.log('Clearing current database...');
-  console.time('Cleared current database');
+  console.log("═════════════════════════════════════════════════════");
+  console.log("Clearing current database...");
+  console.time("Cleared current database");
   await prisma.student.deleteMany();
   await prisma.class.deleteMany();
   await prisma.teacher.deleteMany();
   await prisma.assignment.deleteMany();
   await prisma.policy.deleteMany();
-  console.timeEnd('Cleared current database');
-  console.log('═════════════════════════════════════════════════════ \n');
+  console.timeEnd("Cleared current database");
+  console.log("═════════════════════════════════════════════════════ \n");
 
-  console.log('═════════════════════════════════════════════════════');
-  console.log('Seeding teacher...');
-  console.time('Seeded teacher');
+  console.log("═════════════════════════════════════════════════════");
+  console.log("Seeding teacher...");
+  console.time("Seeded teacher");
   const teacher = await prisma.teacher.create({
     data: {
-      firstName: 'Owen',
-      lastName: 'Shi',
-      email: '2008owenshi@gmail.com',
+      firstName: "Owen",
+      lastName: "Shi",
+      email: "2008owenshi@gmail.com",
+      password: "password",
     },
   });
-  console.timeEnd('Seeded teacher');
-  console.log('═════════════════════════════════════════════════════ \n');
+  console.timeEnd("Seeded teacher");
+  console.log("═════════════════════════════════════════════════════ \n");
 
-  console.log('═════════════════════════════════════════════════════');
-  console.log('Seeding students...');
-  console.time('Seeded students');
+  console.log("═════════════════════════════════════════════════════");
+  console.log("Seeding students...");
+  console.time("Seeded students");
   const students = new Array(100).fill(0).map(
     async () =>
       await prisma.student.create({
@@ -49,50 +50,51 @@ async function main() {
           firstName: faker.person.firstName(),
           lastName: faker.person.lastName(),
           email: faker.internet.email(),
+          password: "password",
         },
-      }),
+      })
   );
-  console.timeEnd('Seeded students');
-  console.log('═════════════════════════════════════════════════════ \n');
+  console.timeEnd("Seeded students");
+  console.log("═════════════════════════════════════════════════════ \n");
 
-  console.log('═════════════════════════════════════════════════════');
-  console.log('Seeding grading policies...');
-  console.time('Seeded grading policies');
+  console.log("═════════════════════════════════════════════════════");
+  console.log("Seeding grading policies...");
+  console.time("Seeded grading policies");
   const policy = await prisma.policy.create({
     data: {
-      name: 'Standard',
+      name: "Standard",
       teacherId: teacher.id,
     },
   });
   const policyFields = [
     await prisma.policyField.create({
       data: {
-        name: 'Participation',
+        name: "Participation",
         weight: 0.2,
         policyId: policy.id,
       },
     }),
     await prisma.policyField.create({
       data: {
-        name: 'Homework, Classwork, & Quizzes',
+        name: "Homework, Classwork, & Quizzes",
         weight: 0.3,
         policyId: policy.id,
       },
     }),
     await prisma.policyField.create({
       data: {
-        name: 'Assessments',
+        name: "Assessments",
         weight: 0.5,
         policyId: policy.id,
       },
     }),
   ];
-  console.timeEnd('Seeded grading policies');
-  console.log('═════════════════════════════════════════════════════ \n');
+  console.timeEnd("Seeded grading policies");
+  console.log("═════════════════════════════════════════════════════ \n");
 
-  console.log('═════════════════════════════════════════════════════');
-  console.log('Seeding classes...');
-  console.time('Seeded classes');
+  console.log("═════════════════════════════════════════════════════");
+  console.log("Seeding classes...");
+  console.time("Seeded classes");
   let classes = Array(5)
     .fill(0)
     .map(
@@ -104,26 +106,26 @@ async function main() {
             teacherId: teacher.id,
             period: Math.floor(1 + 6 * Math.random()),
             subject: [
-              'MATHEMATICS',
-              'SCIENCE',
-              'ENGLISH',
-              'HISTORY',
-              'ART',
-              'MUSIC',
-              'FOREIGN_LANGUAGE',
-              'PHYSICAL_EDUCATION',
-              'OTHER',
+              "MATHEMATICS",
+              "SCIENCE",
+              "ENGLISH",
+              "HISTORY",
+              "ART",
+              "MUSIC",
+              "FOREIGN_LANGUAGE",
+              "PHYSICAL_EDUCATION",
+              "OTHER",
             ][Math.floor(9 * Math.random())],
             policyId: policy.id,
           },
-        }),
+        })
     );
-  console.timeEnd('Seeded classes');
-  console.log('═════════════════════════════════════════════════════ \n');
+  console.timeEnd("Seeded classes");
+  console.log("═════════════════════════════════════════════════════ \n");
 
-  console.log('═════════════════════════════════════════════════════');
-  console.log('Seeding assignments...');
-  console.time('Seeded assignments');
+  console.log("═════════════════════════════════════════════════════");
+  console.log("Seeding assignments...");
+  console.time("Seeded assignments");
   for (let i = 0; i < 30; i++) {
     await prisma.assignment.create({
       data: {
@@ -136,12 +138,12 @@ async function main() {
       },
     });
   }
-  console.timeEnd('Seeded assignments');
-  console.log('═════════════════════════════════════════════════════ \n');
+  console.timeEnd("Seeded assignments");
+  console.log("═════════════════════════════════════════════════════ \n");
 
-  console.log('═════════════════════════════════════════════════════');
-  console.log('Seeding students to classes relationship...');
-  console.time('Seeded students to classes relationship');
+  console.log("═════════════════════════════════════════════════════");
+  console.log("Seeding students to classes relationship...");
+  console.time("Seeded students to classes relationship");
   for (let i = 0; i < 100; i++) {
     await prisma.studentsToClasses.create({
       data: {
@@ -150,12 +152,12 @@ async function main() {
       },
     });
   }
-  console.timeEnd('Seeded students to classes relationship');
-  console.log('═════════════════════════════════════════════════════ \n');
+  console.timeEnd("Seeded students to classes relationship");
+  console.log("═════════════════════════════════════════════════════ \n");
 
-  console.log('═════════════════════════════════════════════════════');
-  console.log('Seeding students to assignments relationship...');
-  console.time('Seeded students to assignments relationship');
+  console.log("═════════════════════════════════════════════════════");
+  console.log("Seeding students to assignments relationship...");
+  console.time("Seeded students to assignments relationship");
   classes = await prisma.class.findMany({
     select: {
       assignments: true,
@@ -177,10 +179,10 @@ async function main() {
       }
     }
   }
-  console.timeEnd('Seeded students to assignments relationship');
-  console.log('═════════════════════════════════════════════════════ \n');
+  console.timeEnd("Seeded students to assignments relationship");
+  console.log("═════════════════════════════════════════════════════ \n");
 
-  console.timeEnd('Seeded database');
+  console.timeEnd("Seeded database");
 }
 
 main()
