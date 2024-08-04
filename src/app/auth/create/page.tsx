@@ -98,12 +98,12 @@ export default function SignIn() {
             {...passFormInputProps("password", form, setForm)}
           />
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+            <InputLabel id="demo-simple-select-label">Role</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={form.type}
-              label="Age"
+              label="type"
               onChange={(e) =>
                 setForm((prev) => ({ ...prev, type: e.target.value }))
               }
@@ -125,8 +125,8 @@ export default function SignIn() {
             Create Account
             {loading && <CircularProgress size="small" sx={{ ml: 2 }} />}
           </Button>
-          <Link href="auth/login" variant="body2">
-            {"Have an account? "}
+          <Link href="/auth/login" variant="body2">
+            {"Log in"}
           </Link>
         </Box>
       </Box>

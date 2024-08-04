@@ -30,8 +30,10 @@ export default function SignIn() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
+
     const { data: response } = await a.post("/auth/login", form);
     if (!response) return setLoading(false);
+
     setLoading(false);
     notify("Successfully loggin in!");
     localStorage.setItem("user", JSON.stringify(response));
@@ -91,8 +93,8 @@ export default function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Create a new account"}
+              <Link href="/auth/create" variant="body2">
+                {"Create a new account"}
               </Link>
             </Grid>
           </Grid>
